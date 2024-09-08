@@ -36,11 +36,11 @@
             "bundleId": "dev.louisbrunet.obs-tournament"
         }
     },
-    "name": "obs-tournament",
+    "name": "obs-tournament-plugin",
     "displayName": "OBS Tournament Plugin",
     "version": "0.1.0",
     "author": "Louis Brunet",
-    "website": "https://github.com/louis-brunet/obs-tournament",
+    "website": "https://github.com/louis-brunet/obs-tournament-plugin",
     "email": "",
     "uuids": {
         "windowsApp": "93c6e441-0186-4d64-9b34-b7ef450b6f7c"
