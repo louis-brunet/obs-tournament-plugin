@@ -38,7 +38,7 @@
     },
     "name": "obs-tournament-plugin",
     "displayName": "OBS Tournament Plugin",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "author": "Louis Brunet",
     "website": "https://github.com/louis-brunet/obs-tournament-plugin",
     "email": "louis.jc.brunet@gmail.com",
