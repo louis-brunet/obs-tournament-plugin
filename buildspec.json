@@ -33,16 +33,16 @@
     },
     "platformConfig": {
         "macos": {
-            "bundleId": "com.example.obs-plugintemplate"
+            "bundleId": "dev.louisbrunet.obs-tournament"
         }
     },
-    "name": "obs-plugintemplate",
-    "displayName": "OBS Plugin Template",
-    "version": "1.0.0",
-    "author": "Your Name Here",
-    "website": "https://example.com",
-    "email": "me@example.com",
+    "name": "obs-tournament",
+    "displayName": "OBS Tournament Plugin",
+    "version": "0.1.0",
+    "author": "Louis Brunet",
+    "website": "https://github.com/louis-brunet/obs-tournament",
+    "email": "",
     "uuids": {
-        "windowsApp": "00000000-0000-0000-0000-000000000000"
+        "windowsApp": "93c6e441-0186-4d64-9b34-b7ef450b6f7c"
     }
 }
