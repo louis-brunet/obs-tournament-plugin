@@ -1,3 +1,8 @@
+```bash
+sudo apt-get install libstdc++-12-dev
+./scripts/build.sh
+```
+
 # OBS Plugin Template
 
 ## Introduction

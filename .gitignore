@@ -1,6 +1,15 @@
 # Exclude everything
 /*
 
+/src/version.h
+!/src/version.h.in
+/src/plugin-support.c
+!/src/plugin-support.c.in
+
+!/scripts
+!.editorconfig
+!.clangd
+
 # Except for default project files
 !/.github
 !/build-aux

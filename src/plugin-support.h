@@ -26,6 +26,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <obs-module.h>
 
 extern const char *PLUGIN_NAME;
 extern const char *PLUGIN_VERSION;
