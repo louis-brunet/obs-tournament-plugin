@@ -17,9 +17,12 @@ TournamentMatchParticipant::TournamentMatchParticipant(
 TournamentMatchParticipant::~TournamentMatchParticipant() {}
 
 TournamentMatchParticipant *
-TournamentMatchParticipant::loadStatic(obs_data_t *dataObj,
-				       MatchReference matchReference)
+TournamentMatchParticipant::loadStatic(obs_data_t *dataObj)
 {
+    if (!dataObj) {
+        return nullptr;
+    }
+
 	// auto dataType = (TournamentMatchParticipant::Type)obs_data_get_int(
 	// 	dataObj, "participantType");
 	auto dataType = TournamentMatchParticipant::loadType(dataObj);
@@ -33,6 +36,7 @@ TournamentMatchParticipant::loadStatic(obs_data_t *dataObj,
 		auto p = new TournamentMatchParticipantUnknown();
 		p->load(dataObj);
 		participant = p;
+
 		break;
 	}
 
@@ -40,6 +44,7 @@ TournamentMatchParticipant::loadStatic(obs_data_t *dataObj,
 		auto p = new TournamentMatchParticipantPlayer();
 		p->load(dataObj);
 		participant = p;
+
 		break;
 	}
 
@@ -51,11 +56,12 @@ TournamentMatchParticipant::loadStatic(obs_data_t *dataObj,
 		// auto p = new TournamentMatchParticipantWinnerOfMatch();
 		// p->load(dataObj, tournament);
 		// participant = p;
-		// break;
+
+		break;
 	}
 
 	default:
-		throw new std::runtime_error("unrecognized plarticipant type");
+		throw  std::runtime_error("unrecognized participant type");
 	}
 
 	return participant;
@@ -77,8 +83,8 @@ TournamentMatchParticipant::loadType(obs_data_t *dataObj)
 
 void TournamentMatchParticipant::load(obs_data_t *dataObj)
 {
-	obs_log(LOG_INFO, "[TournamentMatchParticipant::load] called",
-		this->_type);
+	// obs_log(LOG_INFO, "[TournamentMatchParticipant::load] called",
+	// 	this->_type);
 	this->_type = TournamentMatchParticipant::loadType(dataObj);
 	obs_log(LOG_INFO, "[TournamentMatchParticipant::load] loaded type %d",
 		this->_type);

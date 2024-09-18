@@ -1,6 +1,7 @@
 #pragma once
 
-#include "src/model/player.hpp"
+#include "src/model/match-reference.hpp"
+#include "src/model/player-reference.hpp"
 #include "src/model/tournament-match.hpp"
 #include "src/model/tournament-match-participant.hpp"
 
@@ -9,13 +10,15 @@
 struct PlayerComboBoxEmpty {};
 
 struct PlayerComboBoxStaticPlayer {
-	Player *player;
-	unsigned index;
+	// Player *player;
+	// unsigned index;
+    PlayerReference playerReference;
 };
 
 struct PlayerComboBoxWinnerOfMatch {
-	TournamentMatch *match;
-    long long matchIndex;
+	// TournamentMatch *match;
+	// long long matchIndex;
+	MatchReference matchReference;
 };
 
 struct PlayerComboBoxData {
@@ -27,7 +30,7 @@ public:
 		WinnerOfMatch,
 	};
 
-    PlayerComboBoxData::Type dataType;
+	PlayerComboBoxData::Type dataType;
 	union {
 		PlayerComboBoxEmpty empty;
 		PlayerComboBoxStaticPlayer staticPlayer;
@@ -35,10 +38,11 @@ public:
 	};
 
 	PlayerComboBoxData();
-	PlayerComboBoxData(PlayerComboBoxData &&) = default;
-	PlayerComboBoxData(const PlayerComboBoxData &) = default;
-	PlayerComboBoxData &operator=(PlayerComboBoxData &&) = default;
-	PlayerComboBoxData &operator=(const PlayerComboBoxData &) = default;
+	// FIXME: replacing `MatchReference *` with `MatchReference` implicitly deletes these constructors
+	// PlayerComboBoxData(PlayerComboBoxData &&) = default;
+	// PlayerComboBoxData(const PlayerComboBoxData &) = default;
+	// PlayerComboBoxData &operator=(PlayerComboBoxData &&) = default;
+	// PlayerComboBoxData &operator=(const PlayerComboBoxData &) = default;
 	~PlayerComboBoxData();
 	TournamentMatchParticipant *toTournamentMatchParticipant() const;
 };
@@ -53,8 +57,10 @@ public:
 	~PlayerComboBox();
 	// void setMatchList(std::vector<TournamentMatch> matches);
 	// void setPlayerList(std::vector<Player> players);
-	void setPlayerOptions(const std::vector<Player *> players,
-			      const std::vector<TournamentMatch *> matches);
+	// void setPlayerOptions(const std::vector<Player *> players,
+	void setPlayerOptions(const std::vector<PlayerReference> &players,
+			      const std::vector<MatchReference> matches);
+	// const std::vector<TournamentMatch *> matches);
 	const PlayerComboBoxData *getPlayerData() const;
 
 private:

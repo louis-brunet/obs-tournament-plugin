@@ -16,7 +16,7 @@ public:
 	~CustomKnockoutTabFrame();
 
 private:
-    const Tournament *_tournament;
+    CustomKnockoutTournament *_tournament;
 	// QBoxLayout *ongoingMatchListLayout;
     CustomKnockoutRunningFrame *tournamentRunningWidget;
     // QLayout *tournamentRunningLayout;

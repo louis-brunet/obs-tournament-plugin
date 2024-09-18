@@ -1,13 +1,11 @@
 #include "tournament.hpp"
-#include "src/model/custom-knockout-tournament.hpp"
 #include "src/model/plugin-data-object-helpers.hpp"
 #include "src/plugin-support.h"
 #include <obs.hpp>
-#include <stdexcept>
-#include <utility>
 
 Tournament::Tournament(const Tournament::Type _type,
-		       std::vector<std::unique_ptr<Player>> &&_players,
+		       // std::vector<std::unique_ptr<Player>> &&_players,
+		       std::vector<Player *> &&_players,
 		       TournamentReference _reference)
 	// Tournament::Tournament(Tournament::Type _type,
 	// 		       const std::vector<Player *> &_players)
@@ -74,9 +72,10 @@ void Tournament::load(obs_data_t *dataObj)
 		[this](obs_data_t *playerDataObj, unsigned long playerIndex) {
 			UNUSED_PARAMETER(playerIndex);
 
-			std::unique_ptr<Player> p;
+			// std::unique_ptr<Player> p;
+			auto p = new Player();
+			this->players.push_back(p);
 			p->load(playerDataObj);
-			this->players.push_back(std::move(p));
 			// this->players.push_back(Player::loadStatic(playerDataObj));
 
 			// auto match = new TournamentMatch();
@@ -90,7 +89,9 @@ void Tournament::load(obs_data_t *dataObj)
 		[this](obs_data_t *matchDataObj, unsigned long matchIndex) {
 			UNUSED_PARAMETER(matchIndex);
 
-            MatchReference matchReference { .tournamentReference = this->reference, .matchIndex = matchIndex};
+			MatchReference matchReference(this->reference,
+						      (long long)matchIndex);
+			// MatchReference matchReference { .tournamentReference = this->reference, .matchIndex = matchIndex};
 
 			auto match = new TournamentMatch(matchReference);
 			this->matches.push_back(match);
@@ -118,31 +119,57 @@ void Tournament::save(obs_data_t *dataObj) const
 		dataObj, "matches", this->matches);
 }
 
-Tournament *Tournament::loadStatic(obs_data_t *dataObj)
+std::vector<PlayerReference> Tournament::playerReferences()
 {
-	auto type = Tournament::loadType(dataObj);
+	std::vector<PlayerReference> references;
 
-	Tournament *tournament;
-	switch (type) {
-	case Tournament::Type::SingleEliminationKnockoutTournamentType: {
-		throw new std::runtime_error(
-			"TODO: single elim knockout loadStatic");
-		break;
+	for (unsigned long playerIndex = 0; playerIndex < this->players.size();
+	     playerIndex++) {
+		references.push_back(PlayerReference(this->reference,
+						     (long long)playerIndex));
 	}
 
-	case Tournament::Type::CustomKnockoutTournamentType: {
-		// tournament = new CustomKnockoutTournament();
-		tournament = CustomKnockoutTournament::loadStatic(dataObj);
-		break;
-	}
-
-	default: {
-		throw new std::runtime_error(
-			"loadStatic: unrecognized tournament type");
-		break;
-	}
-	}
-
-	// tournament->load(dataObj);
-	return tournament;
+	return references;
 }
+
+std::vector<MatchReference> Tournament::matchReferences()
+{
+	std::vector<MatchReference> references;
+
+	for (unsigned long matchIndex = 0; matchIndex < this->matches.size();
+	     matchIndex++) {
+		references.push_back(
+			MatchReference(this->reference, (long long)matchIndex));
+	}
+
+	return references;
+}
+
+// Tournament *Tournament::loadStatic(obs_data_t *dataObj)
+// {
+// 	auto type = Tournament::loadType(dataObj);
+//
+// 	Tournament *tournament;
+// 	switch (type) {
+// 	case Tournament::Type::SingleEliminationKnockoutTournamentType: {
+// 		throw  std::runtime_error(
+// 			"TODO: single elim knockout loadStatic");
+// 		break;
+// 	}
+//
+// 	case Tournament::Type::CustomKnockoutTournamentType: {
+// 		// tournament = new CustomKnockoutTournament();
+// 		tournament = CustomKnockoutTournament::loadStatic(dataObj);
+// 		break;
+// 	}
+//
+// 	default: {
+// 		throw  std::runtime_error(
+// 			"loadStatic: unrecognized tournament type");
+// 		break;
+// 	}
+// 	}
+//
+// 	// tournament->load(dataObj);
+// 	return tournament;
+// }

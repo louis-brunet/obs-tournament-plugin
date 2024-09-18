@@ -1,5 +1,6 @@
 #pragma once
 
+#include "src/model/match-reference.hpp"
 #include "src/model/tournament-match-participant.hpp"
 
 class TournamentMatch;
@@ -17,7 +18,7 @@ public:
 	// TournamentMatchParticipantWinnerOfMatch(obs_data_t *dataObj, long long tournamentIndex, long long winnerOfMatchIndex);
 	TournamentMatchParticipantWinnerOfMatch(
 		// MatchReference selfMatchReference,
-		MatchReference winnerOfMatchReference);
+		MatchReference winnerOfMatchReference = {});
 	~TournamentMatchParticipantWinnerOfMatch();
 	bool isValid() const override;
 	bool isReady() const override;

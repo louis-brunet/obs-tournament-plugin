@@ -72,6 +72,10 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/tabs/custom-knockout-tab/custom-knockout-tab.hpp
     src/model/custom-knockout-tournament.cpp
     src/model/custom-knockout-tournament.hpp
+    src/model/match-reference.cpp
+    src/model/match-reference.hpp
+    src/model/player-reference.cpp
+    src/model/player-reference.hpp
     src/model/player.cpp
     src/model/player.hpp
     src/model/plugin-data-object-helpers.hpp
@@ -89,6 +93,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/model/tournament-match-participant.hpp
     src/model/tournament-match.cpp
     src/model/tournament-match.hpp
+    src/model/tournament-reference.cpp
+    src/model/tournament-reference.hpp
     src/model/tournament.hpp
     src/model/tournament.cpp
     src/version.h)

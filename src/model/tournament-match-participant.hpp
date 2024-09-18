@@ -1,8 +1,6 @@
 #pragma once
 
-#include "src/model/match-reference.hpp"
 #include "src/model/plugin-data-object.hpp"
-// #include "src/model/tournament-match.hpp"
 #include <obs-data.h>
 #include <string>
 
@@ -22,7 +20,7 @@ public:
 	~TournamentMatchParticipant();
 
 	static TournamentMatchParticipant *
-	loadStatic(obs_data_t *dataObj, MatchReference matchReference);
+	loadStatic(obs_data_t *dataObj);
 
 	TournamentMatchParticipant::Type type();
 

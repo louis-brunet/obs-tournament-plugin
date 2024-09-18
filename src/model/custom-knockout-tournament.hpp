@@ -5,9 +5,9 @@
 
 class CustomKnockoutTournament : public Tournament {
 public:
-	static CustomKnockoutTournament *loadStatic(obs_data_t *dataObj);
+	// static CustomKnockoutTournament *loadStatic(obs_data_t *dataObj);
 
-    CustomKnockoutTournament(TournamentReference reference);
+    CustomKnockoutTournament(TournamentReference reference, std::vector<Player *> &&players = {});
 	// CustomKnockoutTournament(const std::vector<Player *> &players = {});
 	CustomKnockoutTournament(CustomKnockoutTournament &&) = default;
 	CustomKnockoutTournament(const CustomKnockoutTournament &) = default;
@@ -22,7 +22,8 @@ public:
 
 	// std::vector<TournamentMatch *> &matches();
     // std::vector<TournamentMatch *> matches;
-    bool isStarted();
+    bool isStarted() const;
+    void start();
 
 private:
     bool _isStarted;

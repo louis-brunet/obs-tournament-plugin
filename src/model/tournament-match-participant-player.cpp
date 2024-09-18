@@ -3,18 +3,20 @@
 #include <obs.hpp>
 
 TournamentMatchParticipantPlayer::TournamentMatchParticipantPlayer(
-	Player *__player)
+	PlayerReference __playerReference)
+	// Player *__player)
 	: TournamentMatchParticipant(
-		  TournamentMatchParticipant::Type::StaticPlayer)
+		  TournamentMatchParticipant::Type::StaticPlayer),
+	  _playerReference(__playerReference)
 {
-	this->_player = __player;
+	// this->_player = __player;
 }
 
 TournamentMatchParticipantPlayer::~TournamentMatchParticipantPlayer() {}
 
 bool TournamentMatchParticipantPlayer::isValid() const
 {
-	return this->_player != nullptr;
+	return this->_playerReference.player() != nullptr;
 }
 
 bool TournamentMatchParticipantPlayer::isReady() const
@@ -24,27 +26,33 @@ bool TournamentMatchParticipantPlayer::isReady() const
 
 std::string TournamentMatchParticipantPlayer::displayName() const
 {
-	return this->_player->name();
+    auto player = this->_playerReference.player();
+    if (!player) {
+        return obs_module_text("InvalidPlayerReference");
+    }
+	return player->name();
 }
 
 void TournamentMatchParticipantPlayer::save(obs_data_t *dataObj) const
 {
-    TournamentMatchParticipant::save(dataObj);
-	if (this->_player) {
-		OBSDataAutoRelease playerData = obs_data_create();
-		this->_player->save(playerData);
-		obs_data_set_obj(dataObj, "player", playerData);
-	}
+	TournamentMatchParticipant::save(dataObj);
+
+    OBSDataAutoRelease playerRefData = obs_data_create();
+    this->_playerReference.save(playerRefData);
+    obs_data_set_obj(dataObj, "playerReference", playerRefData);
+
+	// if (this->_player) {
+	// 	OBSDataAutoRelease playerData = obs_data_create();
+	// 	this->_player->save(playerData);
+	// 	obs_data_set_obj(dataObj, "player", playerData);
+	// }
 }
 
 void TournamentMatchParticipantPlayer::load(obs_data_t *dataObj)
 {
     TournamentMatchParticipant::load(dataObj);
-	obs_log(LOG_INFO, "[TournamentMatchParticipantPlayer::load] called");
-	if (!dataObj) {
-		return;
-	}
 
-	OBSDataAutoRelease playerData = obs_data_get_obj(dataObj, "player");
-	this->_player = Player::loadStatic(playerData);
+	OBSDataAutoRelease playerReferenceData =
+		obs_data_get_obj(dataObj, "playerReference");
+	this->_playerReference.load(playerReferenceData);
 }

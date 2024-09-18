@@ -1,4 +1,5 @@
 #include "custom-knockout-tab.hpp"
+#include "src/model/tournament-reference.hpp"
 #include "src/plugin-support.h"
 #include "src/model/tournament-match-participant.hpp"
 #include "src/ui/dialogs/error-dialog.hpp"
@@ -30,6 +31,7 @@ CustomKnockoutTabFrame::CustomKnockoutTabFrame(
 	// 	new QLabel(obs_module_text("TournamentTypeCustomKnockout"));
 	// contentLayout->addWidget(tabTitle);
 
+    // TournamentReference tournamentReference(tournamentIndex);
 	this->matchConfigurationFrame =
 		new CustomKnockoutMatchConfigurationFrame(tournament);
 	contentLayout->addWidget(matchConfigurationFrame);
@@ -56,6 +58,11 @@ CustomKnockoutTabFrame::CustomKnockoutTabFrame(
 	auto tabLayout = new QVBoxLayout();
 	tabLayout->addWidget(contentScrollArea);
 	this->setLayout(tabLayout);
+
+	if (this->_tournament->isStarted()) {
+        // this->endMatchConfigurationButton->click();
+        this->endTournamentConfiguration();
+	}
 }
 
 // CustomKnockoutTabFrame::CustomKnockoutTabFrame(std::vector<Player *> __players)
@@ -122,6 +129,7 @@ bool CustomKnockoutTabFrame::endTournamentConfiguration()
 	this->tournamentRunningWidget->setVisible(true);
 	// (new QVBoxLayout()) ->(true);
 
+    this->_tournament->start();
 	return true;
 }
 

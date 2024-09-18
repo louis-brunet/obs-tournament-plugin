@@ -4,7 +4,6 @@
 #include "src/model/plugin-data.hpp"
 #include "src/plugin-support.h"
 #include "src/ui/dialogs/base-dialog.hpp"
-#include "src/ui/dialogs/error-dialog.hpp"
 #include "src/ui/tabs/custom-knockout-tab/custom-knockout-tab.hpp"
 #include "src/ui/tabs/setup-tab.hpp"
 
@@ -184,7 +183,7 @@ void TournamentPluginDialog::loadData(const TournamentPluginData *_pluginData)
 
 		switch (tournament->type) {
 		case Tournament::Type::SingleEliminationKnockoutTournamentType:
-			throw new std::runtime_error(
+			throw  std::runtime_error(
 				"TODO: SingleEliminationKnockoutTournament");
 			// (new ErrorDialog(
 			// 	 this,
@@ -199,7 +198,7 @@ void TournamentPluginDialog::loadData(const TournamentPluginData *_pluginData)
 			break;
 
 		default:
-			throw new std::runtime_error(
+			throw std::runtime_error(
 				"unrecognized tournament type");
 		}
 

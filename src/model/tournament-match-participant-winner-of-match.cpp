@@ -1,7 +1,5 @@
 #include "tournament-match-participant-winner-of-match.hpp"
 #include "src/model/tournament-match.hpp"
-#include "src/model/tournament.hpp"
-#include "src/plugin-support.h"
 #include <obs-data.h>
 #include <obs-module.h>
 #include <obs.hpp>
@@ -47,7 +45,7 @@ bool TournamentMatchParticipantWinnerOfMatch::isReady() const
 	}
 
 	// TODO: how to tell if "winner of match" is ready? hasWinner method in TournamentMatch?
-	throw new std::runtime_error("TODO winner of match isReady");
+	throw  std::runtime_error("TODO winner of match isReady");
 	return false;
 }
 
@@ -86,6 +84,7 @@ void TournamentMatchParticipantWinnerOfMatch::save(obs_data_t *dataObj) const
 void TournamentMatchParticipantWinnerOfMatch::load(obs_data_t *dataObj)
 {
 	TournamentMatchParticipant::load(dataObj);
+
     OBSDataAutoRelease winnerOfMatchReferenceData = obs_data_get_obj(dataObj, "winnerOfMatchReference");
     this->_winnerOfMatchReference.load(winnerOfMatchReferenceData);
 	// if (!dataObj) {

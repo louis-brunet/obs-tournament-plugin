@@ -1,11 +1,12 @@
 #pragma once
 
-#include "src/model/player.hpp"
+#include "src/model/player-reference.hpp"
 #include "src/model/tournament-match-participant.hpp"
 
 class TournamentMatchParticipantPlayer : public TournamentMatchParticipant {
 public:
-	TournamentMatchParticipantPlayer(Player *_player = nullptr);
+	TournamentMatchParticipantPlayer(PlayerReference _playerReference = PlayerReference());
+	// TournamentMatchParticipantPlayer(Player *_player = nullptr);
 	// TournamentMatchParticipant(TournamentMatch *deciderMatch);
 	~TournamentMatchParticipantPlayer();
     bool isValid() const override;
@@ -17,5 +18,6 @@ public:
     void load(obs_data_t *dataObj) override;
 
 private:
-    Player *_player;
+    PlayerReference _playerReference;
+    // Player *_player;
 };

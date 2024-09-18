@@ -1,4 +1,6 @@
 #include "player-combo-box.hpp"
+#include "src/model/match-reference.hpp"
+#include "src/model/player-reference.hpp"
 #include "src/model/tournament-match-participant-player.hpp"
 #include "src/model/tournament-match-participant-unknown.hpp"
 #include "src/model/tournament-match-participant-winner-of-match.hpp"
@@ -23,20 +25,26 @@ PlayerComboBoxData::toTournamentMatchParticipant() const
 		this->dataType);
 
 	switch (this->dataType) {
-	case PlayerComboBoxData::Type::Empty:
+	case PlayerComboBoxData::Type::Empty: {
 		participant = new TournamentMatchParticipantUnknown();
 		break;
-	case PlayerComboBoxData::Type::StaticPlayer:
+	}
+	case PlayerComboBoxData::Type::StaticPlayer: {
 		participant = new TournamentMatchParticipantPlayer(
-			this->staticPlayer.player);
+			this->staticPlayer.playerReference);
 		break;
-	case PlayerComboBoxData::Type::WinnerOfMatch:
+	}
+	case PlayerComboBoxData::Type::WinnerOfMatch: {
+		// TournamentReference tournamentReference(tournamentIndex);
+		// MatchReference winnerOfMatchReference(tournamentReference, this->winnerOfMatch.matchIndex);
 		participant = new TournamentMatchParticipantWinnerOfMatch(
-			this->winnerOfMatch.match, this->winnerOfMatch.matchIndex);
+			this->winnerOfMatch.matchReference);
 		break;
-	default:
-		throw new std::runtime_error("unrecognized participant type");
+	}
+	default: {
+		throw  std::runtime_error("unrecognized participant type");
 		break;
+	}
 	}
 
 	return participant;
@@ -63,8 +71,8 @@ PlayerComboBox::PlayerComboBox(const TournamentMatch &tournamentMatch)
 PlayerComboBox::~PlayerComboBox() {}
 
 void PlayerComboBox::setPlayerOptions(
-	const std::vector<Player *> players,
-	const std::vector<TournamentMatch *> matches)
+	const std::vector<PlayerReference> &players,
+	const std::vector<MatchReference> matches)
 {
 	auto textToReset = this->currentText();
 	this->clear();
@@ -78,22 +86,31 @@ void PlayerComboBox::setPlayerOptions(
 
 	for (unsigned int playerIndex = 0; playerIndex < players.size();
 	     playerIndex++) {
-		auto player = players[playerIndex];
+		auto playerReference = players[playerIndex];
+		auto player = playerReference.player();
 		auto staticPlayerData = new PlayerComboBoxData();
 		staticPlayerData->dataType =
 			PlayerComboBoxData::Type::StaticPlayer;
-		staticPlayerData->staticPlayer = {.player = player,
-						  .index = playerIndex};
+        staticPlayerData->staticPlayer = { .playerReference = playerReference };
+		// staticPlayerData->staticPlayer = {.player = player,
+		// 				  .index = playerIndex};
 		this->addItem(player->name().c_str(),
 			      (long long)staticPlayerData);
 	}
-	obs_log(LOG_INFO, "added %d players to player comboboxes",
+	obs_log(LOG_INFO, "[PlayerComboBox::setPlayerOptions] added %d players to player comboboxes",
 		players.size());
 
 	auto addedMatchCount = 0;
 	for (unsigned int matchIndex = 0; matchIndex < matches.size();
 	     matchIndex++) {
-		auto match = matches[matchIndex];
+	obs_log(LOG_INFO, "[PlayerComboBox::setPlayerOptions] adding winner of match %d",
+		matchIndex);
+		auto matchReference = matches[matchIndex];
+	obs_log(LOG_INFO, "[PlayerComboBox::setPlayerOptions] matchReference matchindex is %d",
+		matchReference.matchIndex);
+        auto match = matchReference.match();
+	obs_log(LOG_INFO, "[PlayerComboBox::setPlayerOptions] match is %p",
+		match);
 
 		if (this->matchFilterCallback(match)) {
 			const unsigned bufferSize = 64;
@@ -102,10 +119,16 @@ void PlayerComboBox::setPlayerOptions(
 				 obs_module_text("WinnerOfMatch"),
 				 match->matchLabel().c_str());
 
+            // MatchReference winnerOfMatchReference(tournamentReference, matchIndex);
+            // auto winnerOfMatchReference = matches[];
 			auto winnerOfMatchData = new PlayerComboBoxData();
 			winnerOfMatchData->dataType =
 				PlayerComboBoxData::Type::WinnerOfMatch;
-			winnerOfMatchData->winnerOfMatch = {.match = match, .matchIndex = matchIndex};
+			winnerOfMatchData->winnerOfMatch = {
+				.matchReference = matchReference};
+			//      {.match = match,
+			// .matchIndex =
+			//  matchIndex};
 			//, .index = matchIndex};
 			this->addItem(matchItemText,
 				      (long long)winnerOfMatchData);
@@ -113,9 +136,8 @@ void PlayerComboBox::setPlayerOptions(
 		}
 	}
 
-	// ............ TODO: why is there no more "winner of ..." in comboboxes?
 	obs_log(LOG_INFO,
-		"added %d tournament match winners to player comboboxes",
+		"[PlayerComboBox::setPlayerOptions] added %d tournament match winners to player comboboxes",
 		addedMatchCount);
 
 	auto matchFlags = this->completer()->filterMode();

@@ -3,6 +3,17 @@ sudo apt-get install libstdc++-12-dev
 ./scripts/build.sh
 ```
 
+# OBS Tournament Plugin
+
+## Development
+
+Install OBS Studio (Ubuntu)
+```
+sudo add-apt-repository ppa:obsproject/obs-studio
+
+sudo apt install obs-studio
+```
+
 # OBS Plugin Template
 
 ## Introduction

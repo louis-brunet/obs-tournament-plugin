@@ -1,4 +1,5 @@
 #include "custom-knockout-configuration-frame.hpp"
+#include "src/model/tournament-reference.hpp"
 #include "src/plugin-support.h"
 #include "src/model/tournament-match.hpp"
 #include "src/ui/tabs/custom-knockout-tab/custom-knockout-configuration-match-frame.hpp"
@@ -11,7 +12,9 @@ using namespace std;
 
 CustomKnockoutMatchConfigurationFrame::CustomKnockoutMatchConfigurationFrame(
 	CustomKnockoutTournament *tournament)
-	: _tournament(tournament)
+	// TournamentReference __tournamentReference)
+	: //_tournamentReference(__tournamentReference),
+	  _tournament(tournament)
 {
 
 	// auto matches = tournament->matches();
@@ -87,9 +90,14 @@ void CustomKnockoutMatchConfigurationFrame::addMatch(
 	TournamentMatchParticipant *participant2 = nullptr;
 
 	if (!tournamentMatch) {
-		auto matchLabel = this->getMatchIdFromMatchIndex(
-			(uint32_t)this->_tournament->matches.size());
-		tournamentMatch = new TournamentMatch(matchLabel.c_str());
+		auto matchIndex = this->_tournament->matches.size();
+		auto matchLabel =
+			this->getMatchIdFromMatchIndex((uint32_t)matchIndex);
+
+		MatchReference matchReference(this->_tournament->reference,
+					      (long long)matchIndex);
+		tournamentMatch =
+			new TournamentMatch(matchReference, matchLabel.c_str());
 		this->_tournament->matches.push_back(tournamentMatch);
 	} else {
 		participant1 = tournamentMatch->participant1();
@@ -98,9 +106,12 @@ void CustomKnockoutMatchConfigurationFrame::addMatch(
 
 	auto newMatchFrame = new CustomKnockoutMatchFrame(tournamentMatch);
 
+	// FIXME: when loading, setPlayerOptions is called n+1 times (once participant1 is defined, another after all matches load)
+	auto playerReferences = this->_tournament->playerReferences();
+	auto matchReferences = this->_tournament->matchReferences();
 	if (participant1) {
 		auto comboBox = newMatchFrame->player1ComboBox();
-		comboBox->setPlayerOptions(this->_tournament->players, {});
+		comboBox->setPlayerOptions(playerReferences, matchReferences);
 		auto comboBoxCompleter = comboBox->completer();
 		auto matchFlags = comboBoxCompleter->filterMode();
 		auto participantIndex = comboBox->findText(
@@ -110,7 +121,7 @@ void CustomKnockoutMatchConfigurationFrame::addMatch(
 	}
 	if (participant2) {
 		auto comboBox = newMatchFrame->player2ComboBox();
-		comboBox->setPlayerOptions(this->_tournament->players, {});
+		comboBox->setPlayerOptions(playerReferences, matchReferences);
 		auto comboBoxCompleter = comboBox->completer();
 		auto matchFlags = comboBoxCompleter->filterMode();
 		auto participantIndex = comboBox->findText(
@@ -124,7 +135,7 @@ void CustomKnockoutMatchConfigurationFrame::addMatch(
 
 void CustomKnockoutMatchConfigurationFrame::removeMatch()
 {
-	auto matches = this->_tournament->matches;
+	auto &matches = this->_tournament->matches;
 	auto matchCount = (uint32_t)matches.size();
 	if (matchCount > 0) {
 		auto lastIndex = matchCount - 1;
@@ -167,6 +178,9 @@ void CustomKnockoutMatchConfigurationFrame::updateAllPlayerOptions()
 	// auto matches = this->getTournamentMatches();
 	// auto players = this->_tournament->players;
 
+	auto playerReferences = this->_tournament->playerReferences();
+	auto matchReferences = this->_tournament->matchReferences();
+
 	// Update all player selection combo boxes
 	for (int matchIndex = 0; matchIndex < this->matchListLayout->count();
 	     matchIndex++) {
@@ -176,10 +190,11 @@ void CustomKnockoutMatchConfigurationFrame::updateAllPlayerOptions()
 		// auto tournamentMatch = new TournamentMatch(player1, player2);
 		auto matchFrame = reinterpret_cast<CustomKnockoutMatchFrame *>(
 			this->matchListLayout->itemAt(matchIndex)->widget());
+
 		matchFrame->player1ComboBox()->setPlayerOptions(
-			this->_tournament->players, this->_tournament->matches);
+			playerReferences, matchReferences);
 		matchFrame->player2ComboBox()->setPlayerOptions(
-			this->_tournament->players, this->_tournament->matches);
+			playerReferences, matchReferences);
 	}
 }
 

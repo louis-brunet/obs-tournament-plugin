@@ -40,7 +40,7 @@ public:
 		     index < obs_data_array_count(dataArray); index++) {
 			const OBSDataAutoRelease itemDataObj =
 				obs_data_array_item(dataArray, index);
-			iterateCallback(itemDataObj);
+			iterateCallback(itemDataObj, index);
 		}
 	}
 

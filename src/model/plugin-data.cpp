@@ -39,36 +39,39 @@ void TournamentPluginData::loadSettings(obs_data_t *dataObj)
 			// auto tournament = new Tournament(tournamentDataObj, tournamentIndex);
 			auto type = Tournament::loadType(tournamentDataObj);
 
-			TournamentReference reference{.tournamentIndex =
-							      tournamentIndex};
+			// TournamentReference reference{.tournamentIndex =
+			// 				      tournamentIndex};
+			TournamentReference reference(
+				(long long)tournamentIndex);
 
 			// Tournament *tournament;
 			switch (type) {
 			case Tournament::Type::
 				SingleEliminationKnockoutTournamentType: {
-				throw new std::runtime_error(
+				throw  std::runtime_error(
 					"TODO: single elim knockout loadStatic");
 				break;
 			}
 
 			case Tournament::Type::CustomKnockoutTournamentType: {
-				auto t = new CustomKnockoutTournament(reference);
+				auto t =
+					new CustomKnockoutTournament(reference);
 				this->tournaments.push_back(t);
 				t->load(tournamentDataObj);
 				break;
 			}
 
 			default: {
-				throw new std::runtime_error(
+				throw  std::runtime_error(
 					"loadStatic: unrecognized tournament type");
 				break;
 			}
 			}
 		});
 
-	TournamentPluginDataObjectHelpers::loadArray<Tournament>(
-		dataObj, "tournaments", this->tournaments,
-		Tournament::loadStatic);
+	// TournamentPluginDataObjectHelpers::loadArray<Tournament>(
+	// 	dataObj, "tournaments", this->tournaments,
+	// 	Tournament::loadStatic);
 }
 
 void TournamentPluginData::saveSettings(obs_data_t *dataObj)

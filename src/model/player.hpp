@@ -9,6 +9,10 @@ public:
     static Player *loadStatic(obs_data_t *dataObj);
 
 	Player(const std::string name = "<UNNAMED>");
+    Player(Player &&) = default;
+    Player(const Player &) = default;
+    Player &operator=(Player &&) = default;
+    Player &operator=(const Player &) = default;
 	~Player() = default;
 
 	std::string name();

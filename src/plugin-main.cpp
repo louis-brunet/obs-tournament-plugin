@@ -4,7 +4,6 @@
 #include "src/ui/dialogs/plugin-dialog.hpp"
 #include "version.h"
 
-// #include <obs.h>
 #include <obs.hpp>
 #include <obs-module.h>
 #include <obs-frontend-api.h>
@@ -58,8 +57,18 @@ static void frontend_save_load(obs_data_t *saveData, bool saving,
 			obs_log(LOG_INFO, "Loading - save data does not exist");
 			settingsData = obs_data_create();
 		}
-        pluginData->loadSettings(settingsData);
-		obs_log(LOG_INFO, "Loading - save data exists:\n%s",
+
+        try {
+            pluginData->loadSettings(settingsData);
+        } catch (const std::exception &e) {
+			obs_log(LOG_ERROR,
+				"Error during loadSettings: %s",
+				e.what());
+            throw e;
+            // return;
+        }
+
+		obs_log(LOG_INFO, "Loaded - save data exists:\n%s",
 			obs_data_get_json_pretty(settingsData));
 		obs_log(LOG_INFO, "Loaded plugin data - %s",
 			pluginData->toJson().c_str());
@@ -68,8 +77,11 @@ static void frontend_save_load(obs_data_t *saveData, bool saving,
 
 bool obs_module_load(void)
 {
-	obs_log(LOG_INFO, "[%s] loaded version %s", PLUGIN_NAME,
+	obs_log(LOG_INFO, "loaded version %s",
 		PROJECT_VERSION);
+	obs_log(LOG_INFO, "",
+		PROJECT_VERSION);
+
 	initTournamentPluginData();
 
 	auto *action = (QAction *)obs_frontend_add_tools_menu_qaction(
@@ -88,6 +100,7 @@ bool obs_module_load(void)
 			obs_log(LOG_ERROR,
 				"Error during plugin dialog initialization: %s",
 				e.what());
+            throw e;
 		}
 		obs_frontend_pop_ui_translation();
 	};

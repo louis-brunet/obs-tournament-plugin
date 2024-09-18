@@ -3,19 +3,22 @@
 #include "src/model/match-reference.hpp"
 #include "src/model/plugin-data-object.hpp"
 #include "src/model/tournament-match-participant.hpp"
-#include <memory>
 
 // class TournamentMatchParticipant;
 
 class TournamentMatch : public TournamentPluginDataObject {
 public:
-	static TournamentMatch *loadStatic(obs_data_t *dataObj, MatchReference reference);
+	// static TournamentMatch *loadStatic(obs_data_t *dataObj, MatchReference reference);
 
-    TournamentMatch(MatchReference reference);
+    TournamentMatch(MatchReference reference, const char* matchLabel = "");
 	// TournamentMatch(Player *player1, Player *player2);
 	// TournamentMatch(const char *matchLabel = "",
 	// 		TournamentMatchParticipant *player1 = nullptr,
 	// 		TournamentMatchParticipant *player2 = nullptr);
+    TournamentMatch(TournamentMatch &&) = default;
+    TournamentMatch(const TournamentMatch &) = default;
+    TournamentMatch &operator=(TournamentMatch &&) = default;
+    TournamentMatch &operator=(const TournamentMatch &) = default;
 	~TournamentMatch();
 
     std::string matchLabel() const;
@@ -30,8 +33,10 @@ public:
 private:
     std::string _matchLabel;
 	// std::array<std::unique_ptr<TournamentMatchParticipant>, 2> participants;
-    std::unique_ptr<TournamentMatchParticipant> _participant1;
-    std::unique_ptr<TournamentMatchParticipant> _participant2;
+    TournamentMatchParticipant *_participant1;
+    TournamentMatchParticipant *_participant2;
+    // std::unique_ptr<TournamentMatchParticipant> _participant1;
+    // std::unique_ptr<TournamentMatchParticipant> _participant2;
 
     MatchReference _reference;
 };

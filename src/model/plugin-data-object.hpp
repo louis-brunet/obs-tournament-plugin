@@ -60,4 +60,12 @@ public:
 
 	virtual void save(obs_data_t *dataObj) const = 0;
 	virtual void load(obs_data_t *dataObj) = 0;
+
+protected:
+    TournamentPluginDataObject() = default;
+    TournamentPluginDataObject(TournamentPluginDataObject &&) = default;
+    TournamentPluginDataObject(const TournamentPluginDataObject &) = default;
+    TournamentPluginDataObject &operator=(TournamentPluginDataObject &&) = default;
+    TournamentPluginDataObject &operator=(const TournamentPluginDataObject &) = default;
 };
+
