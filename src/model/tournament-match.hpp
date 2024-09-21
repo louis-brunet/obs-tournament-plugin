@@ -22,10 +22,11 @@ public:
 	~TournamentMatch();
 
     std::string matchLabel() const;
-	TournamentMatchParticipant *participant1();
-	TournamentMatchParticipant *participant2();
+	TournamentMatchParticipant *participant1() const;
+	TournamentMatchParticipant *participant2() const;
 	void setParticipant1(TournamentMatchParticipant *);
 	void setParticipant2(TournamentMatchParticipant *);
+    // bool isReady() const;
 
 	void save(obs_data_t *dataObj) const;
 	void load(obs_data_t *dataObj);

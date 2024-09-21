@@ -1,6 +1,6 @@
 #include "line-edit.hpp"
 
-AppLineEdit::AppLineEdit()
+AppLineEdit::AppLineEdit(const char *_contents, QWidget *parent): QLineEdit(_contents, parent)
 {
 	this->connect(this, &QLineEdit::textChanged,
 		      [this]() { this->updateTextColorStyleSheet(); });

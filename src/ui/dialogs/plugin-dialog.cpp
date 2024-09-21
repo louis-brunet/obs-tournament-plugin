@@ -37,7 +37,7 @@ TournamentPluginDialog::TournamentPluginDialog(std::string pluginVersionStr,
 {
 	this->pluginVersion = pluginVersionStr;
 	this->tabsWidget = new QTabWidget();
-    // this->tabsWidget->setTabsClosable(true);
+	// this->tabsWidget->setTabsClosable(true);
 
 	auto setupTab = new SetupTabFrame(this->tabsWidget);
 	this->tabsWidget->addTab(setupTab, obs_module_text("SetupTabTitle"));
@@ -176,14 +176,14 @@ void TournamentPluginDialog::loadData(const TournamentPluginData *_pluginData)
 
 	for (auto tournament : _pluginData->tournaments) {
 		QWidget *tournamentTab;
-		const char *tournamentTabTitle;
+		// const char *tournamentTabTitle;
 		obs_log(LOG_INFO,
 			"TournamentPluginDialog::loadData tournament ptr is %p",
 			tournament);
 
 		switch (tournament->type) {
 		case Tournament::Type::SingleEliminationKnockoutTournamentType:
-			throw  std::runtime_error(
+			throw std::runtime_error(
 				"TODO: SingleEliminationKnockoutTournament");
 			// (new ErrorDialog(
 			// 	 this,
@@ -191,10 +191,10 @@ void TournamentPluginDialog::loadData(const TournamentPluginData *_pluginData)
 			// 	->show();
 			// return;
 			break;
-            case Tournament::Type::CustomKnockoutTournamentType:
-			tournamentTab = new CustomKnockoutTabFrame(reinterpret_cast<CustomKnockoutTournament *>(tournament));
-			tournamentTabTitle =
-				obs_module_text("CustomKnockoutTabTitle");
+		case Tournament::Type::CustomKnockoutTournamentType:
+			tournamentTab = new CustomKnockoutTabFrame(
+				reinterpret_cast<CustomKnockoutTournament *>(
+					tournament));
 			break;
 
 		default:
@@ -204,6 +204,8 @@ void TournamentPluginDialog::loadData(const TournamentPluginData *_pluginData)
 
 		obs_log(LOG_INFO,
 			"TournamentPluginDialog::loadData restoring tournament tab");
+		const char *tournamentTabTitle = tournament->title.c_str();
+		// obs_module_text("CustomKnockoutTabTitle");
 		this->tabsWidget->addTab(tournamentTab, tournamentTabTitle);
 	}
 }

@@ -1,9 +1,9 @@
 #include "custom-knockout-tournament.hpp"
 
 CustomKnockoutTournament::CustomKnockoutTournament(
-	TournamentReference __reference, std::vector<Player *> &&__players)
+	TournamentReference __reference, std::vector<Player *> &&__players, std::string __title)
 	: Tournament(Tournament::Type::CustomKnockoutTournamentType,
-		     std::move(__players), __reference),
+		     std::move(__players), __reference, __title),
 	  _isStarted(false)
 {
 }
@@ -30,12 +30,14 @@ void CustomKnockoutTournament::start() {
 void CustomKnockoutTournament::save(obs_data_t *dataObj) const
 {
 	Tournament::save(dataObj);
+
 	obs_data_set_bool(dataObj, "isStarted", this->_isStarted);
 }
 
 void CustomKnockoutTournament::load(obs_data_t *dataObj)
 {
 	Tournament::load(dataObj);
+
 	obs_data_set_default_bool(dataObj, "isStarted", false);
 	this->_isStarted = obs_data_get_bool(dataObj, "isStarted");
 }

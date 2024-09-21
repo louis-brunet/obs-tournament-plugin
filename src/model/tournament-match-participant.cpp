@@ -19,9 +19,9 @@ TournamentMatchParticipant::~TournamentMatchParticipant() {}
 TournamentMatchParticipant *
 TournamentMatchParticipant::loadStatic(obs_data_t *dataObj)
 {
-    if (!dataObj) {
-        return nullptr;
-    }
+	if (!dataObj) {
+		return nullptr;
+	}
 
 	// auto dataType = (TournamentMatchParticipant::Type)obs_data_get_int(
 	// 	dataObj, "participantType");
@@ -61,7 +61,7 @@ TournamentMatchParticipant::loadStatic(obs_data_t *dataObj)
 	}
 
 	default:
-		throw  std::runtime_error("unrecognized participant type");
+		throw std::runtime_error("unrecognized participant type");
 	}
 
 	return participant;
@@ -95,4 +95,38 @@ void TournamentMatchParticipant::load(obs_data_t *dataObj)
 void TournamentMatchParticipant::save(obs_data_t *dataObj) const
 {
 	obs_data_set_int(dataObj, "type", this->_type);
+}
+
+// TournamentMatchParticipant::ValidateResult::ValidateResult(
+// 	TournamentMatchParticipant::ValidateResult::Type _type,
+// 	TournamentMatchParticipant::ValidateResult::Data _data)
+// 	: type(_type),
+// 	  data(_data)
+// {
+// }
+// // TournamentMatchParticipant::ValidateResult::ValidateResult() {}
+//
+// TournamentMatchParticipant::ValidateResult::~ValidateResult() {}
+
+// TournamentMatchParticipant::ValidateResult::Data(InvalidData _data): invalid(_data) {}
+
+// TournamentMatchParticipant::ValidateResult::ValidateResult(
+// 	TournamentMatchParticipant::ValidateResult::InvalidData _data)
+// 	: type(TournamentMatchParticipant::ValidateResult::Type::Invalid),
+// 	  data(_data)
+// {
+// }
+// TournamentMatchParticipant::ValidateResult::ValidateResult(
+// 	TournamentMatchParticipant::ValidateResult::ValidData _data)
+// 	: type(TournamentMatchParticipant::ValidateResult::Type::Valid),
+// 	  data(_data)
+// {
+// }
+
+// TournamentMatchParticipant::ValidateResult::~ValidateResult() {}
+
+bool TournamentMatchParticipant::ValidateResult::isValid()
+{
+	return this->type ==
+	       TournamentMatchParticipant::ValidateResult::Type::Valid;
 }

@@ -85,13 +85,13 @@ std::string TournamentMatch::matchLabel() const
 	return this->_matchLabel;
 }
 
-TournamentMatchParticipant *TournamentMatch::participant1()
+TournamentMatchParticipant *TournamentMatch::participant1() const
 {
 	return this->_participant1;
 	// return this->participants[0];
 }
 
-TournamentMatchParticipant *TournamentMatch::participant2()
+TournamentMatchParticipant *TournamentMatch::participant2() const
 {
 	return this->_participant2;
 }
@@ -105,3 +105,8 @@ void TournamentMatch::setParticipant2(TournamentMatchParticipant *participant)
 {
 	this->_participant2 = participant;
 }
+
+// bool TournamentMatch::isReady() const
+// {
+// 	return this->_participant1->isReady() && this->_participant2->isReady();
+// }

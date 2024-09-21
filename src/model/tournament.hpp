@@ -10,10 +10,10 @@
 
 class Tournament : public TournamentPluginDataObject {
 public:
-    enum Type {
-        SingleEliminationKnockoutTournamentType = 0,
-        CustomKnockoutTournamentType,
-    };
+	enum Type {
+		SingleEliminationKnockoutTournamentType = 0,
+		CustomKnockoutTournamentType,
+	};
 
 	// static Tournament *load(obs_data_t *dataObj);
 	// static Tournament *loadStatic(obs_data_t *dataObj);
@@ -21,13 +21,16 @@ public:
 
 	virtual ~Tournament();
 
-	// std::vector<std::unique_ptr<Player>> players;
 	std::vector<Player *> players;
 	Tournament::Type type;
 	std::vector<TournamentMatch *> matches;
 	TournamentReference reference;
-    std::vector<PlayerReference> playerReferences();
-    std::vector<MatchReference> matchReferences();
+	std::string title;
+
+	std::vector<PlayerReference> playerReferences();
+	std::vector<MatchReference> matchReferences();
+	// virtual MatchReference currentMatch();
+	// virtual std::vector<MatchReference> matchesReady();
 
 	virtual void save(obs_data_t *dataObj) const override;
 	virtual void load(obs_data_t *dataObj) override;
@@ -35,13 +38,9 @@ public:
 protected:
 	Tournament(const Tournament::Type type,
 		   std::vector<Player *> &&_players,
-		   // std::vector<std::unique_ptr<Player>> &&players,
-		   TournamentReference reference);
-    Tournament(Tournament &&) = default;
-    Tournament(const Tournament &) = default;
-    Tournament &operator=(Tournament &&) = default;
-    Tournament &operator=(const Tournament &) = default;
-	// const std::vector<Player *> &players);
-
-	// private:
+		   TournamentReference reference, std::string title);
+	Tournament(Tournament &&) = default;
+	Tournament(const Tournament &) = default;
+	Tournament &operator=(Tournament &&) = default;
+	Tournament &operator=(const Tournament &) = default;
 };

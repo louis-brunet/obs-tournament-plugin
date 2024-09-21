@@ -1,6 +1,4 @@
 #include "custom-knockout-tab.hpp"
-#include "src/model/tournament-reference.hpp"
-#include "src/plugin-support.h"
 #include "src/model/tournament-match-participant.hpp"
 #include "src/ui/dialogs/error-dialog.hpp"
 

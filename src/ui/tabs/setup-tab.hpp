@@ -3,6 +3,7 @@
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
+#include <QLineEdit>
 
 class SetupTabFrame : public QFrame {
 	Q_OBJECT;
@@ -26,6 +27,7 @@ private:
 	QWidget *tournamentBuilderFrame;
 	QVBoxLayout *playerListLayout;
 	QComboBox *tournamentTypeComboBox;
+	QLineEdit *tournamentTitleLineEdit;
 	QTabWidget *tabWidget;
 	uint16_t playerCount;
 

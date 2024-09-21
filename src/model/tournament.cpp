@@ -6,12 +6,13 @@
 Tournament::Tournament(const Tournament::Type _type,
 		       // std::vector<std::unique_ptr<Player>> &&_players,
 		       std::vector<Player *> &&_players,
-		       TournamentReference _reference)
+		       TournamentReference _reference, std::string _title)
 	// Tournament::Tournament(Tournament::Type _type,
 	// 		       const std::vector<Player *> &_players)
 	: players(_players),
 	  type(_type),
-	  reference(_reference)
+	  reference(_reference),
+	  title(_title)
 {
 }
 
@@ -53,6 +54,10 @@ Tournament::Type Tournament::loadType(obs_data_t *dataObj)
 
 void Tournament::load(obs_data_t *dataObj)
 {
+	obs_data_set_default_string(dataObj, "title",
+				    "[Missing tournament title]");
+	this->title = obs_data_get_string(dataObj, "title");
+
 	this->type = this->loadType(dataObj);
 	obs_log(LOG_INFO, "[Tournament::load] loaded type %d", this->type);
 
@@ -112,6 +117,7 @@ void Tournament::load(obs_data_t *dataObj)
 void Tournament::save(obs_data_t *dataObj) const
 {
 	obs_data_set_int(dataObj, "type", this->type);
+	obs_data_set_string(dataObj, "title", this->title.c_str());
 
 	TournamentPluginDataObjectHelpers::saveArray<Player>(dataObj, "players",
 							     this->players);
@@ -172,4 +178,16 @@ std::vector<MatchReference> Tournament::matchReferences()
 //
 // 	// tournament->load(dataObj);
 // 	return tournament;
+// }
+
+// std::vector<MatchReference> Tournament::matchesReady() {
+//     std::vector<MatchReference> resultMatches;
+//
+//     for (auto match : this->matches){
+//         if (match->isReady()) {
+//             return resultMatches;
+//         }
+//     }
+//
+//     return resultMatches;
 // }

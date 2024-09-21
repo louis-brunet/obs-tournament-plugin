@@ -9,7 +9,9 @@ public:
 	// TournamentMatchParticipantPlayer(Player *_player = nullptr);
 	// TournamentMatchParticipant(TournamentMatch *deciderMatch);
 	~TournamentMatchParticipantPlayer();
-    bool isValid() const override;
+
+    ValidateResult validate(MatchReference &matchReference) const override;
+    // bool isValid() const override;
     bool isReady() const override;
     std::string displayName() const override;
     // inline operator std::string() const { return this->_player->name(); };

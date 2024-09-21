@@ -85,9 +85,8 @@ SetupTabFrame::SetupTabFrame(QTabWidget *_tabWidget)
 
 	// obs_log(LOG_INFO, "before DebugFrame");
 	auto onResetDataCallback = [this]() {
-		for (auto tabIndex = 1; tabIndex < this->tabWidget->count();
-		     tabIndex++) {
-			this->tabWidget->removeTab(tabIndex);
+		while (this->tabWidget->count() > 1) {
+			this->tabWidget->removeTab(1);
 		}
 	};
 	auto debugFrame = new DebugFrame(onResetDataCallback);
@@ -128,6 +127,11 @@ void SetupTabFrame::initTournamentBuilder()
 	// auto *tournamentBuilderTitle =
 	// 	new QLabel(obs_module_text("SetupTabTournamentBuilderTitle"));
 
+	this->tournamentTitleLineEdit =
+		new AppLineEdit(); //obs_module_text("TournamentTypeCustomKnockout"));
+	this->tournamentTitleLineEdit->setPlaceholderText(
+		obs_module_text("SetupTabTournamentTitlePlaceholder"));
+
 	this->tournamentTypeComboBox = new QComboBox();
 	for (auto a : tournamentTypeNameToTournamentTypeMap) {
 		auto name = a.first;
@@ -158,6 +162,7 @@ void SetupTabFrame::initTournamentBuilder()
 	auto *tournamentBuilderLayout = new QVBoxLayout();
 	// tournamentBuilderLayout->addWidget(tournamentBuilderTitle, 0,
 	// Qt::AlignTop);
+	tournamentBuilderLayout->addWidget(this->tournamentTitleLineEdit, 0);
 	tournamentBuilderLayout->addWidget(this->tournamentTypeComboBox, 0,
 					   Qt::AlignTop);
 	tournamentBuilderLayout->addLayout(playerListButtonsLayout);
@@ -209,10 +214,23 @@ void SetupTabFrame::updateRemovePlayerButtonVisibility()
 
 bool SetupTabFrame::finishTournamentBuilder()
 {
+	const unsigned int errorMessageBufferSize = 256;
+	char errorMessage[errorMessageBufferSize];
+
 	auto tournamentType =
 		(Tournament::Type)this->tournamentTypeComboBox->currentData()
 			.toInt();
 	obs_log(LOG_INFO, "Chose tournament type %d", tournamentType);
+
+	std::string newTournamentTitle =
+		this->tournamentTitleLineEdit->text().toStdString();
+	obs_log(LOG_INFO, "Tournament title: '%s'", newTournamentTitle.c_str());
+	if (newTournamentTitle == "") {
+		auto errorDialog = new ErrorDialog(
+			this, obs_module_text("ErrorMissingTournamentTitle"));
+		errorDialog->show();
+		return false;
+	}
 
 	// auto players = this->getPlayersFromPlayerList();
 	vector<Player *> players;
@@ -224,8 +242,6 @@ bool SetupTabFrame::finishTournamentBuilder()
 		auto playerName = newPlayerFrame->getPlayerName();
 
 		if (playerName == "") {
-			const unsigned int errorMessageBufferSize = 256;
-			char errorMessage[errorMessageBufferSize];
 			snprintf(errorMessage, errorMessageBufferSize,
 				 "Seed %d: %s", playerIndex + 1,
 				 obs_module_text("ErrorMissingPlayerName"));
@@ -242,7 +258,6 @@ bool SetupTabFrame::finishTournamentBuilder()
 
 	Tournament *newTournament;
 	QWidget *newTab;
-	const char *newTabTitle;
 	auto tournamentIndex = pluginData->tournaments.size();
 	TournamentReference newTournamentReference((long long)tournamentIndex);
 
@@ -256,19 +271,21 @@ bool SetupTabFrame::finishTournamentBuilder()
 		obs_log(LOG_INFO,
 			"[finishTournamentBuilder] Creating custom knockout tab");
 		newTournament = new CustomKnockoutTournament(
-			newTournamentReference, std::move(players));
-        pluginData->tournaments.push_back(newTournament); // NOTE: needs to be before CustomKnockoutTabFrame initialization
+			newTournamentReference, std::move(players),
+			newTournamentTitle);
+		pluginData->tournaments.push_back(
+			newTournament); // NOTE: needs to be before CustomKnockoutTabFrame initialization
 		newTab = new CustomKnockoutTabFrame(
 			reinterpret_cast<CustomKnockoutTournament *>(
 				newTournament));
-		newTabTitle = obs_module_text("CustomKnockoutTabTitle");
 		break;
 
 	default:
 		throw std::runtime_error("unhandled enum variant");
-        break;
+		break;
 	}
-	this->tabWidget->addTab(newTab, newTabTitle);
+	// newTabTitle = newTournament->title.c_str();
+	this->tabWidget->addTab(newTab, newTournamentTitle.c_str());
 	this->tabWidget->setCurrentWidget(newTab);
 
 	this->showTournamentBuilder(false);

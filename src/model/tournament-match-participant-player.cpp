@@ -1,5 +1,5 @@
 #include "tournament-match-participant-player.hpp"
-#include "src/plugin-support.h"
+#include <obs-module.h>
 #include <obs.hpp>
 
 TournamentMatchParticipantPlayer::TournamentMatchParticipantPlayer(
@@ -14,22 +14,48 @@ TournamentMatchParticipantPlayer::TournamentMatchParticipantPlayer(
 
 TournamentMatchParticipantPlayer::~TournamentMatchParticipantPlayer() {}
 
-bool TournamentMatchParticipantPlayer::isValid() const
+TournamentMatchParticipant::ValidateResult
+TournamentMatchParticipantPlayer::validate(MatchReference &matchReference) const
 {
-	return this->_playerReference.player() != nullptr;
+	if (this->_playerReference.player() == nullptr) {
+		// auto result = TournamentMatchParticipant::ValidateResult(TournamentMatchParticipant::ValidateResult::Type::Invalid);
+		// result.
+		TournamentMatchParticipant::ValidateResult::InvalidData data{
+			.message = obs_module_text(
+				"Error.TournamentMatchParticipantPlayer.InvalidPlayerReference")};
+		return TournamentMatchParticipant::ValidateResult(data);
+		// return TournamentMatchParticipant::ValidateResult{
+		// 	.type = TournamentMatchParticipant::ValidateResult::
+		// 		Type::Invalid,
+		// 		.invalid = {
+		// 			.message = obs_module_text(
+		// 				"Error.TournamentMatchParticipant.MissingPlayer")}};
+	}
+    ....TODO check if other player is this player ? do i really need to switch on the other participant's type ? probably
+
+	TournamentMatchParticipant::ValidateResult::ValidData data{};
+	return TournamentMatchParticipant::ValidateResult(data);
+	// return TournamentMatchParticipant::ValidateResult{
+	// 	.type = TournamentMatchParticipant::ValidateResult::Type::Valid,
+	// 	.valid = {}};
 }
+// bool TournamentMatchParticipantPlayer::isValid() const
+// {
+// 	return this->_playerReference.player() != nullptr;
+// }
 
 bool TournamentMatchParticipantPlayer::isReady() const
 {
-	return this->isValid();
+	auto a = this->validate();
+	return this->validate().isValid();
 }
 
 std::string TournamentMatchParticipantPlayer::displayName() const
 {
-    auto player = this->_playerReference.player();
-    if (!player) {
-        return obs_module_text("InvalidPlayerReference");
-    }
+	auto player = this->_playerReference.player();
+	if (!player) {
+		return obs_module_text("InvalidPlayerReference");
+	}
 	return player->name();
 }
 
@@ -37,9 +63,9 @@ void TournamentMatchParticipantPlayer::save(obs_data_t *dataObj) const
 {
 	TournamentMatchParticipant::save(dataObj);
 
-    OBSDataAutoRelease playerRefData = obs_data_create();
-    this->_playerReference.save(playerRefData);
-    obs_data_set_obj(dataObj, "playerReference", playerRefData);
+	OBSDataAutoRelease playerRefData = obs_data_create();
+	this->_playerReference.save(playerRefData);
+	obs_data_set_obj(dataObj, "playerReference", playerRefData);
 
 	// if (this->_player) {
 	// 	OBSDataAutoRelease playerData = obs_data_create();
@@ -50,7 +76,7 @@ void TournamentMatchParticipantPlayer::save(obs_data_t *dataObj) const
 
 void TournamentMatchParticipantPlayer::load(obs_data_t *dataObj)
 {
-    TournamentMatchParticipant::load(dataObj);
+	TournamentMatchParticipant::load(dataObj);
 
 	OBSDataAutoRelease playerReferenceData =
 		obs_data_get_obj(dataObj, "playerReference");

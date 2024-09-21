@@ -2,6 +2,7 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <qscrollarea.h>
 
 CustomKnockoutRunningFrame::CustomKnockoutRunningFrame()
 {
@@ -14,7 +15,11 @@ CustomKnockoutRunningFrame::CustomKnockoutRunningFrame()
 
 	// TODO: tournament running frame
 	// auto ongoingMatchesWidget = new CustomKnockoutRunningOngoingMatchesFrame();
-	// frameLayout->addWidget(ongoingMatchesWidget, 0, 1);
+    auto ongoingMatchesWidget = new QScrollArea();
+	frameLayout->addWidget(ongoingMatchesWidget, 1, 1);
+
+    auto ongoingMatchesLayout = new QVBoxLayout();
+    ongoingMatchesWidget->setLayout(ongoingMatchesLayout);
 
 	this->setLayout(frameLayout);
 }

@@ -20,7 +20,9 @@ public:
 		// MatchReference selfMatchReference,
 		MatchReference winnerOfMatchReference = {});
 	~TournamentMatchParticipantWinnerOfMatch();
-	bool isValid() const override;
+
+    ValidateResult validate(MatchReference &matchReference) const override;
+	// bool isValid() const override;
 	bool isReady() const override;
 	std::string displayName() const override;
 

@@ -6,9 +6,11 @@
 CustomKnockoutRunningAllMatchesFrame::CustomKnockoutRunningAllMatchesFrame()
 {
 	auto frameLayout = new QVBoxLayout();
+    frameLayout->setAlignment(Qt::AlignTop);
 
 	// TODO: tournament running all matches frame
 	this->matchListLayout = frameLayout;
+
 	// frameLayout->addWidget(new QLabel("TODO: all matches"), 1);
 
 	this->setLayout(frameLayout);

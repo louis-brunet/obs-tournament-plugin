@@ -6,7 +6,9 @@ class TournamentMatchParticipantUnknown : public TournamentMatchParticipant {
 public:
 	TournamentMatchParticipantUnknown();
 	~TournamentMatchParticipantUnknown();
-    bool isValid() const override;
+
+    ValidateResult validate() const override;
+    // bool isValid() const override;
     bool isReady() const override;
     std::string displayName() const override;
 
