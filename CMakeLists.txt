@@ -9,11 +9,14 @@ else()
   cmake_minimum_required(VERSION 3.18)
 endif()
 
-# project(${_name} VERSION ${_version})
-project(obs-tournament-plugin VERSION 0.0.1)
-set(PROJECT_FULL_NAME "Tournament")
+# project(obs-tournament-plugin VERSION 0.0.1)
+# set(PROJECT_FULL_NAME "Tournament")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCOPE)
+
+project(${_name} VERSION ${_version})
+set(PROJECT_FULL_NAME ${_displayName})
+
 include(compilerconfig)
 include(defaults)
 # include(helpers)
@@ -23,7 +26,7 @@ set(MACOS_PACKAGE_UUID "F721F3E7-EBCA-49BF-ACB4-327FDCB8E78E")
 set(MACOS_INSTALLER_UUID "3E600B4A-97D1-482F-8C4A-83F01D38F710")
 
 add_library(${PROJECT_NAME} MODULE)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h)
+# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h)
 
 # if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/plugin-support.c.in")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/plugin-support.c.in ${CMAKE_CURRENT_SOURCE_DIR}/src/plugin-support.c @ONLY)
@@ -42,62 +45,46 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/plugin-support.c.in ${CMAKE_CURRE
 # # endif()
 
 target_sources(${PROJECT_NAME} PRIVATE 
-    src/plugin-main.cpp
-    src/plugin-main.hpp
-    src/plugin-support.c
-    src/plugin-support.h
-    src/ui/components/player-combo-box.cpp
-    src/ui/components/player-combo-box.hpp
-    src/ui/components/line-edit.cpp
-    src/ui/components/line-edit.hpp
+    src/data/data-helpers.cpp
+    src/data/data-helpers.hpp
+    src/data/match-participant-from-match.cpp
+    src/data/match-participant-from-match.hpp
+    src/data/match-participant-player.cpp
+    src/data/match-participant-player.hpp
+    src/data/match-participant-unknown.cpp
+    src/data/match-participant-unknown.hpp
+    src/data/match-participant.cpp
+    src/data/match-participant.hpp
+    src/data/match-reference.cpp
+    src/data/match-reference.hpp
+    src/data/match.cpp
+    src/data/match.hpp
+    src/data/player-reference.cpp
+    src/data/player-reference.hpp
+    src/data/player.cpp
+    src/data/player.hpp
+    src/data/plugin-data.cpp
+    src/data/plugin-data.hpp
+    src/data/tournament-reference.cpp
+    src/data/tournament-reference.hpp
+    src/data/tournament-round-reference.cpp
+    src/data/tournament-round-reference.hpp
+    src/data/tournament-round.cpp
+    src/data/tournament-round.hpp
+    src/data/tournament.cpp
+    src/data/tournament.hpp
     src/ui/dialogs/base-dialog.cpp
     src/ui/dialogs/base-dialog.hpp
-    src/ui/dialogs/plugin-dialog.cpp
-    src/ui/dialogs/plugin-dialog.hpp
     src/ui/dialogs/error-dialog.cpp
     src/ui/dialogs/error-dialog.hpp
-    src/ui/tabs/debug-frame.cpp
-    src/ui/tabs/debug-frame.hpp
-    src/ui/tabs/setup-tab.cpp
-    src/ui/tabs/setup-tab.hpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-configuration-frame.cpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-configuration-frame.hpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-configuration-match-frame.cpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-configuration-match-frame.hpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-running-all-matches-frame.cpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-running-all-matches-frame.hpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-running-frame.cpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-running-frame.hpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-tab.cpp
-    src/ui/tabs/custom-knockout-tab/custom-knockout-tab.hpp
-    src/model/custom-knockout-tournament.cpp
-    src/model/custom-knockout-tournament.hpp
-    src/model/match-reference.cpp
-    src/model/match-reference.hpp
-    src/model/player-reference.cpp
-    src/model/player-reference.hpp
-    src/model/player.cpp
-    src/model/player.hpp
-    src/model/plugin-data-object-helpers.hpp
-    src/model/plugin-data-object.cpp
-    src/model/plugin-data-object.hpp
-    src/model/plugin-data.cpp
-    src/model/plugin-data.hpp
-    src/model/tournament-match-participant-player.cpp
-    src/model/tournament-match-participant-player.hpp
-    src/model/tournament-match-participant-unknown.cpp
-    src/model/tournament-match-participant-unknown.hpp
-    src/model/tournament-match-participant-winner-of-match.cpp
-    src/model/tournament-match-participant-winner-of-match.hpp
-    src/model/tournament-match-participant.cpp
-    src/model/tournament-match-participant.hpp
-    src/model/tournament-match.cpp
-    src/model/tournament-match.hpp
-    src/model/tournament-reference.cpp
-    src/model/tournament-reference.hpp
-    src/model/tournament.hpp
-    src/model/tournament.cpp
-    src/version.h)
+    src/ui/dialogs/plugin-dialog.cpp
+    src/ui/dialogs/plugin-dialog.hpp
+    src/logger.cpp
+    src/logger.hpp
+    src/plugin-main.cpp
+    src/plugin-support.c
+    src/plugin-support.h
+)
 
 if(BUILD_OUT_OF_TREE)
   find_package(libobs REQUIRED)

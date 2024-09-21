@@ -1,8 +1,7 @@
-#include "plugin-main.hpp"
 #include "plugin-support.h"
-#include "src/model/plugin-data.hpp"
+#include "src/data/plugin-data.hpp"
+#include "src/logger.hpp"
 #include "src/ui/dialogs/plugin-dialog.hpp"
-#include "version.h"
 
 #include <obs.hpp>
 #include <obs-module.h>
@@ -19,68 +18,69 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <qmainwindow.h>
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_AUTHOR("Louis Brunet");
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
+using namespace Logger;
+
 static void frontend_save_load(obs_data_t *saveData, bool saving,
 			       void *privateData)
 {
 	UNUSED_PARAMETER(privateData);
+	// UNUSED_PARAMETER(saveData);
+	// UNUSED_PARAMETER(saving);
 
 	if (!pluginData) {
 		return;
 	}
 
 	if (saving) {
-		obs_log(LOG_INFO, "Saving");
+		log("Saving");
+
 		OBSDataAutoRelease settingsData = obs_data_create();
 		obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
-		pluginData->saveSettings(settingsData);
+		try {
+			pluginData->saveSettings(settingsData);
+		} catch (const std::exception &e) {
+			log("Error during saveSettings: %s", e.what());
+			throw e;
+		}
 		obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
 
-		obs_log(LOG_INFO, "Saved settings:\n%s",
-			obs_data_get_json_pretty(settingsData));
-		// OBSDataAutoRelease savedSettings =
-		// 	obs_data_get_obj(saveData, PLUGIN_NAME);
-		// obs_log(LOG_INFO, "Saved settings:\n%s",
-		// 	obs_data_get_json_pretty(savedSettings));
+		log("Saved settings:\n%s",
+		    obs_data_get_json_pretty(settingsData));
 	} else {
-		obs_log(LOG_INFO, "Loading save data");
-		// obs_log(LOG_INFO, "All saveData:\n%s",
+		log("Loading save data");
+		// log(LOG_DEBUG, "All saveData:\n%s",
 		// 	obs_data_get_json_pretty(saveData));
 
 		OBSDataAutoRelease settingsData =
 			obs_data_get_obj(saveData, PLUGIN_NAME);
 		if (!settingsData) {
-			obs_log(LOG_INFO, "Loading - save data does not exist");
+			log("Loading - save data does not exist");
 			settingsData = obs_data_create();
+		} else {
+			log("Loading - save data exists:\n%s",
+			    obs_data_get_json_pretty(settingsData));
 		}
 
-        try {
-            pluginData->loadSettings(settingsData);
-        } catch (const std::exception &e) {
-			obs_log(LOG_ERROR,
-				"Error during loadSettings: %s",
-				e.what());
-            throw e;
-            // return;
-        }
+		try {
+			pluginData->loadSettings(settingsData);
+		} catch (const std::exception &e) {
+			log("Error during loadSettings: %s", e.what());
+			throw e;
+		}
 
-		obs_log(LOG_INFO, "Loaded - save data exists:\n%s",
-			obs_data_get_json_pretty(settingsData));
-		obs_log(LOG_INFO, "Loaded plugin data - %s",
-			pluginData->toJson().c_str());
+		log("Loaded plugin data - %s", pluginData->toJson().c_str());
 	}
 }
 
 bool obs_module_load(void)
 {
-	obs_log(LOG_INFO, "loaded version %s",
-		PROJECT_VERSION);
-	obs_log(LOG_INFO, "",
-		PROJECT_VERSION);
+	log("loaded version %s for %s", PLUGIN_VERSION, PLUGIN_NAME);
 
 	initTournamentPluginData();
 
@@ -90,17 +90,12 @@ bool obs_module_load(void)
 		obs_frontend_push_ui_translation(obs_module_get_string);
 
 		try {
-			auto pluginDialog = new TournamentPluginDialog();
-			// std::string(PLUGIN_VERSION),
-			// (QMainWindow *)obs_frontend_get_main_window());
-			// auto pluginDialog = TournamentPluginDialog::getInstance();
-			// pluginDialog->setAttribute(Qt::WA_DeleteOnClose);
+			auto pluginDialog = new PluginDialog(nullptr);
 			pluginDialog->show();
 		} catch (const std::exception &e) {
-			obs_log(LOG_ERROR,
-				"Error during plugin dialog initialization: %s",
-				e.what());
-            throw e;
+			log("Error during plugin dialog initialization: %s",
+			    e.what());
+			throw e;
 		}
 		obs_frontend_pop_ui_translation();
 	};
@@ -109,101 +104,15 @@ bool obs_module_load(void)
 	obs_frontend_add_save_callback(frontend_save_load,
 				       nullptr); //pluginData);
 
-	// obs_frontend_add_event_callback(frontend_event, nullptr);
-	// signal_handler_connect(obs_get_signal_handler(), "source_rename",
-	// 		       source_rename, nullptr);
-
-	// transition_table_hotkey = obs_hotkey_pair_register_frontend(
-	// 	"transition-table.enable",
-	// 	obs_module_text("TransitionTable.Enable"),
-	// 	"transition-table.disable",
-	// 	obs_module_text("TransitionTable.Disable"), enable_hotkey,
-	// 	disable_hotkey, nullptr, nullptr);
-	// auto ph = obs_get_proc_handler();
-	// proc_handler_add(
-	// 	ph,
-	// 	"void get_transition_table_transition(string from_scene, string to_scene, out string transition, out int duration)",
-	// 	proc_get_transition, nullptr);
-
-	// {
-	// 	// auto testFileName = obs_module_file("locale/en-US.ini");
-	// 	// string testFileString;
-	// 	// auto relativeFileName = "settings.json";
-	// 	// auto testFileNameCStr = obs_module_file(relativeFileName);
-	// 	// if (!testFileNameCStr) {
-	// 	// 	obs_log(LOG_INFO,
-	// 	// 		"COULD NOT FIND MODULE FILE, TRYING TO CREATE",
-	// 	// 		testFileString.c_str());
-	// 	// 	auto moduleDataDirectory = obs_module_file("");
-	// 	// 	testFileString = (string)moduleDataDirectory + "/" +
-	// 	// 			 relativeFileName;
-	// 	// 	bfree(moduleDataDirectory);
-	// 	//
-	// 	// 	// obs_file
-	// 	// 	// obs_data_t* p;
-	// 	// 	// obs_set_private_data();
-	// 	//
-	// 	// 	// fstream testOutStream;
-	// 	// 	// testOutStream.open(testFileString, ios::out);
-	// 	// 	// testOutStream << "hello\n";
-	// 	// 	// // testOutStream.flush();
-	// 	// 	// testOutStream.close();
-	// 	//
-	// 	// } else {
-	// 	// 	testFileString = string(testFileNameCStr);
-	// 	// }
-	// 	// bfree(testFileNameCStr);
-	//
-	// 	auto moduleConfigDirectory = obs_module_config_path("");
-	// 	std::filesystem::create_directory(moduleConfigDirectory);
-	// 	bfree(moduleConfigDirectory);
-	//
-	// 	auto configPathCStr = obs_module_config_path("settings.json");
-	// 	string testFileString = configPathCStr;
-	// 	obs_log(LOG_INFO, "TEST FILE PATH IS: %s\nCONFIG PATH IS: %s",
-	// 		testFileString.c_str(), configPathCStr);
-	// 	bfree(configPathCStr);
-	//
-	// 	auto testData = obs_data_create();
-	// 	obs_data_set_string(testData, "someKey", "someVal");
-	// 	auto json = obs_data_get_json_pretty(testData);
-	// 	if (json) {
-	// 		ofstream configFileStream(testFileString);
-	// 		configFileStream << json;
-	// 		configFileStream.close();
-	// 	}
-	// 	// auto isSaved = obs_data_save_json_pretty(testData, testFileString.c_str());
-	// 	obs_log(LOG_INFO, "saved json data to '%s'", testFileString.c_str());
-	// 	// auto jsonData =
-	// 	// 	obs_data_create_from_json_file(testFileString.c_str());
-	// 	// obs_log(LOG_INFO, "JSON data ptr is %p", jsonData);
-	// }
-
 	return true;
 }
 
-void obs_module_post_load(void)
-{
-	// vendor = obs_websocket_register_vendor("transition-table");
-	// if (!vendor)
-	// 	return;
-	// obs_websocket_vendor_register_request(vendor, "get_transition",
-	// 				      vendor_get_transition, nullptr);
-	// obs_websocket_vendor_register_request(vendor, "set_transition",
-	// 				      vendor_set_transition, nullptr);
-	// obs_websocket_vendor_register_request(vendor, "get_table",
-	// 				      vendor_get_table, nullptr);
-}
+void obs_module_post_load(void) {}
 
 void obs_module_unload(void)
 {
 	freeTournamentPluginData();
-	// obs_hotkey_pair_unregister(transition_table_hotkey);
-	// // obs_frontend_remove_save_callback(frontend_save_load, nullptr);
-	// // obs_frontend_remove_event_callback(frontend_event, nullptr);
-	// // signal_handler_disconnect(obs_get_signal_handler(), "source_rename",
-	// // 			  source_rename, nullptr);
-	// transition_table.clear();
+	obs_frontend_remove_save_callback(frontend_save_load, nullptr);
 }
 
 MODULE_EXPORT const char *obs_module_description(void)

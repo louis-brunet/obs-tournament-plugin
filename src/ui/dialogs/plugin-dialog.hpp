@@ -1,27 +1,13 @@
 #pragma once
 
-#include "src/model/plugin-data.hpp"
-#include "src/plugin-support.h"
 #include "src/ui/dialogs/base-dialog.hpp"
-#include <QTabWidget>
-#include <QMainWindow>
+#include <qmainwindow.h>
 
-class TournamentPluginDialog : public BaseDialog {
-	// Q_OBJECT;
+class PluginDialog : public BaseDialog {
 
 public:
-    // static TournamentPluginDialog *getInstance();
-	TournamentPluginDialog(std::string pluginVersion = PLUGIN_VERSION, QMainWindow *parent = nullptr);
-
-	~TournamentPluginDialog();
+	PluginDialog(QMainWindow *parent);
+	~PluginDialog();
 
 private:
-    static TournamentPluginDialog *instance;
-
-	std::string pluginVersion;
-	QTabWidget *tabsWidget;
-
-
-    void loadData(const TournamentPluginData *pluginData);
 };
-
