@@ -8,24 +8,23 @@
 
 class TournamentRound {
 public:
-    TournamentRound();
-    TournamentRound(TournamentRound &&) = default;
-    TournamentRound(const TournamentRound &) = default;
-    TournamentRound &operator=(TournamentRound &&) = default;
-    TournamentRound &operator=(const TournamentRound &) = default;
-    ~TournamentRound();
+	TournamentRound();
+	TournamentRound(TournamentRound &&) = default;
+	TournamentRound(const TournamentRound &) = default;
+	TournamentRound &operator=(TournamentRound &&) = default;
+	TournamentRound &operator=(const TournamentRound &) = default;
+	~TournamentRound();
 
 	std::string name() const;
-    std::vector<Match> &matches() const;
+	std::vector<std::shared_ptr<Match>> &matches();
 
-    void load(obs_data_t *data);
-    void save(obs_data_t *data) const;
+	void load(obs_data_t *data);
+	void save(obs_data_t *data) const;
 
 private:
-    std::string _name;
-    std::vector<std::shared_ptr<Match>> _matches;
+	std::string _name = "";
+	std::vector<std::shared_ptr<Match>> _matches = {};
 };
-
 
 // TournamentRound::TournamentRound() {
 // }

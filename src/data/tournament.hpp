@@ -31,7 +31,7 @@ public:
 	std::vector<std::shared_ptr<Player>> &players();
 	void setPlayers(std::vector<std::shared_ptr<Player>> &&players);
 
-	// std::vector<TournamentRound> &rounds();
+	std::vector<std::shared_ptr<TournamentRound>> &rounds();
 
 	void load(obs_data_t *data, const TournamentReference &reference);
 	void save(obs_data_t *data) const;

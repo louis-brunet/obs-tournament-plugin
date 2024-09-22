@@ -15,8 +15,8 @@ public:
     void load(obs_data_t *data);
 
 private:
-    TournamentRoundReference roundReference;
-    long long matchIndex;
+    TournamentRoundReference roundReference = TournamentRoundReference();
+    long long matchIndex = -1;
 };
 
 // MatchReference::MatchReference() {

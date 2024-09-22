@@ -1,8 +1,10 @@
 #pragma once
 
+#include "src/data/match-participant-unknown.hpp"
 #include "src/data/match-participant.hpp"
 #include <memory>
 #include <obs-data.h>
+
 class Match {
 public:
     Match();
@@ -21,6 +23,6 @@ public:
 private:
     // MatchParticipant _participant1;
     // MatchParticipant _participant2;
-    std::shared_ptr<MatchParticipant> _participant1;
-    std::shared_ptr<MatchParticipant> _participant2;
+    std::shared_ptr<MatchParticipant> _participant1 = std::make_shared<MatchParticipantUnknown>();
+    std::shared_ptr<MatchParticipant> _participant2 = std::make_shared<MatchParticipantUnknown>();
 };

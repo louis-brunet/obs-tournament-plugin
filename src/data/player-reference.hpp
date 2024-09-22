@@ -17,6 +17,6 @@ public:
     void load(obs_data_t *data);
 
 private:
-	TournamentReference tournamentReference;
-	long long playerIndex;
+	TournamentReference tournamentReference = TournamentReference();
+	long long playerIndex = -1;
 };

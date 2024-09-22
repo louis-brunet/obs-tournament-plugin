@@ -14,8 +14,8 @@ public:
 	~TournamentRoundReference();
 
 private:
-	TournamentReference tournamentReference;
-	long long roundIndex;
+	TournamentReference tournamentReference = TournamentReference();
+	long long roundIndex = -1;
 };
 
 // TournamentRoundReference::TournamentRoundReference() {}

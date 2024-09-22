@@ -34,3 +34,13 @@ void TournamentRound::save(obs_data_t *data) const
 		data, "matches", this->_matches,
 		[](auto match, auto matchData) { match->save(matchData); });
 }
+
+std::string TournamentRound::name() const
+{
+	return this->_name;
+}
+
+std::vector<std::shared_ptr<Match>> &TournamentRound::matches()
+{
+	return this->_matches;
+}

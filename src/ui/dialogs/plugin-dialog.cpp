@@ -49,7 +49,7 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 		}
 
 		case Tournament::Custom: {
-			tournamentTab = new CustomTournamentTab(*tournament);
+			tournamentTab = new CustomTournamentTab(tournament);
 			break;
 		}
 

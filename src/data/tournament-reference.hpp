@@ -14,7 +14,7 @@ public:
 
     void load(obs_data_t *data);
 
-    long long tournamentIndex;
+    long long tournamentIndex = -1;
 
 	Tournament *tournament();
 

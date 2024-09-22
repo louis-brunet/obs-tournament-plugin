@@ -73,6 +73,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/data/tournament-round.hpp
     src/data/tournament.cpp
     src/data/tournament.hpp
+    src/ui/components/icon.cpp
+    src/ui/components/icon.hpp
     src/ui/components/label.cpp
     src/ui/components/label.hpp
     src/ui/components/labeled-input.cpp
@@ -85,6 +87,14 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/dialogs/error-dialog.hpp
     src/ui/dialogs/plugin-dialog.cpp
     src/ui/dialogs/plugin-dialog.hpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-configuration-frame.cpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-configuration-frame.hpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-match-configuration-frame.cpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-match-configuration-frame.hpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-round-configuration-frame.cpp
+    src/ui/tabs/custom-tournament/configuration/custom-tournament-round-configuration-frame.hpp
+    src/ui/tabs/custom-tournament/configuration/match-participant-input.cpp
+    src/ui/tabs/custom-tournament/configuration/match-participant-input.hpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.cpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.hpp
     src/ui/tabs/setup/create-player-frame.cpp
@@ -155,6 +165,8 @@ if(BUILD_OUT_OF_TREE)
     install(TARGETS ${PROJECT_NAME}
         LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIB_OUT_DIR})
     install(DIRECTORY data/locale
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATA_OUT_DIR})
+    install(DIRECTORY data/icons
         DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATA_OUT_DIR})
     setup_plugin_target(${PROJECT_NAME})
 else()

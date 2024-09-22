@@ -85,3 +85,8 @@ void Tournament::setType(Tournament::Type __type)
 {
 	this->_type = __type;
 }
+
+std::vector<std::shared_ptr<TournamentRound>> &Tournament::rounds()
+{
+	return this->_rounds;
+}

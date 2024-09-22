@@ -6,7 +6,7 @@
 
 class CustomTournamentTab : public BaseTab {
 public:
-    CustomTournamentTab(Tournament &tournament);
+    CustomTournamentTab(std::shared_ptr<Tournament> tournament);
     ~CustomTournamentTab();
 
 private:

@@ -184,7 +184,7 @@ bool CreateTournamentFrame::endTournamentCreation()
 	}
 
 	case Tournament::Type::Custom: {
-		newTab = new CustomTournamentTab(*newTournament);
+		newTab = new CustomTournamentTab(newTournament);
 		// log("TODO custom tournament tab creation");
 		// newTournament = new Tournament
 		break;
