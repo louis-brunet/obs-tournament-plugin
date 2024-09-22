@@ -43,3 +43,8 @@ void MatchParticipant::load(obs_data_t *data)
 	this->_type = ObsDataHelpers::getEnum<MatchParticipant::Type>(
 		data, "type", MatchParticipant::Type::Unknown);
 }
+
+void MatchParticipant::save(obs_data_t *data) const
+{
+    obs_data_set_int(data, "type", this->_type);
+}

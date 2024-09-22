@@ -23,6 +23,7 @@ public:
 
     virtual std::string displayName() const = 0;
     virtual void load(obs_data_t *data);
+    virtual void save(obs_data_t *data) const;
 
 private:
     Type _type = Type::Unknown;

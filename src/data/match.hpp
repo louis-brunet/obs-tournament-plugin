@@ -16,6 +16,7 @@ public:
     // MatchParticipant &participant2();
 
     void load(obs_data_t *data);
+    void save(obs_data_t *data) const;
 
 private:
     // MatchParticipant _participant1;

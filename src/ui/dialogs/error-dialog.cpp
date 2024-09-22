@@ -10,7 +10,7 @@ static const int ERROR_DIALOG_MINIMUM_WIDTH = 400;
 static const int ERROR_DIALOG_MINIMUM_HEIGHT = 100;
 
 ErrorDialog::ErrorDialog(QWidget *parent, const char *message)
-	: BaseDialog(parent, obs_module_text("ErrorDialogTitle"),
+	: BaseDialog(parent, obs_module_text("error.dialogTitle"),
 		     ERROR_DIALOG_MINIMUM_WIDTH, ERROR_DIALOG_MINIMUM_HEIGHT)
 {
 	auto dialogLayout = new QVBoxLayout();

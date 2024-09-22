@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/ui/dialogs/base-dialog.hpp"
-#include <qmainwindow.h>
+#include <QMainWindow>
 
 class PluginDialog : public BaseDialog {
 

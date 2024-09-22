@@ -19,6 +19,7 @@ public:
     std::vector<Match> &matches() const;
 
     void load(obs_data_t *data);
+    void save(obs_data_t *data) const;
 
 private:
     std::string _name;

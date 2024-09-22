@@ -85,7 +85,7 @@ bool obs_module_load(void)
 	initTournamentPluginData();
 
 	auto *action = (QAction *)obs_frontend_add_tools_menu_qaction(
-		obs_module_text("TournamentPluginName"));
+		obs_module_text("plugin.name"));
 	auto cb = [] {
 		obs_frontend_push_ui_translation(obs_module_get_string);
 
@@ -117,10 +117,10 @@ void obs_module_unload(void)
 
 MODULE_EXPORT const char *obs_module_description(void)
 {
-	return obs_module_text("Description");
+	return obs_module_text("plugin.description");
 }
 
 MODULE_EXPORT const char *obs_module_name(void)
 {
-	return obs_module_text("TournamentPluginName");
+	return obs_module_text("plugin.name");
 }

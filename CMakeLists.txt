@@ -73,12 +73,30 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/data/tournament-round.hpp
     src/data/tournament.cpp
     src/data/tournament.hpp
+    src/ui/components/label.cpp
+    src/ui/components/label.hpp
+    src/ui/components/labeled-input.cpp
+    src/ui/components/labeled-input.hpp
+    src/ui/components/line-edit.cpp
+    src/ui/components/line-edit.hpp
     src/ui/dialogs/base-dialog.cpp
     src/ui/dialogs/base-dialog.hpp
     src/ui/dialogs/error-dialog.cpp
     src/ui/dialogs/error-dialog.hpp
     src/ui/dialogs/plugin-dialog.cpp
     src/ui/dialogs/plugin-dialog.hpp
+    src/ui/tabs/custom-tournament/custom-tournament-tab.cpp
+    src/ui/tabs/custom-tournament/custom-tournament-tab.hpp
+    src/ui/tabs/setup/create-player-frame.cpp
+    src/ui/tabs/setup/create-player-frame.hpp
+    src/ui/tabs/setup/create-tournament-frame.cpp
+    src/ui/tabs/setup/create-tournament-frame.hpp
+    src/ui/tabs/setup/setup-tab.cpp
+    src/ui/tabs/setup/setup-tab.hpp
+    src/ui/tabs/setup/debug-frame.cpp
+    src/ui/tabs/setup/debug-frame.hpp
+    src/ui/tabs/base-tab.cpp
+    src/ui/tabs/base-tab.hpp
     src/logger.cpp
     src/logger.hpp
     src/plugin-main.cpp
