@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/data/match-participant.hpp"
-#include "src/model/player-reference.hpp"
+#include "src/data/player-reference.hpp"
 
 class MatchParticipantPlayer : public MatchParticipant {
 public:

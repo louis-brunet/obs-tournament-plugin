@@ -50,14 +50,14 @@ MatchParticipantSelectionStrategy::loadStatic(obs_data_t *data)
 	}
 }
 
-MatchParticipant &SelectWinnerOfMatch::select(TournamentMatch fromMatch)
+MatchParticipant &SelectWinnerOfMatch::select(Match fromMatch)
 {
 	UNUSED_PARAMETER(fromMatch);
 	throw std::runtime_error(
 		"TODO SelectWinnerOfMatch::select(TournamentMatch)");
 }
 
-MatchParticipant &SelectLoserOfMatch::select(TournamentMatch fromMatch)
+MatchParticipant &SelectLoserOfMatch::select(Match fromMatch)
 {
 	UNUSED_PARAMETER(fromMatch);
 	throw std::runtime_error(

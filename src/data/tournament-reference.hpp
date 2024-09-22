@@ -1,5 +1,6 @@
 #pragma once
 
+#include <obs-data.h>
 class Tournament;
 
 class TournamentReference {
@@ -10,6 +11,8 @@ public:
 	TournamentReference &operator=(TournamentReference &&) = default;
 	TournamentReference &operator=(const TournamentReference &) = default;
 	~TournamentReference();
+
+    void load(obs_data_t *data);
 
     long long tournamentIndex;
 

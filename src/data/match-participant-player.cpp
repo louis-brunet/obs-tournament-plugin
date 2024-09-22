@@ -1,5 +1,6 @@
 #include "match-participant-player.hpp"
 #include "src/data/data-helpers.hpp"
+#include <obs.hpp>
 #include <stdexcept>
 
 MatchParticipantPlayer::MatchParticipantPlayer() : MatchParticipant() {}

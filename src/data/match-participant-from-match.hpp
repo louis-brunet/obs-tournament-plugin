@@ -1,7 +1,8 @@
 #pragma once
 
 #include "src/data/match-participant.hpp"
-#include "src/model/tournament-match.hpp"
+#include "src/data/match-reference.hpp"
+#include "src/data/match.hpp"
 #include <memory>
 
 class MatchParticipantSelectionStrategy {
@@ -26,17 +27,17 @@ public:
 	operator=(const MatchParticipantSelectionStrategy &) = default;
 	~MatchParticipantSelectionStrategy();
 
-	virtual MatchParticipant &select(TournamentMatch fromMatch) = 0;
+	virtual MatchParticipant &select(Match fromMatch) = 0;
 
 private:
 };
 
 class SelectWinnerOfMatch : public MatchParticipantSelectionStrategy {
-	MatchParticipant &select(TournamentMatch fromMatch);
+	MatchParticipant &select(Match fromMatch);
 };
 
 class SelectLoserOfMatch : public MatchParticipantSelectionStrategy {
-	MatchParticipant &select(TournamentMatch fromMatch);
+	MatchParticipant &select(Match fromMatch);
 };
 
 class MatchParticipantFromMatch : public MatchParticipant {

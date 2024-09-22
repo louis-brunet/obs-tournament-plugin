@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/data/tournament-reference.hpp"
+#include <obs-data.h>
 
 class PlayerReference {
 public:
@@ -12,6 +13,8 @@ public:
 	PlayerReference &
 	operator=(const PlayerReference &) = default;
 	~PlayerReference();
+
+    void load(obs_data_t *data);
 
 private:
 	TournamentReference tournamentReference;
