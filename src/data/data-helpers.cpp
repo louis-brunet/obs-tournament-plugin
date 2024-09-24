@@ -23,6 +23,16 @@ long long getInt(obs_data_t *data, const char *name, long long defaultInt)
 	return obs_data_get_int(data, name);
 }
 
+bool getBool(obs_data_t *data, const char *name, bool defaultValue)
+{
+	if (!data) {
+		return defaultValue;
+	}
+
+	obs_data_set_default_bool(data, name, defaultValue);
+	return obs_data_get_bool(data, name);
+}
+
 void iterateArray(
 	obs_data_t *data, const char *arrayName,
 	std::function<void(obs_data_t *, unsigned long)> iterateCallback)

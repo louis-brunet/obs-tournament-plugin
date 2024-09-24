@@ -99,6 +99,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/tabs/custom-tournament/configuration/custom-tournament-round-configuration-frame.hpp
     src/ui/tabs/custom-tournament/configuration/match-participant-input.cpp
     src/ui/tabs/custom-tournament/configuration/match-participant-input.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.hpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.cpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.hpp
     src/ui/tabs/setup/create-player-frame.cpp

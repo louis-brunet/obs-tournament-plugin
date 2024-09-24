@@ -28,6 +28,9 @@ public:
 	std::string name() const;
 	void setName(const char *name);
 
+	bool isStarted() const;
+	void setStarted(bool isStarted);
+
 	std::vector<std::shared_ptr<Player>> &players();
 	void setPlayers(std::vector<std::shared_ptr<Player>> &&players);
 
@@ -43,4 +46,5 @@ private:
 	std::vector<std::shared_ptr<Player>> _players = {};
 	std::vector<std::shared_ptr<TournamentRound>> _rounds = {};
 	Tournament::Type _type = Tournament::Tournament::Unknown;
+    bool _isStarted = false;
 };

@@ -15,6 +15,9 @@ public:
     CustomTournamentConfigurationFrame(TournamentReference tournamentReference);
     ~CustomTournamentConfigurationFrame();
 
+signals:
+    void tournamentConfigured();
+
 private:
     // std::shared_ptr<Tournament> _tournament;
     TournamentReference _tournamentReference;
@@ -29,4 +32,5 @@ private:
     void
     updatePlayerChoices(const MatchReferenceRemap
                             &remap); //unsigned long startingRoundIndex = 0);
+    void endTournamentConfiguration();
 };

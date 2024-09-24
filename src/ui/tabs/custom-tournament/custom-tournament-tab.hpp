@@ -2,7 +2,8 @@
 
 #include "src/data/tournament-reference.hpp"
 #include "src/ui/tabs/base-tab.hpp"
-#include <QTabWidget>
+#include "src/ui/tabs/custom-tournament/configuration/custom-tournament-configuration-frame.hpp"
+#include "src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.hpp"
 
 class CustomTournamentTab : public BaseTab {
 public:
@@ -10,5 +11,9 @@ public:
     ~CustomTournamentTab();
 
 private:
+    CustomTournamentConfigurationFrame *_configurationFrame;
+    CustomTournamentStartedFrame *_startedFrame;
+
+    void endTournamentConfiguration(TournamentReference tournamentReference);
 };
 

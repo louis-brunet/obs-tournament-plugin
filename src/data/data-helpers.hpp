@@ -10,6 +10,7 @@ const char *getString(obs_data_t *data, const char *name,
 		      const char *defaultString = "[???]");
 
 long long getInt(obs_data_t *data, const char *name, long long defaultInt);
+bool getBool(obs_data_t *data, const char *name, bool defaultValue);
 
 void iterateArray(
 	obs_data_t *data, const char *arrayName,

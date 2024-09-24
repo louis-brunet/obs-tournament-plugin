@@ -20,6 +20,7 @@ void Tournament::load(obs_data_t *data,
     this->_name = ObsDataHelpers::getString(data, "name");
     this->_type = ObsDataHelpers::getEnum<Tournament::Type>(
         data, "type", Tournament::Type::Unknown);
+    this->_isStarted = ObsDataHelpers::getBool(data, "isStarted", false);
 
     ObsDataHelpers::iterateArray(data, "players",
                                  [this](obs_data_t *itemDataObj,
@@ -47,6 +48,7 @@ void Tournament::save(obs_data_t *data) const
 {
     obs_data_set_string(data, "name", this->_name.c_str());
     obs_data_set_int(data, "type", this->_type);
+    obs_data_set_bool(data, "isStarted", this->_isStarted);
 
     ObsDataHelpers::saveArray<std::shared_ptr<Player>>(
         data, "players", this->_players,
@@ -131,4 +133,14 @@ bool Tournament::deleteRound(long long roundIndex)
     Logger::log("[Tournament::deleteRound] deleting round %s with index %d",
                 deletedRound->name().c_str(), uRoundIndex);
     return true;
+}
+
+bool Tournament::isStarted() const
+{
+    return this->_isStarted;
+}
+
+void Tournament::setStarted(bool __isStarted)
+{
+    this->_isStarted = __isStarted;
 }

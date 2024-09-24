@@ -250,3 +250,9 @@ void CustomTournamentConfigurationFrame::updatePlayerChoices(
         }
     }
 }
+
+void CustomTournamentConfigurationFrame::endTournamentConfiguration() {
+    Logger::log("[CustomTournamentConfigurationFrame::endTournamentConfiguration] TODO validation");
+
+    this->tournamentConfigured();
+}
