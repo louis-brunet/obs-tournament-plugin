@@ -2,25 +2,35 @@
 #include "src/data/data-helpers.hpp"
 
 Player::Player(std::string name, std::string imagePath)
-	: _name(name),
-	  _imagePath(imagePath)
+    : _name(name),
+      _imagePath(imagePath)
 {
-	// TODO ?
+    // TODO ?
 }
 
 Player::~Player()
 {
-	// TODO ?
+    // TODO ?
 }
 
 void Player::load(obs_data_t *data)
 {
-	this->_name = ObsDataHelpers::getString(data, "name");
-	this->_imagePath = ObsDataHelpers::getString(data, "imagePath");
+    this->_name = ObsDataHelpers::getString(data, "name");
+    this->_imagePath = ObsDataHelpers::getString(data, "imagePath");
 }
 
 void Player::save(obs_data_t *data) const
 {
-	obs_data_set_string(data, "name", this->_name.c_str());
-	obs_data_set_string(data, "imagePath", this->_imagePath.c_str());
+    obs_data_set_string(data, "name", this->_name.c_str());
+    obs_data_set_string(data, "imagePath", this->_imagePath.c_str());
+}
+
+std::string Player::name()
+{
+    return this->_name;
+}
+
+std::string Player::imagePath()
+{
+    return this->_imagePath;
 }

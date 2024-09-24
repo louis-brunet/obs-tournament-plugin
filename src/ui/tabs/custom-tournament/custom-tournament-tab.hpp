@@ -1,12 +1,12 @@
 #pragma once
 
-#include "src/data/tournament.hpp"
+#include "src/data/tournament-reference.hpp"
 #include "src/ui/tabs/base-tab.hpp"
 #include <QTabWidget>
 
 class CustomTournamentTab : public BaseTab {
 public:
-    CustomTournamentTab(std::shared_ptr<Tournament> tournament);
+    CustomTournamentTab(TournamentReference tournamentReference);
     ~CustomTournamentTab();
 
 private:

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "src/data/player.hpp"
 #include "src/data/tournament-reference.hpp"
 #include <obs-data.h>
 
 class PlayerReference {
 public:
-	PlayerReference();
+	PlayerReference(TournamentReference tournamentReference = TournamentReference(), long long playerIndex = -1);
 	PlayerReference(PlayerReference &&) = default;
 	PlayerReference(const PlayerReference &) = default;
 	PlayerReference &
@@ -14,9 +15,11 @@ public:
 	operator=(const PlayerReference &) = default;
 	~PlayerReference();
 
-    void load(obs_data_t *data);
+    TournamentReference tournamentReference = TournamentReference();
+    long long playerIndex = -1;
 
-private:
-	TournamentReference tournamentReference = TournamentReference();
-	long long playerIndex = -1;
+    std::shared_ptr<Player> player() const;
+
+    void load(obs_data_t *data);
+    void save(obs_data_t *data) const;
 };

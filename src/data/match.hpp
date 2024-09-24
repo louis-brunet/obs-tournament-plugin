@@ -14,8 +14,12 @@ public:
     Match &operator=(const Match &) = default;
     ~Match();
 
-    // MatchParticipant &participant1();
-    // MatchParticipant &participant2();
+    std::shared_ptr<MatchParticipant> participant1();
+    std::shared_ptr<MatchParticipant> participant2();
+    void setParticipant1(std::shared_ptr<MatchParticipant> participant);
+    void setParticipant2(std::shared_ptr<MatchParticipant> participant);
+
+    std::shared_ptr<Match> duplicate() const;
 
     void load(obs_data_t *data);
     void save(obs_data_t *data) const;

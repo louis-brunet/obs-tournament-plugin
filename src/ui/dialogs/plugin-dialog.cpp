@@ -1,8 +1,10 @@
 #include "plugin-dialog.hpp"
 #include "src/data/plugin-data.hpp"
+#include "src/data/tournament-reference.hpp"
 #include "src/ui/dialogs/error-dialog.hpp"
 #include "src/ui/tabs/custom-tournament/custom-tournament-tab.hpp"
 #include "src/ui/tabs/setup/setup-tab.hpp"
+#include <memory>
 #include <obs-module.h>
 #include <QBoxLayout>
 #include <QLabel>
@@ -36,8 +38,15 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 	auto setupTab = new SetupTab(tabWidget);
 	tabWidget->addTab(setupTab, setupTab->tabTitle());
 
-	for (auto tournament : pluginData->tournaments) {
-		QWidget *tournamentTab;
+	// for (auto tournament : pluginData->tournaments) {
+    TournamentReference tournamentReference;
+    std::shared_ptr<Tournament> tournament;
+    QWidget *tournamentTab;
+
+	for (unsigned long tournamentIndex = 0; tournamentIndex  < pluginData->tournaments.size(); tournamentIndex++) {
+        tournament = pluginData->tournaments.at(tournamentIndex);
+        tournamentReference = TournamentReference((long long)tournamentIndex);
+
 		switch (tournament->type()) {
 		case Tournament::Unknown: {
 			auto errorDialog = new ErrorDialog(
@@ -49,7 +58,7 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 		}
 
 		case Tournament::Custom: {
-			tournamentTab = new CustomTournamentTab(tournament);
+			tournamentTab = new CustomTournamentTab(tournamentReference);
 			break;
 		}
 

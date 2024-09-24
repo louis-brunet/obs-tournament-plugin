@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <obs-data.h>
+
 class Tournament;
 
 class TournamentReference {
@@ -11,12 +13,15 @@ public:
 	TournamentReference &operator=(TournamentReference &&) = default;
 	TournamentReference &operator=(const TournamentReference &) = default;
 	~TournamentReference();
-
-    void load(obs_data_t *data);
+    inline bool operator==(const TournamentReference &rhs) const
+    {
+        return this->tournamentIndex == rhs.tournamentIndex;
+    };
 
     long long tournamentIndex = -1;
 
-	Tournament *tournament();
+    std::shared_ptr<Tournament> tournament() const;
 
-// private:
+	void load(obs_data_t *data);
+	void save(obs_data_t *data) const;
 };

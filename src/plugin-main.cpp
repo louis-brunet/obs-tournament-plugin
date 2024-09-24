@@ -45,7 +45,7 @@ static void frontend_save_load(obs_data_t *saveData, bool saving,
 		try {
 			pluginData->saveSettings(settingsData);
 		} catch (const std::exception &e) {
-			log("Error during saveSettings: %s", e.what());
+			log(LOG_ERROR, "Error during saveSettings: %s", e.what());
 			throw e;
 		}
 		obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
@@ -70,7 +70,7 @@ static void frontend_save_load(obs_data_t *saveData, bool saving,
 		try {
 			pluginData->loadSettings(settingsData);
 		} catch (const std::exception &e) {
-			log("Error during loadSettings: %s", e.what());
+			log(LOG_ERROR, "Error during loadSettings: %s", e.what());
 			throw e;
 		}
 
@@ -93,7 +93,7 @@ bool obs_module_load(void)
 			auto pluginDialog = new PluginDialog(nullptr);
 			pluginDialog->show();
 		} catch (const std::exception &e) {
-			log("Error during plugin dialog initialization: %s",
+			log(LOG_ERROR, "Error during plugin dialog initialization: %s",
 			    e.what());
 			throw e;
 		}

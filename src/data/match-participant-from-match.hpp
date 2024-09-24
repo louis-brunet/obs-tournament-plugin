@@ -7,54 +7,75 @@
 
 class MatchParticipantSelectionStrategy {
 public:
-	enum Type {
-		Unknown = -1,
-		Loser = 0,
-		Winner,
-	};
+    enum Type {
+        Unknown = -1,
+        Loser = 0,
+        Winner,
+    };
 
-	static std::unique_ptr<MatchParticipantSelectionStrategy>
-	loadStatic(obs_data_t *data);
+    static std::unique_ptr<MatchParticipantSelectionStrategy>
+    loadStatic(obs_data_t *data);
+    static std::unique_ptr<MatchParticipantSelectionStrategy>
+    loadStatic(MatchParticipantSelectionStrategy::Type selectionStrategyType);
 
-	MatchParticipantSelectionStrategy();
-	MatchParticipantSelectionStrategy(
-		MatchParticipantSelectionStrategy &&) = default;
-	MatchParticipantSelectionStrategy(
-		const MatchParticipantSelectionStrategy &) = default;
-	MatchParticipantSelectionStrategy &
-	operator=(MatchParticipantSelectionStrategy &&) = default;
-	MatchParticipantSelectionStrategy &
-	operator=(const MatchParticipantSelectionStrategy &) = default;
-	~MatchParticipantSelectionStrategy();
+    Type type;
 
-	virtual MatchParticipant &select(Match fromMatch) = 0;
+    MatchParticipantSelectionStrategy(Type = Type::Unknown);
+    MatchParticipantSelectionStrategy(MatchParticipantSelectionStrategy &&) =
+        default;
+    MatchParticipantSelectionStrategy(
+        const MatchParticipantSelectionStrategy &) = default;
+    MatchParticipantSelectionStrategy &
+    operator=(MatchParticipantSelectionStrategy &&) = default;
+    MatchParticipantSelectionStrategy &
+    operator=(const MatchParticipantSelectionStrategy &) = default;
+    ~MatchParticipantSelectionStrategy();
+
+    virtual MatchParticipant &select(Match fromMatch) = 0;
 
 private:
 };
 
 class SelectWinnerOfMatch : public MatchParticipantSelectionStrategy {
-	MatchParticipant &select(Match fromMatch);
+public:
+    SelectWinnerOfMatch();
+    ~SelectWinnerOfMatch();
+
+    MatchParticipant &select(Match fromMatch);
 };
 
 class SelectLoserOfMatch : public MatchParticipantSelectionStrategy {
-	MatchParticipant &select(Match fromMatch);
+public:
+    SelectLoserOfMatch();
+    ~SelectLoserOfMatch();
+
+    MatchParticipant &select(Match fromMatch);
 };
 
 class MatchParticipantFromMatch : public MatchParticipant {
 public:
-	MatchParticipantFromMatch();
-	MatchParticipantFromMatch(MatchParticipantFromMatch &&) = default;
-	// MatchParticipantFromMatch(const MatchParticipantFromMatch &) = default;
-	// MatchParticipantFromMatch &operator=(MatchParticipantFromMatch &&) = default;
-	// MatchParticipantFromMatch &operator=(const MatchParticipantFromMatch &) = default;
-	~MatchParticipantFromMatch();
+    MatchParticipantFromMatch(
+        MatchReference fromMatchReference = MatchReference(),
+        std::unique_ptr<MatchParticipantSelectionStrategy> selectionStrategy =
+            std::make_unique<SelectWinnerOfMatch>());
+    MatchParticipantFromMatch(MatchParticipantFromMatch &&) = default;
+    MatchParticipantFromMatch(const MatchParticipantFromMatch &);
+    MatchParticipantFromMatch &operator=(MatchParticipantFromMatch &&) = default;
+    // MatchParticipantFromMatch &operator=(const MatchParticipantFromMatch &) = default;
+    ~MatchParticipantFromMatch();
 
-	std::string displayName() const override;
-	void load(obs_data_t *data) override;
+    std::string displayName() const override;
+    MatchReference fromMatchReference() const;
+    MatchParticipantSelectionStrategy::Type selectionStrategy() const;
+
+    void load(obs_data_t *data) override;
+    void save(obs_data_t *data) const override;
+    void applyRemap(const MatchReferenceRemap *remap) override;
+    std::shared_ptr<MatchParticipant> duplicate() const override;
 
 private:
-	MatchReference _fromMatchReference;
-	std::unique_ptr<MatchParticipantSelectionStrategy> _selectionStrategy;
+    MatchReference _fromMatchReference;
+    std::unique_ptr<MatchParticipantSelectionStrategy> _selectionStrategy;
 };
 
 // MatchParticipantFromMatch::MatchParticipantFromMatch() {

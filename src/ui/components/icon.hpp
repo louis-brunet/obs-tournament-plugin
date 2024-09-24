@@ -6,6 +6,9 @@ class AppIcon : public QIcon {
     // Q_OBJECT;
 public:
     enum Type {
+        Add,
+        ArrowDownward,
+        ArrowUpward,
         Copy,
         Delete,
     };

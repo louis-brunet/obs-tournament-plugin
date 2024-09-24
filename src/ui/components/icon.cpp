@@ -1,6 +1,5 @@
 #include "icon.hpp"
 #include <obs-module.h>
-#include <stdexcept>
 
 AppIcon::AppIcon(const char *iconFilePath) : QIcon(iconFilePath) {}
 
@@ -13,15 +12,22 @@ std::string AppIcon::typeToFilePath(Type type)
 	std::string iconPath = "icons/";
 
 	switch (type) {
+    case Add:
+		iconPath += "add.svg";
+        break;
 	case Copy:
 		iconPath += "content_copy.svg";
 		break;
 	case Delete:
 		iconPath += "delete.svg";
 		break;
-	default:
-		throw std::runtime_error("[AppIcon::typeToFilePath] unhandled enum variant");
-	}
+    case ArrowDownward:
+		iconPath += "arrow_downward.svg";
+		break;
+    case ArrowUpward:
+		iconPath += "arrow_upward.svg";
+        break;
+    }
 
-	return obs_module_file(iconPath.c_str());
+    return obs_module_file(iconPath.c_str());
 }

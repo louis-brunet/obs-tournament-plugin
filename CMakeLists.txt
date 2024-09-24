@@ -57,6 +57,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/data/match-participant.hpp
     src/data/match-reference.cpp
     src/data/match-reference.hpp
+    src/data/match-reference-remap.cpp
+    src/data/match-reference-remap.hpp
     src/data/match.cpp
     src/data/match.hpp
     src/data/player-reference.cpp

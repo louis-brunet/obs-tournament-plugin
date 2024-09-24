@@ -13,6 +13,8 @@ public:
 
     std::string displayName() const override;
     void load(obs_data_t *data) override;
+    void save(obs_data_t *data) const override;
+    std::shared_ptr<MatchParticipant> duplicate() const override;
 
 private:
 };

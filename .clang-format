@@ -1,7 +1,8 @@
 # please use clang-format version 16 or later
 
 Standard: c++17
-AccessModifierOffset: -8
+# AccessModifierOffset: -8
+AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -47,8 +48,10 @@ BreakStringLiterals: false  # apparently unpredictable
 ColumnLimit: 80
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 8
-ContinuationIndentWidth: 8
+ConstructorInitializerIndentWidth: 4
+# ConstructorInitializerIndentWidth: 8
+ContinuationIndentWidth: 4
+# ContinuationIndentWidth: 8
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
@@ -61,13 +64,15 @@ ForEachMacros:
 IncludeBlocks: Preserve
 IndentCaseLabels: false
 IndentPPDirectives: None
-IndentWidth: 8
+IndentWidth: 4
+# IndentWidth: 8
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 ObjCBinPackProtocolList: Auto
-ObjCBlockIndentWidth: 8
+ObjCBlockIndentWidth: 4
+# ObjCBlockIndentWidth: 8
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
 
@@ -100,10 +105,10 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 StatementMacros:
   - 'Q_OBJECT'
-TabWidth: 8
+TabWidth: 4
 TypenameMacros:
   - 'DARRAY'
-UseTab: ForContinuationAndIndentation
+UseTab: Never
 ---
 Language: ObjC
 AccessModifierOffset: 2

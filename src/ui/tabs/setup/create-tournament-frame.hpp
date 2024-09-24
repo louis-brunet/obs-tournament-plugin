@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/data/tournament.hpp"
+#include "src/ui/tabs/base-tab.hpp"
 #include <QFrame>
 #include <QLineEdit>
 #include <QComboBox>
@@ -14,7 +15,8 @@ public:
 	~CreateTournamentFrame();
 
 signals:
-    void tournamentCreated(std::shared_ptr<Tournament> newTournament, QWidget *newTab);
+    void tournamentCreated(std::shared_ptr<Tournament> newTournament);
+    void tournamentTabCreated(BaseTab *newTab);
 
 private:
 	QLineEdit *_tournamentTitleLineEdit;
