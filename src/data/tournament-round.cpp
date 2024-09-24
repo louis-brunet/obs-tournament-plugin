@@ -58,6 +58,7 @@ void TournamentRound::addMatch(std::shared_ptr<Match> match)
 
 long long TournamentRound::duplicateMatch(std::shared_ptr<Match> match)
 {
+    // FIXME: change parameter from Match to long long matchIndex, no need to compute index here?
     long long newMatchIndex = -1;
     unsigned long matchIndex = 0;
     while (matchIndex < this->_matches.size() &&
@@ -69,12 +70,10 @@ long long TournamentRound::duplicateMatch(std::shared_ptr<Match> match)
         // TODO: not found
         return newMatchIndex;
     }
-    Logger::log("duplicating match %d in round %s (TODO update references)",
+    Logger::log("duplicating match %d in round %s",
                 matchIndex, this->_name.c_str());
     matchIndex++;
 
-    // FIXME: this might not copy how I want it to (new match participant objects) ==> Duplicating match A with ref to match B seems to increment matchIndex twice
-    // ...........................
     auto matchToInsert = match->duplicate(); // std::make_shared<Match>(*match);
     // matchToInsert->setParticipant1(std::make_shared<MatchParticipant>(*match->participant1()));
     // matchToInsert->setParticipant2(std::make_shared<MatchParticipant>(*match->participant2()));
@@ -139,4 +138,14 @@ bool TournamentRound::swapNext(long long matchIndex) {
     this->_matches[uMatchIndex] = this->_matches.at(uMatchIndex + 1);
     this->_matches[uMatchIndex + 1] = tempMatch;
     return true;
+}
+
+std::shared_ptr<TournamentRound> TournamentRound::duplicate() const
+{
+    auto newRound = std::make_shared<TournamentRound>();
+    newRound->_name = this->_name;
+    for (auto match : this->_matches) {
+        newRound->_matches.push_back(match->duplicate());
+    }
+    return newRound;
 }

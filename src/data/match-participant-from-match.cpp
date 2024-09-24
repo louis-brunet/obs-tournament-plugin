@@ -41,9 +41,9 @@ MatchReference MatchParticipantFromMatch::fromMatchReference() const
     return this->_fromMatchReference;
 }
 
-void MatchParticipantFromMatch::applyRemap(const MatchReferenceRemap *remap)
+void MatchParticipantFromMatch::applyRemap(const MatchReferenceRemap *remap, const MatchReference &context)
 {
-    this->_fromMatchReference = remap->apply(this->_fromMatchReference);
+    this->_fromMatchReference = remap->apply(this->_fromMatchReference, context);
 }
 
 void MatchParticipantFromMatch::load(obs_data_t *data)

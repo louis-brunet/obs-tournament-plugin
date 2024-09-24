@@ -21,10 +21,12 @@ public:
     // void setMatches(const std::vector<MatchReference> &matchReferences);
 
 signals:
-    //TODO:  void matchCountChanged(std::map<MatchReference, MatchReference> updatedMatchReferences);
     void matchCountChanged(const MatchReferenceRemap &matchReferenceRemap);
-    //     void duplicateRoundClicked();
-    //     void deleteRoundClicked();
+
+    void duplicateRoundClicked();
+    void deleteRoundClicked();
+    // void moveUpClicked();
+    // void moveDownClicked();
 
 private:
     std::shared_ptr<TournamentRound> _tournamentRound;

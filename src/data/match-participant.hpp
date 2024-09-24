@@ -5,6 +5,7 @@
 #include <string>
 
 class MatchReferenceRemap;
+class MatchReference;
 
 class MatchParticipant {
 public:
@@ -28,7 +29,7 @@ public:
     virtual void load(obs_data_t *data);
     virtual void save(obs_data_t *data) const;
 
-    virtual void applyRemap(const MatchReferenceRemap *remap);
+    virtual void applyRemap(const MatchReferenceRemap *remap, const MatchReference &context);
 
     Type type() const;
 

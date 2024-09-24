@@ -59,6 +59,7 @@ MatchParticipant::Type MatchParticipant::type() const
     return this->_type;
 }
 
-void MatchParticipant::applyRemap(const MatchReferenceRemap *remap) {
+void MatchParticipant::applyRemap(const MatchReferenceRemap *remap, const MatchReference &context) {
     UNUSED_PARAMETER(remap);
+    UNUSED_PARAMETER(context);
 }

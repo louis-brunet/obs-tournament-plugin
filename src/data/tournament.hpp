@@ -32,6 +32,7 @@ public:
 	void setPlayers(std::vector<std::shared_ptr<Player>> &&players);
 
 	std::vector<std::shared_ptr<TournamentRound>> &rounds();
+    long long duplicateRound(long long roundIndex);
 
 	void load(obs_data_t *data, const TournamentReference &reference);
 	void save(obs_data_t *data) const;

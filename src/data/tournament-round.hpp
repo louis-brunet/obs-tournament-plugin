@@ -25,6 +25,8 @@ public:
     bool swapPrevious(long long matchIndex);
     bool swapNext(long long matchIndex);
 
+    std::shared_ptr<TournamentRound> duplicate() const;
+
 	void load(obs_data_t *data);
 	void save(obs_data_t *data) const;
 

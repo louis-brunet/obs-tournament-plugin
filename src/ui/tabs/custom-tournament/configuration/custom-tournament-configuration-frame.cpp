@@ -74,7 +74,26 @@ void CustomTournamentConfigurationFrame::addExistingRound(
 
     this->connect(newRoundConfigurationFrame,
                   &CustomTournamentRoundConfigurationFrame::matchCountChanged,
-                  [this, roundIndex](const MatchReferenceRemap &remap) { this->refreshRoundList(roundIndex, remap); });
+                  [this, roundIndex](const MatchReferenceRemap &remap) {
+                      this->refreshRoundList(roundIndex, remap);
+                  });
+
+    this->connect(
+        newRoundConfigurationFrame,
+        &CustomTournamentRoundConfigurationFrame::duplicateRoundClicked,
+        [this, roundReference]() {
+            auto newRoundIndex =
+                roundReference.tournamentReference.tournament()->duplicateRound(
+                    roundReference.roundIndex);
+            if (newRoundIndex >= 0) {
+                TournamentRoundReference addedRoundReference(
+                    roundReference.tournamentReference, newRoundIndex);
+
+                auto remap =
+                    MatchReferenceRemapDuplicatedRound(addedRoundReference);
+                this->refreshRoundList((unsigned long)newRoundIndex, remap);
+            }
+        });
 }
 
 void CustomTournamentConfigurationFrame::refreshRoundList(
@@ -99,7 +118,8 @@ void CustomTournamentConfigurationFrame::refreshRoundList(
     this->updatePlayerChoices(remap); //startingRoundIndex);
 }
 
-void CustomTournamentConfigurationFrame::updatePlayerChoices(const MatchReferenceRemap &remap)
+void CustomTournamentConfigurationFrame::updatePlayerChoices(
+    const MatchReferenceRemap &remap)
 // unsigned long startingRoundIndex)
 // const std::vector<PlayerReference> &playerReferences,
 // const std::vector<MatchReference> &matchReferences)
@@ -139,10 +159,19 @@ void CustomTournamentConfigurationFrame::updatePlayerChoices(const MatchReferenc
                 matchReferences.size());
 
     std::deque<std::shared_ptr<MatchParticipant>> participantsToReset;
-    for (auto round : this->_tournamentReference.tournament()->rounds()) {
-        for (auto match : round->matches()) {
-            match->participant1()->applyRemap(&remap);
-            match->participant2()->applyRemap(&remap);
+    // for (auto round : this->_tournamentReference.tournament()->rounds()) {
+    //     for (auto match : round->matches()) {
+    auto rounds = this->_tournamentReference.tournament()->rounds();
+    for (unsigned long roundIndex = 0; roundIndex < rounds.size(); roundIndex++) {
+        auto round = rounds[roundIndex];
+        auto matches = round->matches();
+        TournamentRoundReference roundReference(this->_tournamentReference, (long long)roundIndex);
+
+        for (unsigned long matchIndex = 0; matchIndex < matches.size(); matchIndex++) {
+            auto match = matches[matchIndex];
+            MatchReference remapContextReference(roundReference, (long long)matchIndex);
+            match->participant1()->applyRemap(&remap, remapContextReference);
+            match->participant2()->applyRemap(&remap, remapContextReference);
 
             participantsToReset.push_back(match->participant1());
             participantsToReset.push_back(match->participant2());

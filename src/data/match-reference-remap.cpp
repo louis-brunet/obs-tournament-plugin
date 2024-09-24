@@ -7,8 +7,10 @@ MatchReferenceRemapAddedMatch::MatchReferenceRemapAddedMatch(
 }
 
 MatchReference
-MatchReferenceRemapAddedMatch::apply(const MatchReference &oldReference) const
+MatchReferenceRemapAddedMatch::apply(const MatchReference &oldReference,
+                                     const MatchReference &context) const
 {
+    UNUSED_PARAMETER(context);
     // MatchReference newReference(oldReference);
     // newReference.matchIndex++;
 
@@ -44,8 +46,11 @@ MatchReferenceRemapDeletedMatch::MatchReferenceRemapDeletedMatch(
 }
 
 MatchReference
-MatchReferenceRemapDeletedMatch::apply(const MatchReference &oldReference) const
+MatchReferenceRemapDeletedMatch::apply(const MatchReference &oldReference,
+                                       const MatchReference &context) const
 {
+    UNUSED_PARAMETER(context);
+
     MatchReference newReference(oldReference);
     newReference.matchIndex--;
 
@@ -78,25 +83,73 @@ MatchReferenceRemapDeletedMatch::apply(const MatchReference &oldReference) const
 }
 
 MatchReference
-MatchReferenceRemapNone::apply(const MatchReference &oldReference) const
+MatchReferenceRemapNone::apply(const MatchReference &oldReference,
+                               const MatchReference &context) const
 {
+    UNUSED_PARAMETER(context);
+
     return oldReference;
 }
 
 MatchReferenceRemapSwappedMatch::MatchReferenceRemapSwappedMatch(
     MatchReference __from, MatchReference __to)
-    : _from(__from), _to(__to)
+    : _from(__from),
+      _to(__to)
 {
 }
 
 MatchReference
-MatchReferenceRemapSwappedMatch::apply(const MatchReference &oldReference) const
+MatchReferenceRemapSwappedMatch::apply(const MatchReference &oldReference,
+                                       const MatchReference &context) const
 {
+    UNUSED_PARAMETER(context);
     if (oldReference == this->_from) {
         return this->_to;
     }
     if (oldReference == this->_to) {
         return this->_from;
     }
+    return oldReference;
+}
+
+MatchReferenceRemapDuplicatedRound::MatchReferenceRemapDuplicatedRound(
+    TournamentRoundReference addedRound)
+    : _addedRound(addedRound)
+{
+}
+
+MatchReference
+MatchReferenceRemapDuplicatedRound::apply(const MatchReference &oldReference,
+                                          const MatchReference &context) const
+{
+    auto addedTournamentIndex =
+        this->_addedRound.tournamentReference.tournamentIndex;
+    auto oldTournamentIndex =
+        oldReference.roundReference.tournamentReference.tournamentIndex;
+    if (oldTournamentIndex != addedTournamentIndex) {
+        return oldReference;
+    }
+
+    auto addedRoundIndex = this->_addedRound.roundIndex;
+    auto oldRoundIndex = oldReference.roundReference.roundIndex;
+
+    // NOTE: "- 1" to also remap references that were duplicated
+    //  .... doesn't work, also remaps refs to round 1 from round X when round 1 is duplicated
+    // if (oldRoundIndex < addedRoundIndex - 1) {
+
+    TournamentRoundReference newRoundReference(
+        oldReference.roundReference.tournamentReference,
+        oldReference.roundReference.roundIndex + 1);
+
+    auto isDuplicatedReference = oldRoundIndex == addedRoundIndex - 1;
+    auto isRemappingContextNewRound = context.roundReference.roundIndex ==
+                                      addedRoundIndex;
+    auto isAfterDuplicatedRound = oldRoundIndex >= addedRoundIndex;
+    if ((isDuplicatedReference && isRemappingContextNewRound) ||
+        isAfterDuplicatedRound) {
+        // remap duplicated references only when in newly duplicated round context
+        return MatchReference(newRoundReference, oldReference.matchIndex);
+    }
+
     return oldReference;
 }

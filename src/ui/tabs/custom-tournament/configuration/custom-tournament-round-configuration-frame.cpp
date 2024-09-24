@@ -43,15 +43,15 @@ CustomTournamentRoundConfigurationFrame::CustomTournamentRoundConfigurationFrame
         new QPushButton(AppIcon(AppIcon::Type::Copy), "");
     duplicateRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.duplicateRoundButtonTooltip"));
-    // this->connect(duplicateRoundButton, &QPushButton::clicked,
-    // 	      [this]() { this->duplicateRoundClicked(); });
+    this->connect(duplicateRoundButton, &QPushButton::clicked,
+    	      [this]() { this->duplicateRoundClicked(); });
 
     auto deleteRoundButton =
         new QPushButton(AppIcon(AppIcon::Type::Delete), "");
     deleteRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.deleteRoundButtonTooltip"));
-    // this->connect(deleteRoundButton, &QPushButton::clicked,
-    // 	      [this]() { this->deleteRoundClicked(); });
+    this->connect(deleteRoundButton, &QPushButton::clicked,
+    	      [this]() { this->deleteRoundClicked(); });
 
     auto roundConfigLayout = new QHBoxLayout();
     roundConfigLayout->addWidget(roundNameInput, 1);

@@ -70,7 +70,7 @@ public:
 
     void load(obs_data_t *data) override;
     void save(obs_data_t *data) const override;
-    void applyRemap(const MatchReferenceRemap *remap) override;
+    void applyRemap(const MatchReferenceRemap *remap, const MatchReference &context) override;
     std::shared_ptr<MatchParticipant> duplicate() const override;
 
 private:
