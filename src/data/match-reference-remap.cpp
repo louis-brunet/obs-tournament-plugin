@@ -75,10 +75,9 @@ MatchReferenceRemapDeletedMatch::apply(const MatchReference &oldReference,
     }
     if (oldMatchIndex == deletedMatchIndex) {
         newReference.matchIndex = -1;
-        return newReference;
+        // return newReference;
     }
 
-    // NOTE: reference become invalid (-1) if deleted index 0 and oldRef.matchIndex = deleted.matchINdex
     return newReference;
 }
 
@@ -152,4 +151,45 @@ MatchReferenceRemapDuplicatedRound::apply(const MatchReference &oldReference,
     }
 
     return oldReference;
+}
+
+MatchReferenceRemapDeletedRound::MatchReferenceRemapDeletedRound(
+    TournamentRoundReference deletedRound)
+    : _deletedRound(deletedRound)
+{
+}
+
+MatchReference
+MatchReferenceRemapDeletedRound::apply(const MatchReference &oldReference,
+                                       const MatchReference &context) const
+{
+    UNUSED_PARAMETER(context);
+
+    auto deletedTournamentIndex =
+        this->_deletedRound.tournamentReference.tournamentIndex;
+    auto oldTournamentIndex =
+        oldReference.roundReference.tournamentReference.tournamentIndex;
+    if (oldTournamentIndex != deletedTournamentIndex) {
+        return oldReference;
+    }
+
+    auto deletedRoundIndex = this->_deletedRound.roundIndex;
+    auto oldRoundIndex = oldReference.roundReference.roundIndex;
+
+    // TournamentRoundReference newRoundReference(
+    //     oldReference.roundReference.tournamentReference,
+    //     oldReference.roundReference.roundIndex - 1);
+
+    if (oldRoundIndex == deletedRoundIndex) {
+        return MatchReference(TournamentRoundReference(
+            oldReference.roundReference.tournamentReference));
+    }
+    if (oldRoundIndex < deletedRoundIndex) {
+        return oldReference;
+    }
+
+    return MatchReference(TournamentRoundReference(
+                              oldReference.roundReference.tournamentReference,
+                              oldReference.roundReference.roundIndex - 1),
+                          oldReference.matchIndex);
 }

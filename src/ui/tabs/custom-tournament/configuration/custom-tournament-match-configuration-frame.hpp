@@ -23,8 +23,8 @@ public:
 signals:
     void duplicateMatchClicked();
     void deleteMatchClicked();
-    void moveUpClicked();
-    void moveDownClicked();
+    void swapPreviousClicked();
+    void swapNextClicked();
     // void duplicateMatch(std::shared_ptr<Match> match);
 
 private:

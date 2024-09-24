@@ -3,6 +3,7 @@
 #include "src/data/match-reference.hpp"
 #include "src/data/tournament.hpp"
 #include "src/logger.hpp"
+#include "src/ui/components/button.hpp"
 #include "src/ui/components/icon.hpp"
 #include "src/ui/components/labeled-input.hpp"
 #include "src/ui/components/line-edit.hpp"
@@ -40,30 +41,36 @@ CustomTournamentRoundConfigurationFrame::CustomTournamentRoundConfigurationFrame
         roundNameLineEdit);
 
     auto duplicateRoundButton =
-        new QPushButton(AppIcon(AppIcon::Type::Copy), "");
+        new AppButton("", AppIcon(AppIcon::Type::Copy), AppButton::Style::Transparent);
+        // new QPushButton(AppIcon(AppIcon::Type::Copy), "");
     duplicateRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.duplicateRoundButtonTooltip"));
     this->connect(duplicateRoundButton, &QPushButton::clicked,
-    	      [this]() { this->duplicateRoundClicked(); });
+                  [this]() { this->duplicateRoundClicked(); });
 
     auto deleteRoundButton =
-        new QPushButton(AppIcon(AppIcon::Type::Delete), "");
+        new AppButton("", AppIcon(AppIcon::Type::Delete), AppButton::Style::Transparent);
+        // new QPushButton(AppIcon(AppIcon::Type::Delete), "");
     deleteRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.deleteRoundButtonTooltip"));
     this->connect(deleteRoundButton, &QPushButton::clicked,
-    	      [this]() { this->deleteRoundClicked(); });
+                  [this]() { this->deleteRoundClicked(); });
 
     auto roundConfigLayout = new QHBoxLayout();
     roundConfigLayout->addWidget(roundNameInput, 1);
     roundConfigLayout->addWidget(duplicateRoundButton, 0);
     roundConfigLayout->addWidget(deleteRoundButton, 0);
     this->matchListLayout = new QVBoxLayout();
+    this->matchListLayout->setAlignment(Qt::AlignTop);
 
     // this->_matchListLayout->addWidget(new QLabel("TODO round config"));
 
-    auto addMatchButton = new QPushButton(
-        AppIcon(AppIcon::Type::Add),
-        obs_module_text("customTournament.configuration.addMatchButton"));
+    auto addMatchButton = new AppButton(
+        obs_module_text("customTournament.configuration.addMatchButton"),
+        AppIcon(AppIcon::Type::Add));
+    // new QPushButton(
+    // AppIcon(AppIcon::Type::Add),
+    // obs_module_text("customTournament.configuration.addMatchButton"));
     this->connect(addMatchButton, &QPushButton::clicked, [this]() {
         auto addedMatchReference = this->addNewMatch();
         auto remap = MatchReferenceRemapAddedMatch(addedMatchReference);
@@ -86,10 +93,13 @@ CustomTournamentRoundConfigurationFrame::CustomTournamentRoundConfigurationFrame
     // }
 
     auto frameLayout = new QVBoxLayout();
+    frameLayout->setAlignment(Qt::AlignTop);
+    frameLayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(roundConfigLayout, 0);
-    frameLayout->addLayout(this->matchListLayout, 1);
+    frameLayout->addLayout(this->matchListLayout, 0); // 1);
     frameLayout->addLayout(matchListButtons, 0);
 
+    // this->setContentsMargins(0, 0, 0, 0);
     this->setLayout(frameLayout);
     // this->setObjectName("roundConfig");
     // this->setStyleSheet("QFrame#" + this->objectName() +
@@ -156,37 +166,35 @@ void CustomTournamentRoundConfigurationFrame::addExistingMatch(
             }
         });
 
-    this->connect(
-        newMatchConfigurationFrame,
-        &CustomTournamentMatchConfigurationFrame::moveUpClicked,
-        [this, matchReference]() { //, newMatchConfigurationFrame]() {
-            auto isSwapped =
-                this->_tournamentRound->swapPrevious(matchReference.matchIndex);
+    this->connect(newMatchConfigurationFrame,
+                  &CustomTournamentMatchConfigurationFrame::swapPreviousClicked,
+                  [this, matchReference]() { //, newMatchConfigurationFrame]() {
+                      auto isSwapped = this->_tournamentRound->swapPrevious(
+                          matchReference.matchIndex);
 
-            if (isSwapped) {
-                auto remap = MatchReferenceRemapSwappedMatch(
-                    matchReference,
-                    MatchReference(matchReference.roundReference,
-                                   matchReference.matchIndex - 1));
-                this->matchCountChanged(remap);
-            }
-        });
+                      if (isSwapped) {
+                          auto remap = MatchReferenceRemapSwappedMatch(
+                              matchReference,
+                              MatchReference(matchReference.roundReference,
+                                             matchReference.matchIndex - 1));
+                          this->matchCountChanged(remap);
+                      }
+                  });
 
-    this->connect(
-        newMatchConfigurationFrame,
-        &CustomTournamentMatchConfigurationFrame::moveDownClicked,
-        [this, matchReference]() { //, newMatchConfigurationFrame]() {
-            auto isSwapped =
-                this->_tournamentRound->swapNext(matchReference.matchIndex);
+    this->connect(newMatchConfigurationFrame,
+                  &CustomTournamentMatchConfigurationFrame::swapNextClicked,
+                  [this, matchReference]() { //, newMatchConfigurationFrame]() {
+                      auto isSwapped = this->_tournamentRound->swapNext(
+                          matchReference.matchIndex);
 
-            if (isSwapped) {
-                auto remap = MatchReferenceRemapSwappedMatch(
-                    matchReference,
-                    MatchReference(matchReference.roundReference,
-                                   matchReference.matchIndex + 1));
-                this->matchCountChanged(remap);
-            }
-        });
+                      if (isSwapped) {
+                          auto remap = MatchReferenceRemapSwappedMatch(
+                              matchReference,
+                              MatchReference(matchReference.roundReference,
+                                             matchReference.matchIndex + 1));
+                          this->matchCountChanged(remap);
+                      }
+                  });
 
     this->matchListLayout->addWidget(newMatchConfigurationFrame);
 }

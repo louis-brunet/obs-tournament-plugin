@@ -6,6 +6,7 @@
 #include "src/data/tournament-round.hpp"
 #include "src/data/tournament.hpp"
 #include "src/logger.hpp"
+#include "src/ui/components/button.hpp"
 #include "src/ui/components/icon.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/custom-tournament-match-configuration-frame.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/custom-tournament-round-configuration-frame.hpp"
@@ -22,14 +23,22 @@ CustomTournamentConfigurationFrame::CustomTournamentConfigurationFrame(
     Logger::log("[CustomTournamentConfigurationFrame] constructor called");
 
     this->_roundListLayout = new QVBoxLayout();
+    this->_roundListLayout->setAlignment(Qt::AlignTop);
     // for (auto round : tournament)
     // addRound
 
-    auto addRoundButton = new QPushButton(
-        AppIcon(AppIcon::Type::Add),
-        obs_module_text("customTournament.configuration.addRoundButton"));
+    auto addRoundButton = new AppButton(
+        obs_module_text("customTournament.configuration.addRoundButton"),
+        AppIcon(AppIcon::Type::Add));
+    // new QPushButton(
+    // AppIcon(AppIcon::Type::Add),
+    // obs_module_text("customTournament.configuration.addRoundButton"));
     this->connect(addRoundButton, &QPushButton::clicked,
                   [this]() { this->addNewRound(); });
+
+    auto roundListButtons = new QHBoxLayout();
+    roundListButtons->setAlignment(Qt::AlignRight);
+    roundListButtons->addWidget(addRoundButton);
 
     std::shared_ptr<Tournament> tournament =
         this->_tournamentReference.tournament();
@@ -39,14 +48,24 @@ CustomTournamentConfigurationFrame::CustomTournamentConfigurationFrame(
             "[CustomTournamentConfigurationFrame] adding existing rounds");
         this->refreshRoundList();
     } else {
-        Logger::log(
-            "[CustomTournamentConfigurationFrame] no existing rounds, adding new round");
-        this->addNewRound();
+        // Logger::log(
+        //     "[CustomTournamentConfigurationFrame] no existing rounds, adding new round");
+        // this->addNewRound();
     }
 
+    auto endTournamentConfigurationButton = new AppButton(obs_module_text(
+        "customTournament.configuration.endConfigurationButton"));
+    this->connect(endTournamentConfigurationButton, &QPushButton::clicked,
+                  [this]() { this->endTournamentConfiguration(); });
+
+    auto bottomLayout = new QVBoxLayout();
+    bottomLayout->setAlignment(Qt::AlignBottom);
+    bottomLayout->addWidget(endTournamentConfigurationButton);
+
     auto frameLayout = new QVBoxLayout();
-    frameLayout->addLayout(this->_roundListLayout);
-    frameLayout->addWidget(addRoundButton);
+    frameLayout->addLayout(this->_roundListLayout, 0);
+    frameLayout->addLayout(roundListButtons, 0);
+    frameLayout->addLayout(bottomLayout, 1);
 
     this->setLayout(frameLayout);
 }
@@ -94,6 +113,20 @@ void CustomTournamentConfigurationFrame::addExistingRound(
                 this->refreshRoundList((unsigned long)newRoundIndex, remap);
             }
         });
+
+    this->connect(newRoundConfigurationFrame,
+                  &CustomTournamentRoundConfigurationFrame::deleteRoundClicked,
+                  [this, roundReference]() {
+                      auto isDeleted =
+                          this->_tournamentReference.tournament()->deleteRound(
+                              roundReference.roundIndex);
+                      if (isDeleted) {
+                          auto remap =
+                              MatchReferenceRemapDeletedRound(roundReference);
+                          this->refreshRoundList(
+                              (unsigned long)roundReference.roundIndex, remap);
+                      }
+                  });
 }
 
 void CustomTournamentConfigurationFrame::refreshRoundList(
@@ -162,14 +195,18 @@ void CustomTournamentConfigurationFrame::updatePlayerChoices(
     // for (auto round : this->_tournamentReference.tournament()->rounds()) {
     //     for (auto match : round->matches()) {
     auto rounds = this->_tournamentReference.tournament()->rounds();
-    for (unsigned long roundIndex = 0; roundIndex < rounds.size(); roundIndex++) {
+    for (unsigned long roundIndex = 0; roundIndex < rounds.size();
+         roundIndex++) {
         auto round = rounds[roundIndex];
         auto matches = round->matches();
-        TournamentRoundReference roundReference(this->_tournamentReference, (long long)roundIndex);
+        TournamentRoundReference roundReference(this->_tournamentReference,
+                                                (long long)roundIndex);
 
-        for (unsigned long matchIndex = 0; matchIndex < matches.size(); matchIndex++) {
+        for (unsigned long matchIndex = 0; matchIndex < matches.size();
+             matchIndex++) {
             auto match = matches[matchIndex];
-            MatchReference remapContextReference(roundReference, (long long)matchIndex);
+            MatchReference remapContextReference(roundReference,
+                                                 (long long)matchIndex);
             match->participant1()->applyRemap(&remap, remapContextReference);
             match->participant2()->applyRemap(&remap, remapContextReference);
 

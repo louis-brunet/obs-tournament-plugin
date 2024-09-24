@@ -62,3 +62,14 @@ public:
 private:
     TournamentRoundReference _addedRound;
 };
+
+class MatchReferenceRemapDeletedRound : public MatchReferenceRemap {
+public:
+    MatchReferenceRemapDeletedRound(TournamentRoundReference deletedRound);
+    ~MatchReferenceRemapDeletedRound() = default;
+
+    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+
+private:
+    TournamentRoundReference _deletedRound;
+};

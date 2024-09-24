@@ -3,6 +3,8 @@
 #include "src/data/tournament-reference.hpp"
 #include "src/data/tournament.hpp"
 #include "src/logger.hpp"
+#include "src/ui/components/button.hpp"
+#include "src/ui/components/icon.hpp"
 #include "src/ui/components/labeled-input.hpp"
 #include "src/ui/components/line-edit.hpp"
 #include "src/ui/dialogs/error-dialog.hpp"
@@ -38,8 +40,8 @@ CreateTournamentFrame::CreateTournamentFrame()
         obs_module_text("setup.createTournament.typeInputLabel"),
         this->_tournamentTypeComboBox);
 
-    auto addPlayerButton = new QPushButton(
-        obs_module_text("setup.createTournament.addPlayerButton"));
+    auto addPlayerButton =
+        new AppButton(obs_module_text("setup.createTournament.addPlayerButton"), AppIcon(AppIcon::Type::Add));
     this->connect(addPlayerButton, &QPushButton::clicked,
                   [this]() { this->addPlayer(); });
 
@@ -58,7 +60,7 @@ CreateTournamentFrame::CreateTournamentFrame()
         this->addPlayer();
     }
 
-    auto endTournamentCreationButton = new QPushButton(
+    auto endTournamentCreationButton = new AppButton(
         obs_module_text("setup.createTournament.endTournamentCreationButton"));
     this->connect(endTournamentCreationButton, &QPushButton::clicked, [this]() {
         try {

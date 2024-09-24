@@ -98,10 +98,13 @@ long long Tournament::duplicateRound(long long roundIndex)
         return -1;
     }
 
-    auto uRoundIndex = (unsigned long) roundIndex;
+    auto uRoundIndex = (unsigned long)roundIndex;
 
-    std::shared_ptr<TournamentRound> roundToInsert = this->_rounds.at(uRoundIndex)->duplicate();
-    Logger::log("[Tournament::duplicateRound] duplicated round '%s' at index %d", roundToInsert->name().c_str(), uRoundIndex);
+    std::shared_ptr<TournamentRound> roundToInsert =
+        this->_rounds.at(uRoundIndex)->duplicate();
+    Logger::log(
+        "[Tournament::duplicateRound] duplicated round '%s' at index %d",
+        roundToInsert->name().c_str(), uRoundIndex);
 
     uRoundIndex++;
     auto newRoundIndex = (long long)uRoundIndex;
@@ -115,4 +118,17 @@ long long Tournament::duplicateRound(long long roundIndex)
     this->_rounds.push_back(roundToInsert);
 
     return newRoundIndex;
+}
+
+bool Tournament::deleteRound(long long roundIndex)
+{
+    if (roundIndex < 0 || (unsigned long)roundIndex >= this->_rounds.size()) {
+        return false;
+    }
+    auto uRoundIndex = (unsigned long)roundIndex;
+    auto deletedRound = this->_rounds.at(uRoundIndex);
+    this->_rounds.erase(this->_rounds.begin() + roundIndex);
+    Logger::log("[Tournament::deleteRound] deleting round %s with index %d",
+                deletedRound->name().c_str(), uRoundIndex);
+    return true;
 }

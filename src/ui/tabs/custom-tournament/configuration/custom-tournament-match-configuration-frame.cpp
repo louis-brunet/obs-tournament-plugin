@@ -1,6 +1,7 @@
 #include "custom-tournament-match-configuration-frame.hpp"
 #include "src/data/tournament.hpp"
 #include "src/logger.hpp"
+#include "src/ui/components/button.hpp"
 #include "src/ui/components/icon.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/match-participant-input.hpp"
 #include <memory>
@@ -31,41 +32,63 @@ CustomTournamentMatchConfigurationFrame::CustomTournamentMatchConfigurationFrame
                       this->_match->setParticipant2(newParticipant);
                   });
 
-    auto duplicateMatchButton =
-        new QPushButton(AppIcon(AppIcon::Type::Copy), "");
+    auto duplicateMatchButton = new AppButton("", AppIcon(AppIcon::Type::Copy),
+                                              AppButton::Style::Transparent);
+    // new QPushButton(AppIcon(AppIcon::Type::Copy), "");
     duplicateMatchButton->setToolTip(obs_module_text(
         "customTournament.configuration.duplicateMatchButtonTooltip"));
     this->connect(duplicateMatchButton, &QPushButton::clicked,
                   [this]() { this->duplicateMatchClicked(); });
 
-    auto deleteMatchButton =
-        new QPushButton(AppIcon(AppIcon::Type::Delete), "");
+    auto deleteMatchButton = new AppButton("", AppIcon(AppIcon::Type::Delete),
+                                           AppButton::Style::Transparent);
+    // new QPushButton(AppIcon(AppIcon::Type::Delete), "");
     deleteMatchButton->setToolTip(obs_module_text(
         "customTournament.configuration.deleteMatchButtonTooltip"));
     this->connect(deleteMatchButton, &QPushButton::clicked,
                   [this]() { this->deleteMatchClicked(); });
 
-    auto moveUpButton = new QPushButton(AppIcon(AppIcon::Type::ArrowUpward), "");
-    // TODO: refactor these button styles
-    moveUpButton->setStyleSheet("QPushButton {"
-                                "background-color: transparent;"
-                                "}");
+    // auto moveIconColor = nullptr;// new QColor(QColor::fromHsl(258, 10, 57));
+    auto moveIconColor = new QColor(255, 255, 255, 100);
+    auto moveUpButton =
+        new AppButton("", AppIcon(AppIcon::Type::ArrowUpward, moveIconColor),
+                      AppButton::Style::Transparent, true);
+    moveUpButton->setToolTip(obs_module_text("customTournament.configuration.match.moveUpButtonTooltip"));
+    // new QPushButton(AppIcon(AppIcon::Type::ArrowUpward, moveIconColor), "");
+    // // TODO: refactor these button styles
+    // moveUpButton->setStyleSheet("QPushButton {"
+    //                             "background-color: transparent;"
+    //                             "}");
     this->connect(moveUpButton, &QPushButton::clicked,
-                  [this]() { this->moveUpClicked(); });
+                  [this]() { this->swapPreviousClicked(); });
+    if (matchReference.matchIndex == 0) {
+        // auto sizePolicy = moveUpButton->sizePolicy();
+        // sizePolicy.setRetainSizeWhenHidden(true);
+        // moveUpButton->setSizePolicy(sizePolicy);
+        moveUpButton->setVisible(false);
+    }
 
-    auto moveDownButton = new QPushButton(AppIcon(AppIcon::Type::ArrowDownward), "");
-    // TODO: refactor these button styles
-    moveDownButton->setStyleSheet("QPushButton {"
-                                "background-color: transparent;"
-                                "}");
+    auto moveDownButton =
+        new AppButton("", AppIcon(AppIcon::Type::ArrowDownward, moveIconColor),
+                      AppButton::Style::Transparent, true);
+    moveDownButton->setToolTip(obs_module_text("customTournament.configuration.match.moveDownButtonTooltip"));
+    //     new QPushButton(
+    //     AppIcon(AppIcon::Type::ArrowDownward, moveIconColor), "");
+    // // TODO: refactor these button styles
+    // moveDownButton->setStyleSheet("QPushButton {"
+    //                               "background-color: transparent;"
+    //                               "}");
     this->connect(moveDownButton, &QPushButton::clicked,
-                  [this]() { this->moveDownClicked(); });
+                  [this]() { this->swapNextClicked(); });
+    if ((unsigned long)matchReference.matchIndex ==
+        matchReference.roundReference.round()->matches().size() - 1) {
+        // auto sizePolicy = moveDownButton->sizePolicy();
+        // sizePolicy.setRetainSizeWhenHidden(true);
+        // moveDownButton->setSizePolicy(sizePolicy);
+        moveDownButton->setVisible(false);
+    }
 
-    // auto moveButtons = new QVBoxLayout();
-    // moveButtons->addWidget(moveUpButton);
-    // moveButtons->addWidget(moveDownButton);
-
-    auto matchLabel =new QLabel(matchLabelText.c_str());
+    auto matchLabel = new QLabel(matchLabelText.c_str());
     matchLabel->setAlignment(Qt::AlignCenter);
 
     auto firstColumnLayout = new QVBoxLayout();
@@ -74,6 +97,7 @@ CustomTournamentMatchConfigurationFrame::CustomTournamentMatchConfigurationFrame
     firstColumnLayout->addWidget(moveDownButton);
 
     auto frameLayout = new QHBoxLayout();
+    frameLayout->setContentsMargins(0, 0, 0, 0);
     // frameLayout->addWidget(new QLabel("TODO match config frame"));
     frameLayout->addLayout(firstColumnLayout, 0);
     frameLayout->addWidget(this->participant1Input, 1);

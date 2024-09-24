@@ -75,6 +75,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/data/tournament-round.hpp
     src/data/tournament.cpp
     src/data/tournament.hpp
+    src/ui/components/button.cpp
+    src/ui/components/button.hpp
     src/ui/components/icon.cpp
     src/ui/components/icon.hpp
     src/ui/components/label.cpp
