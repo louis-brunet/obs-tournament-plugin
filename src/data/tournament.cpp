@@ -22,6 +22,9 @@ void Tournament::load(obs_data_t *data,
         data, "type", Tournament::Type::Unknown);
     this->_isStarted = ObsDataHelpers::getBool(data, "isStarted", false);
 
+    OBSDataAutoRelease outputsData = obs_data_get_obj(data, "outputs");
+    this->outputs.load(outputsData);
+
     ObsDataHelpers::iterateArray(data, "players",
                                  [this](obs_data_t *itemDataObj,
                                         unsigned long playerIndex) {
@@ -49,6 +52,10 @@ void Tournament::save(obs_data_t *data) const
     obs_data_set_string(data, "name", this->_name.c_str());
     obs_data_set_int(data, "type", this->_type);
     obs_data_set_bool(data, "isStarted", this->_isStarted);
+
+    OBSDataAutoRelease outputsData = obs_data_create();
+    this->outputs.save(outputsData);
+    obs_data_set_obj(data, "outputs", outputsData);
 
     ObsDataHelpers::saveArray<std::shared_ptr<Player>>(
         data, "players", this->_players,

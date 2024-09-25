@@ -19,9 +19,19 @@ static QPixmap iconPixmap(const char *filePath,
     return pixmap;
 }
 
-AppIcon::AppIcon(const char *iconFilePath, const QColor *fillColor)
-    : QIcon(iconPixmap(iconFilePath, fillColor))
+AppIcon::AppIcon(const char *iconFilePath, const QColor *fillColor, const QColor &maskColor)
+    : QIcon(iconPixmap(iconFilePath, fillColor, maskColor))
 {
+    // UNUSED_PARAMETER(iconFilePath);
+    // UNUSED_PARAMETER(fillColor);
+    // if (fillColor) {
+    //     UNUSED_PARAMETER(maskColor);
+    //     // auto pixmap = this->pixmap(200);
+    //     // QBitmap mask = pixmap.createMaskFromColor(maskColor);
+    //     // pixmap.fill(*fillColor);
+    //     // pixmap.setMask(mask);
+    //     // this->addPixmap(pixmap);
+    // }
 }
 
 AppIcon::AppIcon(Type type, const QColor *fillColor)
@@ -50,6 +60,12 @@ std::string AppIcon::typeToFilePath(Type type)
         break;
     case ArrowUpward:
         iconPath += "arrow_upward.svg";
+        break;
+    case KeyboardArrowDown:
+        iconPath += "keyboard_arrow_down.svg";
+        break;
+    case KeyboardArrowUp:
+        iconPath += "keyboard_arrow_up.svg";
         break;
     }
 

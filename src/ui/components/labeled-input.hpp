@@ -11,6 +11,10 @@ public:
         Top,
     };
 
-    AppLabeledInput(const std::string &label, QWidget *inputWidget, LabelPosition labelPosition = LabelPosition::Left);
+    AppLabeledInput(const std::string &label, QWidget *inputWidget,
+                    LabelPosition labelPosition = LabelPosition::Left);
     ~AppLabeledInput();
+
+protected:
+    QWidget *_inputWidget;
 };

@@ -31,12 +31,12 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 	// scrollArea->setLayout(tabLayout);
 	// vlayout
 
-	auto tabWidget = new QTabWidget();
+	this->_tabWidget = new QTabWidget();
 	// tabWidget->addTab(new QLabel("TODO plugin dialog"), "abc");
-	vlayout->addWidget(tabWidget);
+	vlayout->addWidget(this->_tabWidget);
 
-	auto setupTab = new SetupTab(tabWidget);
-	tabWidget->addTab(setupTab, setupTab->tabTitle());
+	auto setupTab = new SetupTab(this->_tabWidget);
+	this->_tabWidget->addTab(setupTab, setupTab->tabTitle());
 
 	// for (auto tournament : pluginData->tournaments) {
     TournamentReference tournamentReference;
@@ -65,9 +65,9 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 		default:
 			throw std::runtime_error("unrecognized enum value");
 		}
-		tabWidget->addTab(tournamentTab, tournament->name().c_str());
+		this->_tabWidget->addTab(tournamentTab, tournament->name().c_str());
 	}
-	tabWidget->setCurrentIndex(tabWidget->count() - 1);
+	this->_tabWidget->setCurrentIndex(this->_tabWidget->count() - 1);
 
 	if (pluginDialogWidth > pluginDialogMinWidth &&
 	    pluginDialogHeight > pluginDialogMinHeight) {
@@ -75,4 +75,12 @@ PluginDialog::PluginDialog(QMainWindow *parent)
 	}
 }
 
-PluginDialog::~PluginDialog() {}
+PluginDialog::~PluginDialog() {
+    // while (this->_tabWidget->count() != 0) {
+    //     QWidget *tab = this->_tabWidget->widget(0);
+    //     this->_tabWidget->removeTab(0);
+    //     delete tab;
+    // }
+    // delete this->_tabWidget;
+    // this->_tabWidget = nullptr;
+}

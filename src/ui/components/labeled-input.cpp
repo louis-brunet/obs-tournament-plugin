@@ -4,7 +4,7 @@
 
 AppLabeledInput::AppLabeledInput(const std::string &labelText,
 				 QWidget *inputWidget,
-				 LabelPosition labelPosition)
+				 LabelPosition labelPosition): _inputWidget(inputWidget)
 {
 	auto label = new AppLabel(labelText.c_str());
 
@@ -23,7 +23,7 @@ AppLabeledInput::AppLabeledInput(const std::string &labelText,
 			"[AppLabeledInput] unrecognized label position");
 	}
 	widgetLayout->addWidget(label, 0);
-	widgetLayout->addWidget(inputWidget, 0);
+	widgetLayout->addWidget(this->_inputWidget, 0);
 	this->setLayout(widgetLayout);
 
 	this->connect(label, &AppLabel::clicked, [inputWidget]() {

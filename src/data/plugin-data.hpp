@@ -2,6 +2,7 @@
 
 #include "src/data/tournament.hpp"
 #include <memory>
+#include <obs.hpp>
 #include <obs-data.h>
 #include <string>
 #include <vector>
@@ -26,5 +27,8 @@ public:
     // --- (end) Save/load settings section  ---
 
     std::vector<std::shared_ptr<Tournament>> tournaments;
+
+    std::vector<OBSWeakSource> textSources();
+    std::vector<OBSWeakSource> imageSources();
     // std::vector<std::unique_ptr<Tournament>> tournaments;
 };

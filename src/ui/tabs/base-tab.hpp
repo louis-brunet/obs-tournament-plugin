@@ -8,7 +8,7 @@ class BaseTab : public QScrollArea {
 
 public:
 	BaseTab(std::string tabTitle);
-	~BaseTab();
+	virtual ~BaseTab();
     const char *tabTitle() const;
 
 protected:

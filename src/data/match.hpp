@@ -7,6 +7,17 @@
 
 class Match {
 public:
+    enum State {
+        NotStarted,
+        // Ready,
+        Started,
+        Done,
+    };
+
+    State state = State::NotStarted;
+    unsigned char participant1Score = 0;
+    unsigned char participant2Score = 0;
+
     Match();
     Match(Match &&) = default;
     Match(const Match &) = default;
@@ -25,8 +36,6 @@ public:
     void save(obs_data_t *data) const;
 
 private:
-    // MatchParticipant _participant1;
-    // MatchParticipant _participant2;
     std::shared_ptr<MatchParticipant> _participant1 = std::make_shared<MatchParticipantUnknown>();
     std::shared_ptr<MatchParticipant> _participant2 = std::make_shared<MatchParticipantUnknown>();
 };

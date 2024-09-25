@@ -22,11 +22,17 @@ public:
         return std::tie(this->roundReference, this->matchIndex) ==
                std::tie(rhs.roundReference, rhs.matchIndex);
     };
+    inline bool operator<(const MatchReference &rhs) const
+    {
+        return this->roundReference < rhs.roundReference ||
+            (this->roundReference == rhs.roundReference &&
+             this->matchIndex < rhs.matchIndex);
+    };
 
     TournamentRoundReference roundReference = TournamentRoundReference();
     long long matchIndex = -1;
 
-    std::string toMatchLabel();
+    std::string toMatchLabel() const;
     std::shared_ptr<Match> match() const;
 
     void load(obs_data_t *data);

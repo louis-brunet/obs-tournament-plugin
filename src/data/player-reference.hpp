@@ -14,6 +14,11 @@ public:
 	PlayerReference &
 	operator=(const PlayerReference &) = default;
 	~PlayerReference();
+    inline bool operator==(const PlayerReference &rhs) const
+    {
+        return std::tie(this->tournamentReference, this->playerIndex) ==
+               std::tie(rhs.tournamentReference, rhs.playerIndex);
+    };
 
     TournamentReference tournamentReference = TournamentReference();
     long long playerIndex = -1;

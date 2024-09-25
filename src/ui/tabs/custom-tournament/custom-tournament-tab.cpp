@@ -4,7 +4,6 @@
 #include "src/logger.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/custom-tournament-configuration-frame.hpp"
 #include "src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.hpp"
-#include <qlabel.h>
 
 CustomTournamentTab::CustomTournamentTab(TournamentReference tournamentReference)
     : BaseTab(tournamentReference.tournament()->name())
@@ -17,12 +16,11 @@ CustomTournamentTab::CustomTournamentTab(TournamentReference tournamentReference
                       this->endTournamentConfiguration(tournamentReference);
                   });
 
-    this->_startedFrame = new CustomTournamentStartedFrame(tournamentReference);
+    this->_startedFrame = new CustomTournamentStartedFrame();
     this->_startedFrame->setVisible(false);
 
     this->_tabContentLayout->addWidget(this->_configurationFrame);
     this->_tabContentLayout->addWidget(this->_startedFrame);
-    // this->_tabContentLayout->addWidget(new QLabel("TODO custom tournament tab"));
 
     std::shared_ptr<Tournament> tournament = tournamentReference.tournament();
     if (tournament->isStarted()) {
@@ -30,7 +28,13 @@ CustomTournamentTab::CustomTournamentTab(TournamentReference tournamentReference
     }
 }
 
-CustomTournamentTab::~CustomTournamentTab() {}
+CustomTournamentTab::~CustomTournamentTab() {
+    // delete this->_configurationFrame;
+    // this->_configurationFrame = nullptr;
+    //
+    // delete this->_startedFrame;
+    // this->_startedFrame = nullptr;
+}
 
 void CustomTournamentTab::endTournamentConfiguration(
     TournamentReference tournamentReference)
@@ -38,6 +42,8 @@ void CustomTournamentTab::endTournamentConfiguration(
     tournamentReference.tournament()->setStarted(true);
 
     this->_configurationFrame->setVisible(false);
+
+    this->_startedFrame->setTournament(tournamentReference);
     this->_startedFrame->setVisible(true);
 
     Logger::log("[CustomTournamentTab::endTournamentConfiguration()] TODO");

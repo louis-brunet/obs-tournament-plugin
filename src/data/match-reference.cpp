@@ -15,7 +15,8 @@ MatchReference::~MatchReference() {}
 
 void MatchReference::load(obs_data_t *data)
 {
-    OBSDataAutoRelease roundReferenceData = obs_data_get_obj(data, "roundReference");
+    OBSDataAutoRelease roundReferenceData =
+        obs_data_get_obj(data, "roundReference");
     if (roundReferenceData) {
         this->roundReference.load(roundReferenceData);
     } else {
@@ -26,7 +27,8 @@ void MatchReference::load(obs_data_t *data)
     this->matchIndex = obs_data_get_int(data, "matchIndex");
 }
 
-void MatchReference::save(obs_data_t *data) const {
+void MatchReference::save(obs_data_t *data) const
+{
     OBSDataAutoRelease roundReferenceData = obs_data_create();
     this->roundReference.save(roundReferenceData);
     obs_data_set_obj(data, "roundReference", roundReferenceData);
@@ -34,13 +36,15 @@ void MatchReference::save(obs_data_t *data) const {
     obs_data_set_int(data, "matchIndex", this->matchIndex);
 }
 
-std::string MatchReference::toMatchLabel() {
+std::string MatchReference::toMatchLabel() const
+{
     Logger::log(LOG_DEBUG, "[MatchReference::toMatchLabel()] called");
 
     std::shared_ptr<Tournament> tournament =
         this->roundReference.tournamentReference.tournament();
 
-    Logger::log(LOG_DEBUG, "[MatchReference::toMatchLabel()] tournament is %p", tournament.get());
+    Logger::log(LOG_DEBUG, "[MatchReference::toMatchLabel()] tournament is %p",
+                tournament.get());
 
     if (!tournament.get()) {
         return MatchReference::INVALID_MATCH_REFERENCE_LABEL;
@@ -83,11 +87,10 @@ std::string MatchReference::toMatchLabel() {
 std::shared_ptr<Match> MatchReference::match() const
 {
     auto tournamentRound = this->roundReference.round();
-	if (this->matchIndex < 0 ||
-	    (unsigned long)this->matchIndex >= tournamentRound->matches().size()
-		    ) {
-		return nullptr;
-	}
+    if (this->matchIndex < 0 ||
+        (unsigned long)this->matchIndex >= tournamentRound->matches().size()) {
+        return nullptr;
+    }
 
-	return tournamentRound->matches().at((unsigned long)this->matchIndex);
+    return tournamentRound->matches().at((unsigned long)this->matchIndex);
 }

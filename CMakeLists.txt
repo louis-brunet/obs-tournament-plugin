@@ -67,6 +67,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/data/player.hpp
     src/data/plugin-data.cpp
     src/data/plugin-data.hpp
+    src/data/tournament-outputs.cpp
+    src/data/tournament-outputs.hpp
     src/data/tournament-reference.cpp
     src/data/tournament-reference.hpp
     src/data/tournament-round-reference.cpp
@@ -101,6 +103,18 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/tabs/custom-tournament/configuration/match-participant-input.hpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.cpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-frame.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-participant-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-participant-frame.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-round-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-round-frame.hpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-score-frame.cpp
+    src/ui/tabs/custom-tournament/started/custom-tournament-started-score-frame.hpp
+    src/ui/tabs/custom-tournament/started/source-combo-box.cpp
+    src/ui/tabs/custom-tournament/started/source-combo-box.hpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.cpp
     src/ui/tabs/custom-tournament/custom-tournament-tab.hpp
     src/ui/tabs/setup/create-player-frame.cpp
@@ -113,6 +127,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/tabs/setup/debug-frame.hpp
     src/ui/tabs/base-tab.cpp
     src/ui/tabs/base-tab.hpp
+    # src/ui/validation.cpp
+    src/ui/validation.hpp
     src/logger.cpp
     src/logger.hpp
     src/plugin-main.cpp

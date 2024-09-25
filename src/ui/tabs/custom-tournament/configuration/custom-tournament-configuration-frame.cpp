@@ -10,6 +10,7 @@
 #include "src/ui/components/icon.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/custom-tournament-match-configuration-frame.hpp"
 #include "src/ui/tabs/custom-tournament/configuration/custom-tournament-round-configuration-frame.hpp"
+#include "src/ui/validation.hpp"
 #include <QBoxLayout>
 #include <deque>
 #include <obs-module.h>
@@ -251,8 +252,79 @@ void CustomTournamentConfigurationFrame::updatePlayerChoices(
     }
 }
 
-void CustomTournamentConfigurationFrame::endTournamentConfiguration() {
-    Logger::log("[CustomTournamentConfigurationFrame::endTournamentConfiguration] TODO validation");
+void CustomTournamentConfigurationFrame::endTournamentConfiguration()
+{
+    auto tournament = this->_tournamentReference.tournament();
 
+    // for (auto round : tournament->rounds()) {
+    for (unsigned long roundIndex = 0; roundIndex < tournament->rounds().size();
+         roundIndex++) {
+        auto round = tournament->rounds()[roundIndex];
+        if (!Validation::validate(
+                round->name() != "", "Round %d: %s",
+                obs_module_text(
+                    "error.customTournament.configuration.missingRoundName"))) {
+            return;
+        }
+
+        TournamentRoundReference roundReference(this->_tournamentReference,
+                                                (long long)roundIndex);
+        for (unsigned long matchIndex = 0; matchIndex < round->matches().size();
+             matchIndex++) {
+            auto match = round->matches()[matchIndex];
+
+            MatchReference matchReference(roundReference,
+                                          (long long)matchIndex);
+
+            for (auto participant :
+                 {match->participant1(), match->participant2()}) {
+                auto participantValidation =
+                    participant->validateConfiguration(matchReference);
+                switch (participantValidation) {
+                case MatchParticipant::Valid:
+                    break;
+                case MatchParticipant::InvalidUnknownParticipant:
+                    Validation::validate(
+                        false, "Round %d (%s), match %s: %s", roundIndex + 1,
+                        round->name().c_str(),
+                        matchReference.toMatchLabel().c_str(),
+                        obs_module_text(
+                            "error.customTournament.configuration.missingMatchParticipant"));
+                    return;
+                case MatchParticipant::InvalidCircularDependency:
+                    Validation::validate(
+                        false, "Round %d (%s), match %s: %s", roundIndex + 1,
+                        round->name().c_str(),
+                        matchReference.toMatchLabel().c_str(),
+                        obs_module_text(
+                            "error.customTournament.configuration.circularDependency"));
+                    return;
+                case MatchParticipant::InvalidPlayerVersusSelf:
+                    Validation::validate(
+                        false, "Round %d (%s), match %s: %s", roundIndex + 1,
+                        round->name().c_str(),
+                        matchReference.toMatchLabel().c_str(),
+                        obs_module_text(
+                            "error.customTournament.configuration.playerVersusSelf"));
+                    return;
+                }
+                Logger::log(
+                    LOG_DEBUG,
+                    "[CustomTournamentConfigurationFrame::endTournamentConfiguration] Match %s is valid",
+                    matchReference.toMatchLabel().c_str());
+            }
+        }
+
+        Logger::log(
+            LOG_DEBUG,
+            "[CustomTournamentConfigurationFrame::endTournamentConfiguration] Round %s is valid",
+            round->name().c_str());
+    }
+
+    // if (!Validation::validate(tournament->, , FormatArgs errorFormatArgs...)) {
+    // }
+
+    // Logger::log(
+    //     "[CustomTournamentConfigurationFrame::endTournamentConfiguration] TODO: more validation?");
     this->tournamentConfigured();
 }

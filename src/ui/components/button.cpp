@@ -36,3 +36,5 @@ AppButton::AppButton(const char *buttonText, Style style,
 {
     this->init(style, retainSizeWhenHidden);
 }
+
+AppButton::~AppButton() {}

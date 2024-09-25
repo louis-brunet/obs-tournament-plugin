@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/data/player.hpp"
+#include "src/data/tournament-outputs.hpp"
 #include "src/data/tournament-reference.hpp"
 #include "src/data/tournament-round.hpp"
 #include <memory>
@@ -14,6 +15,8 @@ public:
 		Unknown = -1,
 		Custom = 0,
 	};
+
+    TournamentOutputs outputs = TournamentOutputs();
 
 	Tournament();
 	Tournament(Tournament &&) = default;

@@ -1,5 +1,7 @@
 #include "match-participant-player.hpp"
+#include "src/data/match-reference.hpp"
 #include <obs.hpp>
+#include <stdexcept>
 
 MatchParticipantPlayer::MatchParticipantPlayer(PlayerReference playerReference)
     : MatchParticipant(MatchParticipant::Type::Player),
@@ -48,4 +50,44 @@ void MatchParticipantPlayer::save(obs_data_t *data) const
 std::shared_ptr<MatchParticipant> MatchParticipantPlayer::duplicate() const
 {
     return std::make_shared<MatchParticipantPlayer>(*this);
+}
+
+MatchParticipant::ValidateConfigurationResult
+MatchParticipantPlayer::validateConfiguration(
+    const MatchReference &matchContext) const
+{
+    auto player = this->_playerReference.player();
+    if (!player) {
+        throw std::runtime_error(
+            "[MatchParticipantPlayer::validateConfiguration] invalid player reference");
+    }
+
+    auto match = matchContext.match();
+    if (!match) {
+        throw std::runtime_error(
+            "[MatchParticipantPlayer::validateConfiguration] invalid match reference");
+    }
+
+    std::shared_ptr<MatchParticipant> otherParticipant;
+    if (match->participant1().get() == this) {
+        otherParticipant = match->participant2();
+    } else if (match->participant2().get() == this) {
+        otherParticipant = match->participant1();
+    } else {
+        throw std::runtime_error(
+            "[MatchParticipantPlayer::validateConfiguration] given match reference does not contain this participant");
+    }
+
+    if (otherParticipant->type() == MatchParticipant::Type::Player &&
+        this->_playerReference ==
+            std::reinterpret_pointer_cast<MatchParticipantPlayer>(
+                otherParticipant)
+                ->_playerReference) {
+        return MatchParticipantPlayer::ValidateConfigurationResult::
+            InvalidPlayerVersusSelf;
+    }
+
+    // TODO: if other is from match, traverse tree to check no player vs self
+
+    return MatchParticipant::ValidateConfigurationResult::Valid;
 }

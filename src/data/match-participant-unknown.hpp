@@ -15,6 +15,7 @@ public:
     void load(obs_data_t *data) override;
     void save(obs_data_t *data) const override;
     std::shared_ptr<MatchParticipant> duplicate() const override;
+    ValidateConfigurationResult validateConfiguration(const MatchReference &matchContext) const override;
 
 private:
 };

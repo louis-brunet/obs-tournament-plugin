@@ -12,6 +12,8 @@ public:
         ArrowUpward,
         Copy,
         Delete,
+        KeyboardArrowDown,
+        KeyboardArrowUp,
     };
 
     static std::string typeToFilePath(Type type);
@@ -20,5 +22,5 @@ public:
     ~AppIcon();
 
 private:
-    AppIcon(const char *iconFilePath, const QColor *fillColor);
+    AppIcon(const char *iconFilePath, const QColor *fillColor, const QColor &maskColor = QColor(0, 0, 0, 0));
 };

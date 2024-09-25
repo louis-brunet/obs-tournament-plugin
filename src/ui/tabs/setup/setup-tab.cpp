@@ -14,13 +14,13 @@ SetupTab::SetupTab(QTabWidget *tabWidget)
     : BaseTab(obs_module_text("setup.tabTitle")),
       _tabWidget(tabWidget)
 {
-    auto createTournamentWidget = new CreateTournamentFrame();
-    this->connect(createTournamentWidget,
+    this->_createTournamentWidget = new CreateTournamentFrame();
+    this->connect(this->_createTournamentWidget,
                   &CreateTournamentFrame::tournamentCreated,
                   [](std::shared_ptr<Tournament> newTournament) {
                       pluginData->tournaments.push_back(newTournament);
                   });
-    this->connect(createTournamentWidget,
+    this->connect(this->_createTournamentWidget,
                   &CreateTournamentFrame::tournamentTabCreated,
                   [this](BaseTab *newTab) {
                       this->_tabWidget->addTab(newTab, newTab->tabTitle());
@@ -32,9 +32,16 @@ SetupTab::SetupTab(QTabWidget *tabWidget)
             this->_tabWidget->removeTab(1);
         }
     };
+    this->_debugFrame = new DebugFrame(onResetDataCallback);
 
-    this->_tabContentLayout->addWidget(createTournamentWidget);
-    this->_tabContentLayout->addWidget(new DebugFrame(onResetDataCallback));
+    this->_tabContentLayout->addWidget(this->_createTournamentWidget);
+    this->_tabContentLayout->addWidget(this->_debugFrame);
 }
 
-SetupTab::~SetupTab() {}
+SetupTab::~SetupTab() {
+    delete this->_createTournamentWidget;
+    this->_createTournamentWidget = nullptr;
+
+    delete this->_debugFrame;
+    this->_debugFrame = nullptr;
+}

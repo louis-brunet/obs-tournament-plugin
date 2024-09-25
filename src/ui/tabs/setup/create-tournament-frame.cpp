@@ -10,6 +10,7 @@
 #include "src/ui/dialogs/error-dialog.hpp"
 #include "src/ui/tabs/custom-tournament/custom-tournament-tab.hpp"
 #include "src/ui/tabs/setup/create-player-frame.hpp"
+#include "src/ui/validation.hpp"
 #include <obs-module.h>
 #include <QBoxLayout>
 #include <QGroupBox>
@@ -41,7 +42,8 @@ CreateTournamentFrame::CreateTournamentFrame()
         this->_tournamentTypeComboBox);
 
     auto addPlayerButton =
-        new AppButton(obs_module_text("setup.createTournament.addPlayerButton"), AppIcon(AppIcon::Type::Add));
+        new AppButton(obs_module_text("setup.createTournament.addPlayerButton"),
+                      AppIcon(AppIcon::Type::Add));
     this->connect(addPlayerButton, &QPushButton::clicked,
                   [this]() { this->addPlayer(); });
 
@@ -76,31 +78,27 @@ CreateTournamentFrame::CreateTournamentFrame()
     frameLayout->addWidget(tournamentTypeLabeledInput);
     frameLayout->addWidget(playerListWidget);
     frameLayout->addWidget(endTournamentCreationButton);
-    // frameLayout->addWidget(new QGroupBox("test gorupbox"));
 }
 
 CreateTournamentFrame::~CreateTournamentFrame() {}
 
 bool CreateTournamentFrame::endTournamentCreation()
 {
-    // Logger::log("TODO endtournamentcrreation");
-
-    const unsigned int errorMessageBufferSize = 256;
-    char errorMessage[errorMessageBufferSize];
-
     auto tournamentType =
         (Tournament::Type)this->_tournamentTypeComboBox->currentData().toInt();
     log(LOG_INFO, "Chose tournament type %d", tournamentType);
-    // if (tournamentType == Tournament::Type::Unknown) {
-    // }
+    if (!Validation::validate(
+            tournamentType != Tournament::Type::Unknown, "%s",
+            obs_module_text("error.setup.missingTournamentType"))) {
+        return false;
+    }
 
     std::string newTournamentTitle =
         this->_tournamentTitleLineEdit->text().toStdString();
     log(LOG_INFO, "Tournament title: '%s'", newTournamentTitle.c_str());
-    if (newTournamentTitle == "") {
-        auto errorDialog = new ErrorDialog(
-            this, obs_module_text("error.setup.missingTournamentTitle"));
-        errorDialog->show();
+    if (!Validation::validate(
+            newTournamentTitle != "", "%s",
+            obs_module_text("error.setup.missingTournamentTitle"))) {
         return false;
     }
 
@@ -111,32 +109,23 @@ bool CreateTournamentFrame::endTournamentCreation()
             this->_playerListLayout->itemAt(playerIndex)->widget());
 
         auto playerName = newPlayerFrame->getPlayerName();
-        if (playerName == "") {
-            snprintf(errorMessage, errorMessageBufferSize, "Player %d: %s",
-                     playerIndex + 1,
-                     obs_module_text("error.setup.missingPlayerName"));
-            auto errorDialog = new ErrorDialog(this, errorMessage);
-            errorDialog->show();
+        if (!Validation::validate(
+                playerName != "", "Player %d: %s", playerIndex + 1,
+                obs_module_text("error.setup.missingPlayerName"))) {
             return false;
         }
 
         auto playerImagePath = newPlayerFrame->getPlayerImagePath();
-        if (playerImagePath == "") {
-            snprintf(errorMessage, errorMessageBufferSize, "Player %d: %s",
-                     playerIndex + 1,
-                     obs_module_text("error.setup.missingPlayerImage"));
-            auto errorDialog = new ErrorDialog(this, errorMessage);
-            errorDialog->show();
+        if (!Validation::validate(
+                playerImagePath != "", "Player %d: %s", playerIndex + 1,
+                obs_module_text("error.setup.missingPlayerImage"))) {
             return false;
         }
 
         auto playerDescription = newPlayerFrame->getPlayerDescription();
-        if (playerDescription == "") {
-            snprintf(errorMessage, errorMessageBufferSize, "Player %d: %s",
-                     playerIndex + 1,
-                     obs_module_text("error.setup.missingPlayerDescription"));
-            auto errorDialog = new ErrorDialog(this, errorMessage);
-            errorDialog->show();
+        if (!Validation::validate(
+                playerDescription != "", "Player %d: %s", playerIndex + 1,
+                obs_module_text("error.setup.missingPlayerDescription"))) {
             return false;
         }
 
@@ -144,10 +133,8 @@ bool CreateTournamentFrame::endTournamentCreation()
         players.push_back(player);
     }
     log(LOG_INFO, "Found %d players", players.size());
-    if (players.size() == 0) {
-        auto errorDialog = new ErrorDialog(
-            this, obs_module_text("error.setup.notEnoughPlayers"));
-        errorDialog->show();
+    if (!Validation::validate(players.size() != 0, "%s",
+                              obs_module_text("error.setup.notEnoughPlayers"))) {
         return false;
     }
 

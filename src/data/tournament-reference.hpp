@@ -17,6 +17,10 @@ public:
     {
         return this->tournamentIndex == rhs.tournamentIndex;
     };
+    inline bool operator<(const TournamentReference &rhs) const
+    {
+        return this->tournamentIndex < rhs.tournamentIndex;
+    };
 
     long long tournamentIndex = -1;
 

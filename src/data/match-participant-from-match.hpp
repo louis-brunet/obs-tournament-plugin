@@ -4,6 +4,7 @@
 #include "src/data/match-reference.hpp"
 #include "src/data/match.hpp"
 #include <memory>
+#include <set>
 
 class MatchParticipantSelectionStrategy {
 public:
@@ -32,6 +33,7 @@ public:
     ~MatchParticipantSelectionStrategy();
 
     virtual MatchParticipant &select(Match fromMatch) = 0;
+    virtual std::string displayName(const char *matchLabel) = 0;
 
 private:
 };
@@ -42,6 +44,7 @@ public:
     ~SelectWinnerOfMatch();
 
     MatchParticipant &select(Match fromMatch);
+    std::string displayName(const char *matchLabel);
 };
 
 class SelectLoserOfMatch : public MatchParticipantSelectionStrategy {
@@ -50,6 +53,7 @@ public:
     ~SelectLoserOfMatch();
 
     MatchParticipant &select(Match fromMatch);
+    std::string displayName(const char *matchLabel);
 };
 
 class MatchParticipantFromMatch : public MatchParticipant {
@@ -60,9 +64,16 @@ public:
             std::make_unique<SelectWinnerOfMatch>());
     MatchParticipantFromMatch(MatchParticipantFromMatch &&) = default;
     MatchParticipantFromMatch(const MatchParticipantFromMatch &);
-    MatchParticipantFromMatch &operator=(MatchParticipantFromMatch &&) = default;
+    MatchParticipantFromMatch &
+    operator=(MatchParticipantFromMatch &&) = default;
     // MatchParticipantFromMatch &operator=(const MatchParticipantFromMatch &) = default;
     ~MatchParticipantFromMatch();
+    inline bool operator==(const MatchParticipantFromMatch &rhs) const
+    {
+        return std::tie(this->_fromMatchReference,
+                        this->_selectionStrategy->type) ==
+               std::tie(rhs._fromMatchReference, rhs._selectionStrategy->type);
+    };
 
     std::string displayName() const override;
     MatchReference fromMatchReference() const;
@@ -70,10 +81,17 @@ public:
 
     void load(obs_data_t *data) override;
     void save(obs_data_t *data) const override;
-    void applyRemap(const MatchReferenceRemap *remap, const MatchReference &context) override;
+    void applyRemap(const MatchReferenceRemap *remap,
+                    const MatchReference &context) override;
     std::shared_ptr<MatchParticipant> duplicate() const override;
+    ValidateConfigurationResult
+    validateConfiguration(const MatchReference &matchContext) const override;
 
 private:
+    static MatchParticipant::ValidateConfigurationResult
+    validateCircularDependencies(std::set<MatchReference> &seenMatchReferences,
+                                 const MatchReference &recursiveMatchContext);
+
     MatchReference _fromMatchReference;
     std::unique_ptr<MatchParticipantSelectionStrategy> _selectionStrategy;
 };
