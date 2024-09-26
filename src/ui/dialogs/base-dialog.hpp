@@ -3,12 +3,12 @@
 #include <QDialog>
 
 class BaseDialog : public QDialog {
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
-	BaseDialog(QWidget *parent, const char *windowTitle, int minWidth,
-		   int minHeight);
-	~BaseDialog();
+    BaseDialog(QWidget *parent, const char *windowTitle, int minWidth,
+               int minHeight);
+    ~BaseDialog();
 
 private:
 };

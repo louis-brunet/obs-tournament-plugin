@@ -5,8 +5,8 @@
 class ErrorDialog : public BaseDialog {
 
 public:
-	ErrorDialog(QWidget *parent, const char *message);
-	~ErrorDialog();
+    ErrorDialog(QWidget *parent, const char *message);
+    ~ErrorDialog();
 
 private:
 };

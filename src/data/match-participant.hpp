@@ -39,12 +39,14 @@ public:
     virtual std::string displayName() const = 0;
     virtual std::shared_ptr<Player> determinedPlayer() const = 0;
     // virtual bool isPlayerKnown();
-    virtual ValidateConfigurationResult validateConfiguration(const MatchReference &matchContext) const = 0;
+    virtual ValidateConfigurationResult
+    validateConfiguration(const MatchReference &matchContext) const = 0;
 
     virtual void load(obs_data_t *data);
     virtual void save(obs_data_t *data) const;
 
-    virtual void applyRemap(const MatchReferenceRemap *remap, const MatchReference &matchContext);
+    virtual void applyRemap(const MatchReferenceRemap *remap,
+                            const MatchReference &matchContext);
 
     Type type() const;
 

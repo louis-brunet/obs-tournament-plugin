@@ -4,9 +4,9 @@
 
 class DebugFrame : public QFrame {
 public:
-	DebugFrame(std::function<void()> onResetDataCallback);
-	~DebugFrame();
+    DebugFrame(std::function<void()> onResetDataCallback);
+    ~DebugFrame();
 
 private:
-	void clearData();
+    void clearData();
 };

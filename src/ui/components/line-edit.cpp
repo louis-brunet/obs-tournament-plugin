@@ -1,10 +1,11 @@
 #include "line-edit.hpp"
 
-AppLineEdit::AppLineEdit(const char *initialText, QWidget *parent): QLineEdit(initialText, parent)
+AppLineEdit::AppLineEdit(const char *initialText, QWidget *parent)
+    : QLineEdit(initialText, parent)
 {
     // this->setFocus(Qt::FocusReason::MouseFocusReason);
-	this->connect(this, &QLineEdit::textChanged,
-		      [this]() { this->updateTextColorStyleSheet(); });
+    this->connect(this, &QLineEdit::textChanged,
+                  [this]() { this->updateTextColorStyleSheet(); });
 
     // this->setMaximumWidth(400);
     this->updateTextColorStyleSheet();
@@ -12,7 +13,8 @@ AppLineEdit::AppLineEdit(const char *initialText, QWidget *parent): QLineEdit(in
 
 AppLineEdit::~AppLineEdit() {}
 
-void AppLineEdit::updateTextColorStyleSheet() {
+void AppLineEdit::updateTextColorStyleSheet()
+{
     if (this->text().isEmpty()) {
         this->setStyleSheet("QLineEdit { color: gray; }");
     } else {

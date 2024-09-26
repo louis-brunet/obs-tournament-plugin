@@ -12,7 +12,8 @@ public:
     // MatchReferenceRemap &operator=(MatchReferenceRemap &&) = default;
     virtual ~MatchReferenceRemap() = default;
 
-    virtual MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const = 0;
+    virtual MatchReference apply(const MatchReference &oldReference,
+                                 const MatchReference &context) const = 0;
 };
 
 class MatchReferenceRemapAddedMatch : public MatchReferenceRemap {
@@ -20,7 +21,8 @@ public:
     MatchReferenceRemapAddedMatch(MatchReference addedMatch);
     ~MatchReferenceRemapAddedMatch() = default;
 
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 
 private:
     MatchReference _addedMatch;
@@ -31,7 +33,8 @@ public:
     MatchReferenceRemapDeletedMatch(MatchReference deletedMatch);
     ~MatchReferenceRemapDeletedMatch() = default;
 
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 
 private:
     MatchReference _deletedMatch;
@@ -39,13 +42,15 @@ private:
 
 class MatchReferenceRemapNone : public MatchReferenceRemap {
 public:
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 };
 
 class MatchReferenceRemapSwappedMatch : public MatchReferenceRemap {
 public:
     MatchReferenceRemapSwappedMatch(MatchReference from, MatchReference to);
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 
 private:
     MatchReference _from;
@@ -57,7 +62,8 @@ public:
     MatchReferenceRemapDuplicatedRound(TournamentRoundReference addedRound);
     ~MatchReferenceRemapDuplicatedRound() = default;
 
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 
 private:
     TournamentRoundReference _addedRound;
@@ -68,7 +74,8 @@ public:
     MatchReferenceRemapDeletedRound(TournamentRoundReference deletedRound);
     ~MatchReferenceRemapDeletedRound() = default;
 
-    MatchReference apply(const MatchReference &oldReference, const MatchReference &context) const override;
+    MatchReference apply(const MatchReference &oldReference,
+                         const MatchReference &context) const override;
 
 private:
     TournamentRoundReference _deletedRound;

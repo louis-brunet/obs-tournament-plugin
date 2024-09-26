@@ -29,8 +29,8 @@ public:
     inline bool operator<(const MatchReference &rhs) const
     {
         return this->roundReference < rhs.roundReference ||
-            (this->roundReference == rhs.roundReference &&
-             this->matchIndex < rhs.matchIndex);
+               (this->roundReference == rhs.roundReference &&
+                this->matchIndex < rhs.matchIndex);
     };
 
     TournamentRoundReference roundReference = TournamentRoundReference();

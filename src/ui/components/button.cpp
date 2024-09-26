@@ -4,7 +4,7 @@ void AppButton::init(Style style, bool retainSizeWhenHidden)
 {
     switch (style) {
     case Filled:
-            // keep default styles
+        // keep default styles
         break;
 
     case Transparent:

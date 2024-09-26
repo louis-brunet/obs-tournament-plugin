@@ -36,6 +36,8 @@ public:
     void save(obs_data_t *data) const;
 
 private:
-    std::shared_ptr<MatchParticipant> _participant1 = std::make_shared<MatchParticipantUnknown>();
-    std::shared_ptr<MatchParticipant> _participant2 = std::make_shared<MatchParticipantUnknown>();
+    std::shared_ptr<MatchParticipant> _participant1 =
+        std::make_shared<MatchParticipantUnknown>();
+    std::shared_ptr<MatchParticipant> _participant2 =
+        std::make_shared<MatchParticipantUnknown>();
 };

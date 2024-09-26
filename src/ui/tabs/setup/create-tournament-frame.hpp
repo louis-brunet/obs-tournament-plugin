@@ -8,20 +8,20 @@
 #include <QBoxLayout>
 
 class CreateTournamentFrame : public QFrame {
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
-	CreateTournamentFrame();
-	~CreateTournamentFrame();
+    CreateTournamentFrame();
+    ~CreateTournamentFrame();
 
 signals:
     void tournamentCreated(std::shared_ptr<Tournament> newTournament);
     void tournamentTabCreated(BaseTab *newTab);
 
 private:
-	QLineEdit *_tournamentTitleLineEdit;
-	QComboBox *_tournamentTypeComboBox;
+    QLineEdit *_tournamentTitleLineEdit;
+    QComboBox *_tournamentTypeComboBox;
     QVBoxLayout *_playerListLayout;
-	bool endTournamentCreation();
+    bool endTournamentCreation();
     void addPlayer();
 };

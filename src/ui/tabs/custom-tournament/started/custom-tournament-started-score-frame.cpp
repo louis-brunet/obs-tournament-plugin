@@ -8,17 +8,16 @@ CustomTournamentStartedScoreFrame::CustomTournamentStartedScoreFrame(
     unsigned char initialScore)
     : _score(initialScore)
 {
-    this->_incrementButton =
-        new AppButton("", AppIcon(AppIcon::Type::KeyboardArrowUp, AppIcon::Color::Faded),
-                      AppButton::Style::Transparent);
-    this->_decrementButton =
-        new AppButton("", AppIcon(AppIcon::Type::KeyboardArrowDown, AppIcon::Color::Faded),
-                      AppButton::Style::Transparent);
+    this->_incrementButton = new AppButton(
+        "", AppIcon(AppIcon::Type::KeyboardArrowUp, AppIcon::Color::Faded),
+        AppButton::Style::Transparent);
+    this->_decrementButton = new AppButton(
+        "", AppIcon(AppIcon::Type::KeyboardArrowDown, AppIcon::Color::Faded),
+        AppButton::Style::Transparent);
 
     this->_scoreLabel = new QLabel();
     this->_scoreLabel->setAlignment(Qt::AlignCenter);
     this->_scoreLabel->setMinimumWidth(20);
-
 
     this->setScore(initialScore);
 
@@ -33,7 +32,6 @@ CustomTournamentStartedScoreFrame::CustomTournamentStartedScoreFrame(
     frameLayout->addWidget(this->_scoreLabel);
     frameLayout->addWidget(this->_incrementButton);
     this->setLayout(frameLayout);
-
 }
 
 CustomTournamentStartedScoreFrame::~CustomTournamentStartedScoreFrame() {}

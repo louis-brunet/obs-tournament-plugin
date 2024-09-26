@@ -16,4 +16,3 @@ private:
 
     void endTournamentConfiguration(TournamentReference tournamentReference);
 };
-

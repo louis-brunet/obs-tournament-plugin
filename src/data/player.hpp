@@ -5,7 +5,8 @@
 
 class Player {
 public:
-    Player(std::string name = "", std::string imagePath = "", std::string description = "");
+    Player(std::string name = "", std::string imagePath = "",
+           std::string description = "");
     Player(Player &&) = default;
     Player(const Player &) = default;
     Player &operator=(Player &&) = default;

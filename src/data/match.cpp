@@ -11,8 +11,10 @@ void Match::load(obs_data_t *data)
 {
     this->state = ObsDataHelpers::getEnum<Match::State>(
         data, "state", Match::State::NotStarted);
-    this->participant1Score = (unsigned char)ObsDataHelpers::getInt(data, "participant1Score", 0);
-    this->participant2Score = (unsigned char)ObsDataHelpers::getInt(data, "participant2Score", 0);
+    this->participant1Score =
+        (unsigned char)ObsDataHelpers::getInt(data, "participant1Score", 0);
+    this->participant2Score =
+        (unsigned char)ObsDataHelpers::getInt(data, "participant2Score", 0);
 
     OBSDataAutoRelease participant1Data =
         obs_data_get_obj(data, "participant1");

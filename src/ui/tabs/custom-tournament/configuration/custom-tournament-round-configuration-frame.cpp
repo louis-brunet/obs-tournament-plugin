@@ -40,17 +40,17 @@ CustomTournamentRoundConfigurationFrame::CustomTournamentRoundConfigurationFrame
         obs_module_text("customTournament.configuration.roundNameInputLabel"),
         roundNameLineEdit);
 
-    auto duplicateRoundButton =
-        new AppButton("", AppIcon(AppIcon::Type::Copy), AppButton::Style::Transparent);
-        // new QPushButton(AppIcon(AppIcon::Type::Copy), "");
+    auto duplicateRoundButton = new AppButton("", AppIcon(AppIcon::Type::Copy),
+                                              AppButton::Style::Transparent);
+    // new QPushButton(AppIcon(AppIcon::Type::Copy), "");
     duplicateRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.duplicateRoundButtonTooltip"));
     this->connect(duplicateRoundButton, &QPushButton::clicked,
                   [this]() { this->duplicateRoundClicked(); });
 
-    auto deleteRoundButton =
-        new AppButton("", AppIcon(AppIcon::Type::Delete), AppButton::Style::Transparent);
-        // new QPushButton(AppIcon(AppIcon::Type::Delete), "");
+    auto deleteRoundButton = new AppButton("", AppIcon(AppIcon::Type::Delete),
+                                           AppButton::Style::Transparent);
+    // new QPushButton(AppIcon(AppIcon::Type::Delete), "");
     deleteRoundButton->setToolTip(obs_module_text(
         "customTournament.configuration.deleteRoundButtonTooltip"));
     this->connect(deleteRoundButton, &QPushButton::clicked,

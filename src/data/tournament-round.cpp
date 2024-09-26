@@ -70,8 +70,8 @@ long long TournamentRound::duplicateMatch(std::shared_ptr<Match> match)
         // TODO: not found
         return newMatchIndex;
     }
-    Logger::log("duplicating match %d in round %s",
-                matchIndex, this->_name.c_str());
+    Logger::log("duplicating match %d in round %s", matchIndex,
+                this->_name.c_str());
     matchIndex++;
 
     auto matchToInsert = match->duplicate(); // std::make_shared<Match>(*match);
@@ -116,7 +116,8 @@ bool TournamentRound::deleteMatch(std::shared_ptr<Match> match)
     return true;
 }
 
-bool TournamentRound::swapPrevious(long long matchIndex) {
+bool TournamentRound::swapPrevious(long long matchIndex)
+{
     if (matchIndex <= 0 || (unsigned long)matchIndex >= this->_matches.size()) {
         return false;
     }
@@ -128,8 +129,10 @@ bool TournamentRound::swapPrevious(long long matchIndex) {
     return true;
 }
 
-bool TournamentRound::swapNext(long long matchIndex) {
-    if (matchIndex < 0 || (unsigned long)matchIndex >= this->_matches.size() - 1) {
+bool TournamentRound::swapNext(long long matchIndex)
+{
+    if (matchIndex < 0 ||
+        (unsigned long)matchIndex >= this->_matches.size() - 1) {
         return false;
     }
 

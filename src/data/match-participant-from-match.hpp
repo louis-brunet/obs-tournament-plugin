@@ -32,7 +32,8 @@ public:
     operator=(const MatchParticipantSelectionStrategy &) = default;
     ~MatchParticipantSelectionStrategy();
 
-    virtual std::shared_ptr<MatchParticipant> select(const MatchReference &fromMatch) = 0;
+    virtual std::shared_ptr<MatchParticipant>
+    select(const MatchReference &fromMatch) = 0;
     virtual std::string displayName(const char *matchLabel) = 0;
 
 private:

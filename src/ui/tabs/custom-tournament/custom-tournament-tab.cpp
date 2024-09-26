@@ -28,7 +28,8 @@ CustomTournamentTab::CustomTournamentTab(TournamentReference tournamentReference
     }
 }
 
-CustomTournamentTab::~CustomTournamentTab() {
+CustomTournamentTab::~CustomTournamentTab()
+{
     // delete this->_configurationFrame;
     // this->_configurationFrame = nullptr;
     //

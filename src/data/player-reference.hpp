@@ -6,14 +6,14 @@
 
 class PlayerReference {
 public:
-	PlayerReference(TournamentReference tournamentReference = TournamentReference(), long long playerIndex = -1);
-	PlayerReference(PlayerReference &&) = default;
-	PlayerReference(const PlayerReference &) = default;
-	PlayerReference &
-	operator=(PlayerReference &&) = default;
-	PlayerReference &
-	operator=(const PlayerReference &) = default;
-	~PlayerReference();
+    PlayerReference(
+        TournamentReference tournamentReference = TournamentReference(),
+        long long playerIndex = -1);
+    PlayerReference(PlayerReference &&) = default;
+    PlayerReference(const PlayerReference &) = default;
+    PlayerReference &operator=(PlayerReference &&) = default;
+    PlayerReference &operator=(const PlayerReference &) = default;
+    ~PlayerReference();
     inline bool operator==(const PlayerReference &rhs) const
     {
         return std::tie(this->tournamentReference, this->playerIndex) ==

@@ -27,100 +27,99 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 using namespace Logger;
 
 static void frontend_save_load(obs_data_t *saveData, bool saving,
-			       void *privateData)
+                               void *privateData)
 {
-	UNUSED_PARAMETER(privateData);
-	// UNUSED_PARAMETER(saveData);
-	// UNUSED_PARAMETER(saving);
+    UNUSED_PARAMETER(privateData);
+    // UNUSED_PARAMETER(saveData);
+    // UNUSED_PARAMETER(saving);
 
-	if (!pluginData) {
-		return;
-	}
+    if (!pluginData) {
+        return;
+    }
 
-	if (saving) {
-		log("Saving");
+    if (saving) {
+        log("Saving");
 
-		OBSDataAutoRelease settingsData = obs_data_create();
-		obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
-		try {
-			pluginData->saveSettings(settingsData);
-		} catch (const std::exception &e) {
-			log(LOG_ERROR, "Error during saveSettings: %s", e.what());
-			throw e;
-		}
-		obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
+        OBSDataAutoRelease settingsData = obs_data_create();
+        obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
+        try {
+            pluginData->saveSettings(settingsData);
+        } catch (const std::exception &e) {
+            log(LOG_ERROR, "Error during saveSettings: %s", e.what());
+            throw e;
+        }
+        obs_data_set_obj(saveData, PLUGIN_NAME, settingsData);
 
-		log("Saved settings:\n%s",
-		    obs_data_get_json_pretty(settingsData));
-	} else {
-		log("Loading save data");
-		// log(LOG_DEBUG, "All saveData:\n%s",
-		// 	obs_data_get_json_pretty(saveData));
+        log("Saved settings:\n%s", obs_data_get_json_pretty(settingsData));
+    } else {
+        log("Loading save data");
+        // log(LOG_DEBUG, "All saveData:\n%s",
+        // 	obs_data_get_json_pretty(saveData));
 
-		OBSDataAutoRelease settingsData =
-			obs_data_get_obj(saveData, PLUGIN_NAME);
-		if (!settingsData) {
-			log("Loading - save data does not exist");
-			settingsData = obs_data_create();
-		} else {
-			log("Loading - save data exists:\n%s",
-			    obs_data_get_json_pretty(settingsData));
-		}
+        OBSDataAutoRelease settingsData =
+            obs_data_get_obj(saveData, PLUGIN_NAME);
+        if (!settingsData) {
+            log("Loading - save data does not exist");
+            settingsData = obs_data_create();
+        } else {
+            log("Loading - save data exists:\n%s",
+                obs_data_get_json_pretty(settingsData));
+        }
 
-		try {
-			pluginData->loadSettings(settingsData);
-		} catch (const std::exception &e) {
-			log(LOG_ERROR, "Error during loadSettings: %s", e.what());
-			throw e;
-		}
+        try {
+            pluginData->loadSettings(settingsData);
+        } catch (const std::exception &e) {
+            log(LOG_ERROR, "Error during loadSettings: %s", e.what());
+            throw e;
+        }
 
-		log("Loaded plugin data - %s", pluginData->toJson().c_str());
-	}
+        log("Loaded plugin data - %s", pluginData->toJson().c_str());
+    }
 }
 
 bool obs_module_load(void)
 {
-	log("loaded version %s for %s", PLUGIN_VERSION, PLUGIN_NAME);
+    log("loaded version %s for %s", PLUGIN_VERSION, PLUGIN_NAME);
 
-	initTournamentPluginData();
+    initTournamentPluginData();
 
-	auto *action = (QAction *)obs_frontend_add_tools_menu_qaction(
-		obs_module_text("plugin.name"));
-	auto cb = [] {
-		obs_frontend_push_ui_translation(obs_module_get_string);
+    auto *action = (QAction *)obs_frontend_add_tools_menu_qaction(
+        obs_module_text("plugin.name"));
+    auto cb = [] {
+        obs_frontend_push_ui_translation(obs_module_get_string);
 
-		try {
-			auto pluginDialog = new PluginDialog(nullptr);
-			pluginDialog->show();
-		} catch (const std::exception &e) {
-			log(LOG_ERROR, "Error during plugin dialog initialization: %s",
-			    e.what());
-			throw e;
-		}
-		obs_frontend_pop_ui_translation();
-	};
-	QAction::connect(action, &QAction::triggered, cb);
+        try {
+            auto pluginDialog = new PluginDialog(nullptr);
+            pluginDialog->show();
+        } catch (const std::exception &e) {
+            log(LOG_ERROR, "Error during plugin dialog initialization: %s",
+                e.what());
+            throw e;
+        }
+        obs_frontend_pop_ui_translation();
+    };
+    QAction::connect(action, &QAction::triggered, cb);
 
-	obs_frontend_add_save_callback(frontend_save_load,
-				       nullptr); //pluginData);
+    obs_frontend_add_save_callback(frontend_save_load,
+                                   nullptr); //pluginData);
 
-	return true;
+    return true;
 }
 
 void obs_module_post_load(void) {}
 
 void obs_module_unload(void)
 {
-	freeTournamentPluginData();
-	obs_frontend_remove_save_callback(frontend_save_load, nullptr);
+    freeTournamentPluginData();
+    obs_frontend_remove_save_callback(frontend_save_load, nullptr);
 }
 
 MODULE_EXPORT const char *obs_module_description(void)
 {
-	return obs_module_text("plugin.description");
+    return obs_module_text("plugin.description");
 }
 
 MODULE_EXPORT const char *obs_module_name(void)
 {
-	return obs_module_text("plugin.name");
+    return obs_module_text("plugin.name");
 }

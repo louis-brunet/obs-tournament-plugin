@@ -38,7 +38,8 @@ SetupTab::SetupTab(QTabWidget *tabWidget)
     this->_tabContentLayout->addWidget(this->_debugFrame);
 }
 
-SetupTab::~SetupTab() {
+SetupTab::~SetupTab()
+{
     delete this->_createTournamentWidget;
     this->_createTournamentWidget = nullptr;
 

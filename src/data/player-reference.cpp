@@ -28,15 +28,18 @@ std::shared_ptr<Player> PlayerReference::player() const
     return tournament->players().at((unsigned long)this->playerIndex);
 }
 
-void PlayerReference::load(obs_data_t *data) {
-    OBSDataAutoRelease tournamentData = obs_data_get_obj(data, "tournamentReference");
+void PlayerReference::load(obs_data_t *data)
+{
+    OBSDataAutoRelease tournamentData =
+        obs_data_get_obj(data, "tournamentReference");
     this->tournamentReference.load(tournamentData);
 
     obs_data_set_default_int(data, "playerIndex", -1);
     this->playerIndex = obs_data_get_int(data, "playerIndex");
 }
 
-void PlayerReference::save(obs_data_t *data) const {
+void PlayerReference::save(obs_data_t *data) const
+{
 
     OBSDataAutoRelease tournamentData = obs_data_create();
     this->tournamentReference.save(tournamentData);

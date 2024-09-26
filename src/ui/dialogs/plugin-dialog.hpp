@@ -6,8 +6,8 @@
 class PluginDialog : public BaseDialog {
 
 public:
-	PluginDialog(QMainWindow *parent);
-	~PluginDialog();
+    PluginDialog(QMainWindow *parent);
+    ~PluginDialog();
 
 private:
     QTabWidget *_tabWidget;
