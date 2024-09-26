@@ -23,11 +23,11 @@ MatchParticipantInput::MatchParticipantInput()
                       auto newMatchParticipant = this->toMatchParticipant();
 
                       switch (newMatchParticipant->type()) {
-                      case MatchParticipant::FromMatch:
+                      case MatchParticipant::ParticipantFromMatch:
                           this->fromMatchComboBox->setVisible(true);
                           break;
-                      case MatchParticipant::Unknown:
-                      case MatchParticipant::Player:
+                      case MatchParticipant::ParticipantUnknown:
+                      case MatchParticipant::ParticipantPlayer:
                       default:
                           this->fromMatchComboBox->setVisible(false);
                           break;
@@ -196,7 +196,7 @@ void MatchParticipantInput::setParticipant(
     const std::shared_ptr<MatchParticipant> participant)
 {
     switch (participant->type()) {
-    case MatchParticipant::Type::Player: {
+    case MatchParticipant::Type::ParticipantPlayer: {
         auto participantPlayer =
             std::reinterpret_pointer_cast<MatchParticipantPlayer>(participant);
         auto foundIndex = this->playerComboBox->findText(
@@ -205,17 +205,18 @@ void MatchParticipantInput::setParticipant(
         break;
     }
 
-    case MatchParticipant::Type::FromMatch: {
+    case MatchParticipant::Type::ParticipantFromMatch: {
         auto participantFromMatch =
             std::reinterpret_pointer_cast<MatchParticipantFromMatch>(
                 participant);
-            if (participantFromMatch->fromMatchReference().match()) {
-                auto fromMatchLabel =
-                    participantFromMatch->fromMatchReference().toMatchLabel();
-                Logger::log("[MatchParticipantInput::setParticipant] from match %s", fromMatchLabel.c_str());
-                this->fromMatchComboBox->setCurrentIndex(
-                    this->fromMatchComboBox->findText(fromMatchLabel.c_str()));
-            }
+        if (participantFromMatch->fromMatchReference().match()) {
+            auto fromMatchLabel =
+                participantFromMatch->fromMatchReference().toMatchLabel();
+            Logger::log("[MatchParticipantInput::setParticipant] from match %s",
+                        fromMatchLabel.c_str());
+            this->fromMatchComboBox->setCurrentIndex(
+                this->fromMatchComboBox->findText(fromMatchLabel.c_str()));
+        }
 
         switch (participantFromMatch->selectionStrategy()) {
         case MatchParticipantSelectionStrategy::Loser:
@@ -238,7 +239,7 @@ void MatchParticipantInput::setParticipant(
 
         break;
     }
-    case MatchParticipant::Type::Unknown:
+    case MatchParticipant::Type::ParticipantUnknown:
         break;
     }
 }

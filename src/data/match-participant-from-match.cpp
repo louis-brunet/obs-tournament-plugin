@@ -11,7 +11,7 @@
 MatchParticipantFromMatch::MatchParticipantFromMatch(
     MatchReference __fromMatchReference,
     std::unique_ptr<MatchParticipantSelectionStrategy> __selectionStrategy)
-    : MatchParticipant(MatchParticipant::Type::FromMatch),
+    : MatchParticipant(MatchParticipant::Type::ParticipantFromMatch),
       _fromMatchReference(__fromMatchReference),
       _selectionStrategy(std::move(__selectionStrategy))
 {
@@ -30,8 +30,15 @@ MatchParticipantFromMatch::~MatchParticipantFromMatch() {}
 
 std::string MatchParticipantFromMatch::displayName() const
 {
-    return this->_selectionStrategy->displayName(
+    auto selectionStrategyDisplayName = this->_selectionStrategy->displayName(
         this->fromMatchReference().toMatchLabel().c_str());
+
+    auto player = this->determinedPlayer();
+    if (player) {
+        return player->name() + " (" + selectionStrategyDisplayName + ")";
+    }
+
+    return selectionStrategyDisplayName;
 }
 
 MatchParticipantSelectionStrategy::Type
@@ -95,11 +102,11 @@ MatchParticipantFromMatch::validateCircularDependencies(
     auto recMatch = recursiveMatchContext.match();
     for (auto p : {recMatch->participant1(), recMatch->participant2()}) {
         switch (p->type()) {
-        case MatchParticipant::Unknown:
+        case MatchParticipant::ParticipantUnknown:
             break;
-        case MatchParticipant::Player:
+        case MatchParticipant::ParticipantPlayer:
             break;
-        case MatchParticipant::FromMatch:
+        case MatchParticipant::ParticipantFromMatch:
             return MatchParticipantFromMatch::validateCircularDependencies(
                 seenMatchReferences,
                 std::reinterpret_pointer_cast<MatchParticipantFromMatch>(p)
@@ -169,11 +176,11 @@ MatchParticipantFromMatch::validateConfiguration(
     // std::set<MatchReference> seenMatchReferences = {matchContextReference};
 
     switch (otherParticipant->type()) {
-    case MatchParticipant::Unknown:
+    case MatchParticipant::ParticipantUnknown:
         break;
-    case MatchParticipant::Player:
+    case MatchParticipant::ParticipantPlayer:
         break;
-    case MatchParticipant::FromMatch: {
+    case MatchParticipant::ParticipantFromMatch: {
         auto otherParticipantFromMatch =
             std::reinterpret_pointer_cast<MatchParticipantFromMatch>(
                 otherParticipant);
@@ -182,7 +189,7 @@ MatchParticipantFromMatch::validateConfiguration(
             return MatchParticipant::ValidateConfigurationResult::
                 InvalidPlayerVersusSelf;
         }
-            // Logger::log("[MatchParticipantFromMatch::validateConfiguration] other is from match but not equal");
+        // Logger::log("[MatchParticipantFromMatch::validateConfiguration] other is from match but not equal");
 
         std::set<MatchReference> seenMatchReferences = {matchContextReference};
         auto circularDepsResult =
@@ -210,6 +217,16 @@ MatchParticipantFromMatch::validateConfiguration(
         this->_fromMatchReference.toMatchLabel().c_str());
     // TODO: ?
     return ValidateConfigurationResult::Valid;
+}
+
+std::shared_ptr<Player> MatchParticipantFromMatch::determinedPlayer() const
+{
+    auto selectedParticipant =
+        this->_selectionStrategy->select(this->_fromMatchReference);
+    if (!selectedParticipant) {
+        return nullptr;
+    }
+    return selectedParticipant->determinedPlayer();
 }
 
 MatchParticipantSelectionStrategy::MatchParticipantSelectionStrategy(Type __type)
@@ -254,11 +271,21 @@ SelectWinnerOfMatch::SelectWinnerOfMatch()
 {
 }
 
-MatchParticipant &SelectWinnerOfMatch::select(Match fromMatch)
+std::shared_ptr<MatchParticipant>
+SelectWinnerOfMatch::select(const MatchReference &fromMatchReference)
 {
-    UNUSED_PARAMETER(fromMatch);
-    throw std::runtime_error(
-        "TODO SelectWinnerOfMatch::select(TournamentMatch)");
+    auto fromMatch = fromMatchReference.match();
+    if (!fromMatch || fromMatch->state != Match::State::Done) {
+        return nullptr;
+    }
+    if (fromMatch->participant1Score > fromMatch->participant2Score) {
+        return fromMatch->participant1();
+    } else if (fromMatch->participant1Score < fromMatch->participant2Score) {
+        return fromMatch->participant2();
+    }
+
+    // TODO: tiebreaker ?
+    return fromMatch->participant1();
 }
 
 std::string SelectWinnerOfMatch::displayName(const char *matchLabel)
@@ -273,11 +300,21 @@ SelectLoserOfMatch::SelectLoserOfMatch()
 {
 }
 
-MatchParticipant &SelectLoserOfMatch::select(Match fromMatch)
+std::shared_ptr<MatchParticipant>
+SelectLoserOfMatch::select(const MatchReference &fromMatchReference)
 {
-    UNUSED_PARAMETER(fromMatch);
-    throw std::runtime_error(
-        "TODO SelectLoserOfMatch::select(TournamentMatch)");
+    auto fromMatch = fromMatchReference.match();
+    if (!fromMatch || fromMatch->state != Match::State::Done) {
+        return nullptr;
+    }
+    if (fromMatch->participant1Score > fromMatch->participant2Score) {
+        return fromMatch->participant2();
+    } else if (fromMatch->participant1Score < fromMatch->participant2Score) {
+        return fromMatch->participant1();
+    }
+
+    // TODO: tiebreaker ?
+    return fromMatch->participant2();
 }
 
 std::string SelectLoserOfMatch::displayName(const char *matchLabel)

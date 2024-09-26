@@ -25,5 +25,6 @@ private:
     SourceComboBox *_participant1ScoreInput;
     SourceComboBox *_participant2ScoreInput;
 
-    void setCurrentMatchOutputs(MatchReference *currentMatchReference);
+    // void setCurrentMatchOutputs(MatchReference *currentMatchReference);
+    void updateOutputSources();
 };

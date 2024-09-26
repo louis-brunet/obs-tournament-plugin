@@ -47,6 +47,21 @@ CustomTournamentStartedMatchFrame::CustomTournamentStartedMatchFrame(
     // scoreLayout->setContentsMargins(0, 0, 0, 0);
     // scoreLayout->addWidget(participant1Score);
     // scoreLayout->addWidget(participant2Score);
+    auto determinedPlayer1 = match->participant1()->determinedPlayer();
+    auto determinedPlayer2 = match->participant2()->determinedPlayer();
+    if (!determinedPlayer1 || !determinedPlayer2) {
+        isStartedCheckbox->setVisible(false);
+
+        // TODO: this should not be done here, but probably before
+        switch (match->state) {
+        case Match::NotStarted:
+            break;
+        case Match::Started:
+        case Match::Done:
+            match->state = Match::State::NotStarted;
+            break;
+        }
+    }
     isDoneCheckbox->setVisible(false);
     participant1Score->setVisible(false);
     participant2Score->setVisible(false);
@@ -76,28 +91,37 @@ CustomTournamentStartedMatchFrame::CustomTournamentStartedMatchFrame(
                       }
                   });
     this->connect(isDoneCheckbox, &QCheckBox::stateChanged,
-                  [participant1Score, participant2Score, isStartedCheckbox,
-                   match](int checkBoxStateInt) {
+                  [this, participant1Score, participant2Score,
+                   isStartedCheckbox, match](int checkBoxStateInt) {
                       auto checkBoxState = (Qt::CheckState)checkBoxStateInt;
                       Logger::log("checkbox state : %d", checkBoxState);
 
                       // TODO: refactor to fct callable from constructor
 
                       switch (checkBoxState) {
-
                       case Qt::Unchecked:
-                      case Qt::PartiallyChecked:
+                      case Qt::PartiallyChecked: {
                           participant1Score->setEditable(true);
                           participant2Score->setEditable(true);
                           isStartedCheckbox->setVisible(true);
+                          bool wasDone = match->state == Match::State::Done;
                           match->state = Match::State::Started;
+                          if (wasDone) {
+                              this->matchUnended();
+                          }
                           break;
-                      case Qt::Checked:
+                      }
+                      case Qt::Checked: {
                           participant1Score->setEditable(false);
                           participant2Score->setEditable(false);
                           isStartedCheckbox->setVisible(false);
+                          bool wasDone = match->state == Match::State::Done;
                           match->state = Match::State::Done;
+                          if (!wasDone) {
+                              this->matchEnded();
+                          }
                           break;
+                      }
                       }
                   });
     // TODO: refactor to public function ?

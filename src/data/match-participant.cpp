@@ -9,8 +9,8 @@
 
 static MatchParticipant::Type loadMatchParticipantType(obs_data_t *data)
 {
-    auto type =
-        ObsDataHelpers::getInt(data, "type", MatchParticipant::Type::Unknown);
+    auto type = ObsDataHelpers::getInt(
+        data, "type", MatchParticipant::Type::ParticipantUnknown);
     return static_cast<MatchParticipant::Type>(type);
 }
 
@@ -21,13 +21,13 @@ std::shared_ptr<MatchParticipant> MatchParticipant::loadStatic(obs_data_t *data)
     std::shared_ptr<MatchParticipant> participant;
 
     switch (type) {
-    case Unknown:
+    case ParticipantUnknown:
         participant = std::make_shared<MatchParticipantUnknown>();
         break;
-    case Player:
+    case ParticipantPlayer:
         participant = std::make_shared<MatchParticipantPlayer>();
         break;
-    case FromMatch:
+    case ParticipantFromMatch:
         participant = std::make_shared<MatchParticipantFromMatch>();
         break;
     }
@@ -46,7 +46,7 @@ MatchParticipant::~MatchParticipant() {}
 void MatchParticipant::load(obs_data_t *data)
 {
     this->_type = ObsDataHelpers::getEnum<MatchParticipant::Type>(
-        data, "type", MatchParticipant::Type::Unknown);
+        data, "type", MatchParticipant::Type::ParticipantUnknown);
 }
 
 void MatchParticipant::save(obs_data_t *data) const
@@ -59,7 +59,9 @@ MatchParticipant::Type MatchParticipant::type() const
     return this->_type;
 }
 
-void MatchParticipant::applyRemap(const MatchReferenceRemap *remap, const MatchReference &context) {
+void MatchParticipant::applyRemap(const MatchReferenceRemap *remap,
+                                  const MatchReference &context)
+{
     UNUSED_PARAMETER(remap);
     UNUSED_PARAMETER(context);
 }

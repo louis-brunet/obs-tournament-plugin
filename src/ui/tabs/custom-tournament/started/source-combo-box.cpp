@@ -20,6 +20,8 @@ SourceComboBox::SourceComboBox(const char *labelText, Type sourceType)
     }
 
     this->_comboBox = reinterpret_cast<QComboBox *>(this->_inputWidget);
+
+    this->_comboBox->addItem("", QString(""));
     for (auto weakSource : weakSources) {
         OBSSourceAutoRelease source = obs_weak_source_get_source(weakSource);
         auto sourceName = obs_source_get_name(source);

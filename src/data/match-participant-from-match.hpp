@@ -32,7 +32,7 @@ public:
     operator=(const MatchParticipantSelectionStrategy &) = default;
     ~MatchParticipantSelectionStrategy();
 
-    virtual MatchParticipant &select(Match fromMatch) = 0;
+    virtual std::shared_ptr<MatchParticipant> select(const MatchReference &fromMatch) = 0;
     virtual std::string displayName(const char *matchLabel) = 0;
 
 private:
@@ -43,7 +43,7 @@ public:
     SelectWinnerOfMatch();
     ~SelectWinnerOfMatch();
 
-    MatchParticipant &select(Match fromMatch);
+    std::shared_ptr<MatchParticipant> select(const MatchReference &fromMatch);
     std::string displayName(const char *matchLabel);
 };
 
@@ -52,7 +52,7 @@ public:
     SelectLoserOfMatch();
     ~SelectLoserOfMatch();
 
-    MatchParticipant &select(Match fromMatch);
+    std::shared_ptr<MatchParticipant> select(const MatchReference &fromMatch);
     std::string displayName(const char *matchLabel);
 };
 
@@ -86,6 +86,7 @@ public:
     std::shared_ptr<MatchParticipant> duplicate() const override;
     ValidateConfigurationResult
     validateConfiguration(const MatchReference &matchContext) const override;
+    std::shared_ptr<Player> determinedPlayer() const override;
 
 private:
     static MatchParticipant::ValidateConfigurationResult

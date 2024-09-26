@@ -1,4 +1,5 @@
 #include "custom-tournament-started-frame.hpp"
+#include "src/data/match-reference.hpp"
 #include "src/data/tournament-round-reference.hpp"
 #include "src/data/tournament.hpp"
 #include "src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.hpp"
@@ -42,5 +43,18 @@ void CustomTournamentStartedFrame::setTournament(
         auto roundWidget =
             new CustomTournamentStartedRoundFrame(roundReference);
         this->_roundListLayout->addWidget(roundWidget);
+
+        this->connect(
+            roundWidget, &CustomTournamentStartedRoundFrame::matchEnded,
+            [this, tournamentReference](MatchReference matchReference) {
+                UNUSED_PARAMETER(matchReference);
+                this->setTournament(tournamentReference);
+            });
+        this->connect(
+            roundWidget, &CustomTournamentStartedRoundFrame::matchUnended,
+            [this, tournamentReference](MatchReference matchReference) {
+                UNUSED_PARAMETER(matchReference);
+                this->setTournament(tournamentReference);
+            });
     }
 }

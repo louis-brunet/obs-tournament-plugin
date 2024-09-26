@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 MatchParticipantPlayer::MatchParticipantPlayer(PlayerReference playerReference)
-    : MatchParticipant(MatchParticipant::Type::Player),
+    : MatchParticipant(MatchParticipant::Type::ParticipantPlayer),
       _playerReference(playerReference)
 {
 }
@@ -78,7 +78,7 @@ MatchParticipantPlayer::validateConfiguration(
             "[MatchParticipantPlayer::validateConfiguration] given match reference does not contain this participant");
     }
 
-    if (otherParticipant->type() == MatchParticipant::Type::Player &&
+    if (otherParticipant->type() == MatchParticipant::Type::ParticipantPlayer &&
         this->_playerReference ==
             std::reinterpret_pointer_cast<MatchParticipantPlayer>(
                 otherParticipant)
@@ -90,4 +90,9 @@ MatchParticipantPlayer::validateConfiguration(
     // TODO: if other is from match, traverse tree to check no player vs self
 
     return MatchParticipant::ValidateConfigurationResult::Valid;
+}
+
+std::shared_ptr<Player> MatchParticipantPlayer::determinedPlayer() const
+{
+    return this->_playerReference.player();
 }

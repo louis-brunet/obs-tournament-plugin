@@ -1,5 +1,6 @@
 #pragma once
 
+#include "src/data/player.hpp"
 #include <memory>
 #include <obs-data.h>
 #include <string>
@@ -14,9 +15,9 @@ class MatchReference;
 class MatchParticipant {
 public:
     enum Type {
-        Unknown = -1,
-        Player = 0,
-        FromMatch,
+        ParticipantUnknown = -1,
+        ParticipantPlayer = 0,
+        ParticipantFromMatch,
     };
     enum ValidateConfigurationResult {
         Valid,
@@ -27,7 +28,7 @@ public:
 
     static std::shared_ptr<MatchParticipant> loadStatic(obs_data_t *data);
 
-    MatchParticipant(Type type = Type::Unknown);
+    MatchParticipant(Type type = Type::ParticipantUnknown);
     MatchParticipant(MatchParticipant &&) = default;
     MatchParticipant(const MatchParticipant &) = default;
     MatchParticipant &operator=(MatchParticipant &&) = default;
@@ -36,6 +37,7 @@ public:
 
     virtual std::shared_ptr<MatchParticipant> duplicate() const = 0;
     virtual std::string displayName() const = 0;
+    virtual std::shared_ptr<Player> determinedPlayer() const = 0;
     // virtual bool isPlayerKnown();
     virtual ValidateConfigurationResult validateConfiguration(const MatchReference &matchContext) const = 0;
 
@@ -47,7 +49,7 @@ public:
     Type type() const;
 
 private:
-    Type _type = Type::Unknown;
+    Type _type = Type::ParticipantUnknown;
 };
 //
 // MatchParticipant::MatchParticipant() {

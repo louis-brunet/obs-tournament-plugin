@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <QComboBox>
+#include <QPushButton>
 #include <obs-module.h>
 
 CustomTournamentStartedOutputsFrame::CustomTournamentStartedOutputsFrame()
@@ -44,8 +45,13 @@ CustomTournamentStartedOutputsFrame::CustomTournamentStartedOutputsFrame()
         obs_module_text("customTournament.output.participant2Score"),
         SourceComboBox::Type::TextSource);
 
+    auto updateOutputSourcesButton = new QPushButton(
+        obs_module_text("customTournament.output.updateOutputSourcesButton"));
+    this->connect(updateOutputSourcesButton, &QPushButton::clicked,
+                  [this]() { this->updateOutputSources(); });
+
     auto frameLayout = new QVBoxLayout();
-    frameLayout->setContentsMargins(0, 0, 0, 0);
+    // frameLayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addWidget(this->_currentMatchComboBox);
     frameLayout->addWidget(this->_participant1NameInput);
     frameLayout->addWidget(this->_participant2NameInput);
@@ -53,6 +59,7 @@ CustomTournamentStartedOutputsFrame::CustomTournamentStartedOutputsFrame()
     frameLayout->addWidget(this->_participant2ImageInput);
     frameLayout->addWidget(this->_participant1ScoreInput);
     frameLayout->addWidget(this->_participant2ScoreInput);
+    frameLayout->addWidget(updateOutputSourcesButton);
 
     this->setLayout(frameLayout);
 }
@@ -110,7 +117,7 @@ void CustomTournamentStartedOutputsFrame::setTournament(
                           tournament->outputs.currentMatch.matchIndex = -1;
                       }
 
-                      this->setCurrentMatchOutputs(matchReference);
+                      this->updateOutputSources();
                   });
 
     this->disconnect(this->_participant1NameInput,
@@ -180,12 +187,38 @@ void CustomTournamentStartedOutputsFrame::setTournament(
     // TODO: ? when more inputs are added
 }
 
-void CustomTournamentStartedOutputsFrame::setCurrentMatchOutputs(
-    MatchReference *currentMatchReference)
+void CustomTournamentStartedOutputsFrame::updateOutputSources()
 {
+    auto currentMatchReference =
+        (MatchReference *)this->_currentMatchComboBox->currentData()
+            .toLongLong();
+
     if (currentMatchReference) {
-        Logger::log("TODO set match %s outputs",
+        Logger::log("setting match %s outputs",
                     currentMatchReference->toMatchLabel().c_str());
+        auto tournament = currentMatchReference->roundReference
+                              .tournamentReference.tournament();
+        auto match = currentMatchReference->match();
+        auto outputs = tournament->outputs;
+
+        auto player1 = match->participant1()->determinedPlayer();
+        auto player2 = match->participant2()->determinedPlayer();
+
+        if (player1) {
+            outputs.participant1Name.setSourceText(player1->name().c_str());
+            outputs.participant1Score.setSourceText(
+                std::to_string((unsigned int)match->participant1Score).c_str());
+            outputs.participant1Image.setSourceImageFile(
+                player1->imagePath().c_str());
+        }
+
+        if (player2) {
+            outputs.participant2Name.setSourceText(player2->name().c_str());
+            outputs.participant2Score.setSourceText(
+                std::to_string((unsigned int)match->participant2Score).c_str());
+            outputs.participant2Image.setSourceImageFile(
+                player2->imagePath().c_str());
+        }
     } else {
         Logger::log("TODO unset match outputs");
     }

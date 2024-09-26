@@ -21,7 +21,15 @@ CustomTournamentStartedRoundFrame::CustomTournamentStartedRoundFrame(
          matchIndex++) {
         MatchReference matchReference(roundReference, (long long)matchIndex);
         auto matchFrame = new CustomTournamentStartedMatchFrame(matchReference);
+        // matchFrame->xon
         matchListLayout->addWidget(matchFrame);
+
+        this->connect(
+            matchFrame, &CustomTournamentStartedMatchFrame::matchEnded,
+            [this, matchReference]() { this->matchEnded(matchReference); });
+        this->connect(
+            matchFrame, &CustomTournamentStartedMatchFrame::matchUnended,
+            [this, matchReference]() { this->matchUnended(matchReference); });
     }
 
     auto frameLayout = new QVBoxLayout();

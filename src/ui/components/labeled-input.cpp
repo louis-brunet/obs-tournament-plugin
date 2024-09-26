@@ -22,6 +22,7 @@ AppLabeledInput::AppLabeledInput(const std::string &labelText,
 		throw std::runtime_error(
 			"[AppLabeledInput] unrecognized label position");
 	}
+    widgetLayout->setContentsMargins(0, 0, 0, 0);
 	widgetLayout->addWidget(label, 0);
 	widgetLayout->addWidget(this->_inputWidget, 0);
 	this->setLayout(widgetLayout);

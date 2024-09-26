@@ -1,7 +1,7 @@
 #include "match-participant-unknown.hpp"
 
 MatchParticipantUnknown::MatchParticipantUnknown()
-    : MatchParticipant(MatchParticipant::Type::Unknown)
+    : MatchParticipant(MatchParticipant::Type::ParticipantUnknown)
 {
 }
 
@@ -35,4 +35,9 @@ MatchParticipantUnknown::validateConfiguration(
     UNUSED_PARAMETER(matchContext);
     return MatchParticipant::ValidateConfigurationResult::
         InvalidUnknownParticipant;
+}
+
+std::shared_ptr<Player> MatchParticipantUnknown::determinedPlayer() const
+{
+    return nullptr;
 }

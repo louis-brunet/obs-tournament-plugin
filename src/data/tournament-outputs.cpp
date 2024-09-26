@@ -1,5 +1,7 @@
 #include "tournament-outputs.hpp"
 #include "src/data/data-helpers.hpp"
+#include "src/logger.hpp"
+#include <obs.h>
 
 void TournamentSourceOutput::load(obs_data_t *data)
 {
@@ -20,29 +22,37 @@ void TournamentOutputs::load(obs_data_t *data)
         return;
     }
 
-    OBSDataAutoRelease currentMatchData = obs_data_get_obj(data, "currentMatch");
+    OBSDataAutoRelease currentMatchData =
+        obs_data_get_obj(data, "currentMatch");
     this->currentMatch.load(currentMatchData);
 
-    OBSDataAutoRelease participant1NameData = obs_data_get_obj(data, "participant1Name");
+    OBSDataAutoRelease participant1NameData =
+        obs_data_get_obj(data, "participant1Name");
     this->participant1Name.load(participant1NameData);
 
-    OBSDataAutoRelease participant2NameData = obs_data_get_obj(data, "participant2Name");
+    OBSDataAutoRelease participant2NameData =
+        obs_data_get_obj(data, "participant2Name");
     this->participant2Name.load(participant2NameData);
 
-    OBSDataAutoRelease participant1ScoreData = obs_data_get_obj(data, "participant1Score");
+    OBSDataAutoRelease participant1ScoreData =
+        obs_data_get_obj(data, "participant1Score");
     this->participant1Score.load(participant1ScoreData);
 
-    OBSDataAutoRelease participant2ScoreData = obs_data_get_obj(data, "participant2Score");
+    OBSDataAutoRelease participant2ScoreData =
+        obs_data_get_obj(data, "participant2Score");
     this->participant2Score.load(participant2ScoreData);
 
-    OBSDataAutoRelease participant1ImageData = obs_data_get_obj(data, "participant1Image");
+    OBSDataAutoRelease participant1ImageData =
+        obs_data_get_obj(data, "participant1Image");
     this->participant1Image.load(participant1ImageData);
 
-    OBSDataAutoRelease participant2ImageData = obs_data_get_obj(data, "participant2Image");
+    OBSDataAutoRelease participant2ImageData =
+        obs_data_get_obj(data, "participant2Image");
     this->participant2Image.load(participant2ImageData);
 }
 
-void TournamentOutputs::save(obs_data_t *data) const {
+void TournamentOutputs::save(obs_data_t *data) const
+{
 
     OBSDataAutoRelease currentMatchData = obs_data_create();
     this->currentMatch.save(currentMatchData);
@@ -71,4 +81,36 @@ void TournamentOutputs::save(obs_data_t *data) const {
     OBSDataAutoRelease participant2ImageData = obs_data_create();
     this->participant2Image.save(participant2ImageData);
     obs_data_set_obj(data, "participant2Image", participant2ImageData);
+}
+
+void TournamentSourceOutput::setSourceText(const char *text)
+{
+    this->setSourceSettingString("text", text);
+}
+
+void TournamentSourceOutput::setSourceImageFile(const char *imageFilePath)
+{
+    this->setSourceSettingString("file", imageFilePath);
+}
+
+void TournamentSourceOutput::setSourceSettingString(const char *settingName,
+                                                    const char *settingValue)
+{
+    if (this->sourceUuid == "") {
+        return;
+    }
+
+    OBSSourceAutoRelease source =
+        obs_get_source_by_uuid(this->sourceUuid.c_str());
+    if (!source) {
+        return;
+    }
+
+    OBSDataAutoRelease sourceSettings = obs_source_get_settings(source);
+    if (!sourceSettings) {
+        return;
+    }
+
+    obs_data_set_string(sourceSettings, settingName, settingValue);
+    obs_source_update(source, sourceSettings);
 }

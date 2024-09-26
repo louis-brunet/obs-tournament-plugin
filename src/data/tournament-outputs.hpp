@@ -10,6 +10,12 @@ public:
 
     virtual void load(obs_data_t *data);
     virtual void save(obs_data_t *data) const;
+
+    void setSourceText(const char *text);
+    void setSourceImageFile(const char *imageFilePath);
+
+private:
+    void setSourceSettingString(const char *settingSame, const char *settingValue);
 };
 
 // class TournamentTextSourceOutput : public TournamentSourceOutput {
