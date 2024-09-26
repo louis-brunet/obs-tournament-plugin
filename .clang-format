@@ -1,7 +1,6 @@
 # please use clang-format version 16 or later
 
 Standard: c++17
-# AccessModifierOffset: -8
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
@@ -49,9 +48,7 @@ ColumnLimit: 80
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
-# ConstructorInitializerIndentWidth: 8
 ContinuationIndentWidth: 4
-# ContinuationIndentWidth: 8
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
@@ -65,14 +62,12 @@ IncludeBlocks: Preserve
 IndentCaseLabels: false
 IndentPPDirectives: None
 IndentWidth: 4
-# IndentWidth: 8
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 ObjCBinPackProtocolList: Auto
 ObjCBlockIndentWidth: 4
-# ObjCBlockIndentWidth: 8
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
 
