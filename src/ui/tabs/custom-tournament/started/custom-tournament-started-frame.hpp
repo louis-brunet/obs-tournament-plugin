@@ -1,5 +1,6 @@
 #pragma once
 
+#include "src/data/match-reference.hpp"
 #include "src/data/tournament-reference.hpp"
 #include "src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.hpp"
 #include <QFrame>
@@ -17,4 +18,6 @@ public:
 private:
     QBoxLayout *_roundListLayout;
     CustomTournamentStartedOutputsFrame *_outputsFrame;
+
+    void notifyNewMatchState(const MatchReference &updatedMatch);
 };

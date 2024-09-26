@@ -105,8 +105,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ui/tabs/custom-tournament/started/custom-tournament-started-frame.hpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-match-frame.cpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-match-frame.hpp
-    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-participant-frame.cpp
-    src/ui/tabs/custom-tournament/started/custom-tournament-started-match-participant-frame.hpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.cpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-outputs-frame.hpp
     src/ui/tabs/custom-tournament/started/custom-tournament-started-round-frame.cpp

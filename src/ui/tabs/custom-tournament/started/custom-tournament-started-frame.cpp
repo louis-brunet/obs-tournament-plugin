@@ -47,14 +47,29 @@ void CustomTournamentStartedFrame::setTournament(
         this->connect(
             roundWidget, &CustomTournamentStartedRoundFrame::matchEnded,
             [this, tournamentReference](MatchReference matchReference) {
-                UNUSED_PARAMETER(matchReference);
-                this->setTournament(tournamentReference);
+                this->notifyNewMatchState(matchReference);
             });
         this->connect(
             roundWidget, &CustomTournamentStartedRoundFrame::matchUnended,
             [this, tournamentReference](MatchReference matchReference) {
-                UNUSED_PARAMETER(matchReference);
-                this->setTournament(tournamentReference);
+                this->notifyNewMatchState(matchReference);
             });
+        this->connect(
+            roundWidget, &CustomTournamentStartedRoundFrame::scoreChanged,
+            [this, tournamentReference](MatchReference matchReference) {
+                this->_outputsFrame->onScoreChanged(matchReference);
+            });
+    }
+}
+
+void CustomTournamentStartedFrame::notifyNewMatchState(
+    const MatchReference &updatedMatch)
+{
+    for (int roundIndex = 0; roundIndex < this->_roundListLayout->count();
+         roundIndex++) {
+        auto layoutItem = this->_roundListLayout->itemAt(roundIndex);
+        auto roundFrame =
+            (CustomTournamentStartedRoundFrame *)layoutItem->widget();
+        roundFrame->notifyNewMatchState(updatedMatch);
     }
 }

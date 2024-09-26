@@ -34,7 +34,7 @@ private:
 class TournamentOutputs {
 public:
     MatchReference currentMatch = MatchReference();
-    // TODO: MatchReference upcomingMatch;
+    MatchReference upcomingMatch = MatchReference();
 
     TournamentSourceOutput participant1Name = TournamentSourceOutput();
     TournamentSourceOutput participant1Image = TournamentSourceOutput();

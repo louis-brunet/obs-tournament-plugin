@@ -26,6 +26,10 @@ void TournamentOutputs::load(obs_data_t *data)
         obs_data_get_obj(data, "currentMatch");
     this->currentMatch.load(currentMatchData);
 
+    OBSDataAutoRelease upcomingMatchData =
+        obs_data_get_obj(data, "upcomingMatch");
+    this->upcomingMatch.load(upcomingMatchData);
+
     OBSDataAutoRelease participant1NameData =
         obs_data_get_obj(data, "participant1Name");
     this->participant1Name.load(participant1NameData);
@@ -66,6 +70,10 @@ void TournamentOutputs::save(obs_data_t *data) const
     this->currentMatch.save(currentMatchData);
     obs_data_set_obj(data, "currentMatch", currentMatchData);
 
+    OBSDataAutoRelease upcomingMatchData = obs_data_create();
+    this->upcomingMatch.save(upcomingMatchData);
+    obs_data_set_obj(data, "upcomingMatch", upcomingMatchData);
+
     OBSDataAutoRelease participant1NameData = obs_data_create();
     this->participant1Name.save(participant1NameData);
     obs_data_set_obj(data, "participant1Name", participant1NameData);
@@ -92,11 +100,13 @@ void TournamentOutputs::save(obs_data_t *data) const
 
     OBSDataAutoRelease participant1DescriptionData = obs_data_create();
     this->participant1Description.save(participant1DescriptionData);
-    obs_data_set_obj(data, "participant1Description", participant1DescriptionData);
+    obs_data_set_obj(data, "participant1Description",
+                     participant1DescriptionData);
 
     OBSDataAutoRelease participant2DescriptionData = obs_data_create();
     this->participant2Description.save(participant2DescriptionData);
-    obs_data_set_obj(data, "participant2Description", participant2DescriptionData);
+    obs_data_set_obj(data, "participant2Description",
+                     participant2DescriptionData);
 }
 
 void TournamentSourceOutput::setSourceText(const char *text)

@@ -49,9 +49,9 @@ CustomTournamentMatchConfigurationFrame::CustomTournamentMatchConfigurationFrame
                   [this]() { this->deleteMatchClicked(); });
 
     // auto moveIconColor = nullptr;// new QColor(QColor::fromHsl(258, 10, 57));
-    auto moveIconColor = new QColor(255, 255, 255, 100);
+    // auto moveIconColor = new QColor(255, 255, 255, 100);
     auto moveUpButton =
-        new AppButton("", AppIcon(AppIcon::Type::ArrowUpward, moveIconColor),
+        new AppButton("", AppIcon(AppIcon::Type::ArrowUpward, AppIcon::Color::Faded),
                       AppButton::Style::Transparent, true);
     moveUpButton->setToolTip(obs_module_text("customTournament.configuration.match.moveUpButtonTooltip"));
     // new QPushButton(AppIcon(AppIcon::Type::ArrowUpward, moveIconColor), "");
@@ -69,7 +69,7 @@ CustomTournamentMatchConfigurationFrame::CustomTournamentMatchConfigurationFrame
     }
 
     auto moveDownButton =
-        new AppButton("", AppIcon(AppIcon::Type::ArrowDownward, moveIconColor),
+        new AppButton("", AppIcon(AppIcon::Type::ArrowDownward, AppIcon::Color::Faded),
                       AppButton::Style::Transparent, true);
     moveDownButton->setToolTip(obs_module_text("customTournament.configuration.match.moveDownButtonTooltip"));
     //     new QPushButton(

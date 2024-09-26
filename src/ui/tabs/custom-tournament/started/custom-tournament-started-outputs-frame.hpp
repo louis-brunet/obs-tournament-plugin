@@ -15,9 +15,11 @@ public:
     ~CustomTournamentStartedOutputsFrame();
 
     void setTournament(TournamentReference tournamentReference);
+    void onScoreChanged(const MatchReference &updatedMatch);
 
 private:
     QComboBox *_currentMatchComboBox;
+    QComboBox *_upcomingMatchComboBox;
     SourceComboBox *_participant1NameInput;
     SourceComboBox *_participant2NameInput;
     SourceComboBox *_participant1ImageInput;
@@ -29,4 +31,8 @@ private:
 
     // void setCurrentMatchOutputs(MatchReference *currentMatchReference);
     void updateOutputSources();
+    void setMatchSelection(
+        QComboBox *comboBox, const TournamentReference &tournamentReference,
+        const MatchReference &referenceToSelect,
+        std::function<void(MatchReference *)> selectionChangedCallback);
 };

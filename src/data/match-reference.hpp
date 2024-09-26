@@ -22,6 +22,10 @@ public:
         return std::tie(this->roundReference, this->matchIndex) ==
                std::tie(rhs.roundReference, rhs.matchIndex);
     };
+    inline bool operator!=(const MatchReference &rhs) const
+    {
+        return !(*this == rhs);
+    };
     inline bool operator<(const MatchReference &rhs) const
     {
         return this->roundReference < rhs.roundReference ||

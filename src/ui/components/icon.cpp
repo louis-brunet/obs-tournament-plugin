@@ -4,38 +4,46 @@
 #include <qbitmap.h>
 #include <qcolor.h>
 
-static QPixmap iconPixmap(const char *filePath,
-                          const QColor *fillColor = nullptr,
-                          const QColor &maskColor = QColor(0, 0, 0, 0))
+static QColor rgbaQColor(unsigned int rgba)
+{
+    auto r = (unsigned char)(((unsigned int)rgba) >> 24);
+    auto g = (unsigned char)(((unsigned int)rgba) >> 16);
+    auto b = (unsigned char)(((unsigned int)rgba) >> 8);
+    auto a = (unsigned char)(((unsigned int)rgba));
+    return QColor(r, g, b, a);
+}
+
+static QPixmap iconPixmap(const char *filePath, const QColor &fillColor,
+                          const QColor &maskColor)
 {
     QPixmap pixmap(filePath);
 
-    if (fillColor) {
-        QBitmap mask = pixmap.createMaskFromColor(maskColor);
-        pixmap.fill(*fillColor);
-        pixmap.setMask(mask);
-    }
+    // if (fillColor) {
+    QBitmap mask = pixmap.createMaskFromColor(maskColor);
+    pixmap.fill(fillColor);
+    pixmap.setMask(mask);
+    // }
 
     return pixmap;
 }
 
-AppIcon::AppIcon(const char *iconFilePath, const QColor *fillColor, const QColor &maskColor)
+AppIcon::AppIcon(const char *iconFilePath) : QIcon(iconFilePath) {}
+
+AppIcon::AppIcon(const char *iconFilePath, const QColor &fillColor,
+                 const QColor &maskColor)
     : QIcon(iconPixmap(iconFilePath, fillColor, maskColor))
 {
-    // UNUSED_PARAMETER(iconFilePath);
-    // UNUSED_PARAMETER(fillColor);
-    // if (fillColor) {
-    //     UNUSED_PARAMETER(maskColor);
-    //     // auto pixmap = this->pixmap(200);
-    //     // QBitmap mask = pixmap.createMaskFromColor(maskColor);
-    //     // pixmap.fill(*fillColor);
-    //     // pixmap.setMask(mask);
-    //     // this->addPixmap(pixmap);
-    // }
 }
 
-AppIcon::AppIcon(Type type, const QColor *fillColor)
-    : AppIcon(AppIcon::typeToFilePath(type).c_str(), fillColor)
+AppIcon::AppIcon(const Type &type, const Color &fillColor,
+                 const QColor &maskColor)
+    : AppIcon(AppIcon::typeToFilePath(type).c_str(), rgbaQColor(fillColor),
+              maskColor)
+{
+}
+
+AppIcon::AppIcon(const Type &type)
+    : AppIcon(AppIcon::typeToFilePath(type).c_str())
 {
 }
 
