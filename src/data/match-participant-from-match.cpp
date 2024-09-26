@@ -271,6 +271,8 @@ SelectWinnerOfMatch::SelectWinnerOfMatch()
 {
 }
 
+SelectWinnerOfMatch::~SelectWinnerOfMatch() {}
+
 std::shared_ptr<MatchParticipant>
 SelectWinnerOfMatch::select(const MatchReference &fromMatchReference)
 {
@@ -299,6 +301,8 @@ SelectLoserOfMatch::SelectLoserOfMatch()
           MatchParticipantSelectionStrategy::Type::Loser)
 {
 }
+
+SelectLoserOfMatch::~SelectLoserOfMatch() {}
 
 std::shared_ptr<MatchParticipant>
 SelectLoserOfMatch::select(const MatchReference &fromMatchReference)
