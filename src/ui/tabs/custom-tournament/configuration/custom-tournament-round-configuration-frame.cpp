@@ -117,7 +117,7 @@ CustomTournamentRoundConfigurationFrame::
 
 MatchReference CustomTournamentRoundConfigurationFrame::addNewMatch()
 {
-    auto newMatchIndex = this->_tournamentRound->matches().size();
+    auto newMatchIndex = (unsigned long)this->_tournamentRound->matches().size();
     auto newMatch = std::make_shared<Match>();
     // this->_tournamentRound->matches().push_back(newMatch);
     this->_tournamentRound->addMatch(newMatch);

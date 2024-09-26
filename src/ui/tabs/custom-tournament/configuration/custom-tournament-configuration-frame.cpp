@@ -76,7 +76,7 @@ CustomTournamentConfigurationFrame::~CustomTournamentConfigurationFrame() {}
 void CustomTournamentConfigurationFrame::addNewRound()
 {
 
-    auto roundIndex = this->_tournamentReference.tournament()->rounds().size();
+    auto roundIndex = (unsigned long)this->_tournamentReference.tournament()->rounds().size();
     auto newRound = std::make_shared<TournamentRound>();
     this->_tournamentReference.tournament()->rounds().push_back(newRound);
 

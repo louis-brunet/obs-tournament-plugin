@@ -65,7 +65,7 @@ std::string MatchReference::toMatchLabel() const
     unsigned long totalMatchIndex = 0;
     for (unsigned long previousRoundIndex = 0;
          previousRoundIndex < (unsigned long)roundIndex; previousRoundIndex++) {
-        totalMatchIndex += rounds.at(previousRoundIndex)->matches().size();
+        totalMatchIndex += (unsigned long)rounds.at(previousRoundIndex)->matches().size();
     }
     totalMatchIndex += (unsigned long)this->matchIndex;
 
