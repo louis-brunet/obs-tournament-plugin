@@ -15,7 +15,8 @@ public:
     void setSourceImageFile(const char *imageFilePath);
 
 private:
-    void setSourceSettingString(const char *settingSame, const char *settingValue);
+    void setSourceSettingString(const char *settingSame,
+                                const char *settingValue);
 };
 
 // class TournamentTextSourceOutput : public TournamentSourceOutput {
@@ -38,10 +39,12 @@ public:
     TournamentSourceOutput participant1Name = TournamentSourceOutput();
     TournamentSourceOutput participant1Image = TournamentSourceOutput();
     TournamentSourceOutput participant1Score = TournamentSourceOutput();
+    TournamentSourceOutput participant1Description = TournamentSourceOutput();
 
     TournamentSourceOutput participant2Name = TournamentSourceOutput();
     TournamentSourceOutput participant2Image = TournamentSourceOutput();
     TournamentSourceOutput participant2Score = TournamentSourceOutput();
+    TournamentSourceOutput participant2Description = TournamentSourceOutput();
     // TournamentTextSourceOutput participant1Name = TournamentTextSourceOutput();
     // TournamentTextSourceOutput participant2Name = TournamentTextSourceOutput();
     // TournamentImageSourceOutput participant1Image = TournamentImageSourceOutput();

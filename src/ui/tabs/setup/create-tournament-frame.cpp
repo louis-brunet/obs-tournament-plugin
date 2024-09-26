@@ -129,7 +129,7 @@ bool CreateTournamentFrame::endTournamentCreation()
             return false;
         }
 
-        auto player = std::make_shared<Player>(playerName, playerImagePath);
+        auto player = std::make_shared<Player>(playerName, playerImagePath, playerDescription);
         players.push_back(player);
     }
     log(LOG_INFO, "Found %d players", players.size());

@@ -5,7 +5,7 @@
 
 class Player {
 public:
-    Player(std::string name = "", std::string imagePath = "");
+    Player(std::string name = "", std::string imagePath = "", std::string description = "");
     Player(Player &&) = default;
     Player(const Player &) = default;
     Player &operator=(Player &&) = default;
@@ -14,6 +14,7 @@ public:
 
     std::string name();
     std::string imagePath();
+    std::string description();
 
     void load(obs_data_t *data);
     void save(obs_data_t *data) const;
@@ -21,6 +22,7 @@ public:
 private:
     std::string _name;
     std::string _imagePath;
+    std::string _description;
 };
 
 // Player::Player() {

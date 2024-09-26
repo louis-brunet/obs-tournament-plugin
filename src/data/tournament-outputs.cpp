@@ -49,6 +49,14 @@ void TournamentOutputs::load(obs_data_t *data)
     OBSDataAutoRelease participant2ImageData =
         obs_data_get_obj(data, "participant2Image");
     this->participant2Image.load(participant2ImageData);
+
+    OBSDataAutoRelease participant1DescriptionData =
+        obs_data_get_obj(data, "participant1Description");
+    this->participant1Description.load(participant1DescriptionData);
+
+    OBSDataAutoRelease participant2DescriptionData =
+        obs_data_get_obj(data, "participant2Description");
+    this->participant2Description.load(participant2DescriptionData);
 }
 
 void TournamentOutputs::save(obs_data_t *data) const
@@ -81,6 +89,14 @@ void TournamentOutputs::save(obs_data_t *data) const
     OBSDataAutoRelease participant2ImageData = obs_data_create();
     this->participant2Image.save(participant2ImageData);
     obs_data_set_obj(data, "participant2Image", participant2ImageData);
+
+    OBSDataAutoRelease participant1DescriptionData = obs_data_create();
+    this->participant1Description.save(participant1DescriptionData);
+    obs_data_set_obj(data, "participant1Description", participant1DescriptionData);
+
+    OBSDataAutoRelease participant2DescriptionData = obs_data_create();
+    this->participant2Description.save(participant2DescriptionData);
+    obs_data_set_obj(data, "participant2Description", participant2DescriptionData);
 }
 
 void TournamentSourceOutput::setSourceText(const char *text)

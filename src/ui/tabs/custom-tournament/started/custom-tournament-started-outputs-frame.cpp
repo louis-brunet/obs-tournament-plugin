@@ -45,6 +45,13 @@ CustomTournamentStartedOutputsFrame::CustomTournamentStartedOutputsFrame()
         obs_module_text("customTournament.output.participant2Score"),
         SourceComboBox::Type::TextSource);
 
+    this->_participant1DescriptionInput = new SourceComboBox(
+        obs_module_text("customTournament.output.participant1Description"),
+        SourceComboBox::Type::TextSource);
+    this->_participant2DescriptionInput = new SourceComboBox(
+        obs_module_text("customTournament.output.participant2Description"),
+        SourceComboBox::Type::TextSource);
+
     auto updateOutputSourcesButton = new QPushButton(
         obs_module_text("customTournament.output.updateOutputSourcesButton"));
     this->connect(updateOutputSourcesButton, &QPushButton::clicked,
@@ -59,6 +66,8 @@ CustomTournamentStartedOutputsFrame::CustomTournamentStartedOutputsFrame()
     frameLayout->addWidget(this->_participant2ImageInput);
     frameLayout->addWidget(this->_participant1ScoreInput);
     frameLayout->addWidget(this->_participant2ScoreInput);
+    frameLayout->addWidget(this->_participant1DescriptionInput);
+    frameLayout->addWidget(this->_participant2DescriptionInput);
     frameLayout->addWidget(updateOutputSourcesButton);
 
     this->setLayout(frameLayout);
@@ -184,6 +193,28 @@ void CustomTournamentStartedOutputsFrame::setTournament(
                       // TODO: change displayed source text here?
                   });
 
+    this->disconnect(this->_participant1DescriptionInput,
+                     &SourceComboBox::sourceChanged, nullptr, nullptr);
+    this->_participant1DescriptionInput->setCurrentSource(
+        tournament->outputs.participant1Description.sourceUuid.c_str());
+    this->connect(this->_participant1DescriptionInput, &SourceComboBox::sourceChanged,
+                  [tournament](std::string newUuid) {
+                      tournament->outputs.participant1Description.sourceUuid =
+                          newUuid;
+                      // TODO: change displayed source text here?
+                  });
+
+    this->disconnect(this->_participant2DescriptionInput,
+                     &SourceComboBox::sourceChanged, nullptr, nullptr);
+    this->_participant2DescriptionInput->setCurrentSource(
+        tournament->outputs.participant2Description.sourceUuid.c_str());
+    this->connect(this->_participant2DescriptionInput, &SourceComboBox::sourceChanged,
+                  [tournament](std::string newUuid) {
+                      tournament->outputs.participant2Description.sourceUuid =
+                          newUuid;
+                      // TODO: change displayed source text here?
+                  });
+
     // TODO: ? when more inputs are added
 }
 
@@ -204,12 +235,15 @@ void CustomTournamentStartedOutputsFrame::updateOutputSources()
         auto player1 = match->participant1()->determinedPlayer();
         auto player2 = match->participant2()->determinedPlayer();
 
+        Logger::log("player1 description : %s",
+                    player1->description().c_str());
         if (player1) {
             outputs.participant1Name.setSourceText(player1->name().c_str());
             outputs.participant1Score.setSourceText(
                 std::to_string((unsigned int)match->participant1Score).c_str());
             outputs.participant1Image.setSourceImageFile(
                 player1->imagePath().c_str());
+            outputs.participant1Description.setSourceText(player1->description().c_str());
         }
 
         if (player2) {
@@ -218,6 +252,7 @@ void CustomTournamentStartedOutputsFrame::updateOutputSources()
                 std::to_string((unsigned int)match->participant2Score).c_str());
             outputs.participant2Image.setSourceImageFile(
                 player2->imagePath().c_str());
+            outputs.participant2Description.setSourceText(player2->description().c_str());
         }
     } else {
         Logger::log("TODO unset match outputs");

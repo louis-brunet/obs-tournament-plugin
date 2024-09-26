@@ -24,6 +24,8 @@ private:
     SourceComboBox *_participant2ImageInput;
     SourceComboBox *_participant1ScoreInput;
     SourceComboBox *_participant2ScoreInput;
+    SourceComboBox *_participant1DescriptionInput;
+    SourceComboBox *_participant2DescriptionInput;
 
     // void setCurrentMatchOutputs(MatchReference *currentMatchReference);
     void updateOutputSources();
