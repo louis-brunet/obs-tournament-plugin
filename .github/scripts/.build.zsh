@@ -263,7 +263,7 @@ ${_usage_host:-}"
           cmake_build_args+=(--parallel)
         }
 
-        cmake_install_args+=(build_${target##*-} --install-prefix ${project_root}/release/${config})
+        cmake_install_args+=(build_${target##*-} --prefix ${project_root}/release/${config})
         ;;
     }
 
