@@ -44,6 +44,7 @@ file(READ "${CMAKE_CURRENT_SOURCE_DIR}/buildspec.json" buildspec)
 
 # cmake-format: off
 string(JSON _name GET ${buildspec} name)
+string(JSON _displayName GET ${buildspec} displayName)
 string(JSON _website GET ${buildspec} website)
 string(JSON _author GET ${buildspec} author)
 string(JSON _email GET ${buildspec} email)
